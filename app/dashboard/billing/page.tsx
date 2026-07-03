@@ -10,19 +10,19 @@ const PLANS = [
     id: "starter", name: "Starter", price: 47, currency: "$",
     desc: "Pour démarrer sur vos premiers deals",
     features: ["17 Deal Draft / mois", "17 Smart Chase / mois", "5 Pitch Radar / mois", "Due Diligence non inclus", "Support email"],
-    highlight: false, border: "#2a2a3a", glow: "transparent",
+    highlight: false, border: "#e2e8f0", glow: "transparent",
   },
   {
     id: "growth", name: "Growth", price: 147, currency: "$",
     desc: "Pour les équipes actives",
     features: ["Deal Draft illimité", "Smart Chase illimité", "Pitch Radar illimité", "5 Deep Due / mois", "Support prioritaire"],
-    highlight: true, border: "#7c3aed", glow: "rgba(124,58,237,0.2)",
+    highlight: true, border: "#7c3aed", glow: "rgba(124,58,237,0.12)",
   },
   {
     id: "enterprise", name: "Enterprise", price: 477, currency: "$",
     desc: "Pour les fonds et équipes en volume",
     features: ["Tout illimité", "Deep Due illimité", "Accès API", "Onboarding dédié", "SLA 99.9%"],
-    highlight: false, border: "#f59e0b44", glow: "transparent",
+    highlight: false, border: "#fde68a", glow: "transparent",
   },
 ] as const;
 
@@ -55,10 +55,15 @@ function dayBarColor(pct: number) {
   return "#ef4444";
 }
 
+const CARD: React.CSSProperties = {
+  background: "#ffffff", border: "1px solid #e2e8f0", borderRadius: 16,
+  padding: "28px", boxShadow: "0 1px 4px rgba(0,0,0,0.06)",
+};
+
 export default function BillingPage() {
   const user       = getUser();
   const currentPlan = user?.plan ?? "free_trial";
-  const [quota, setQuota]           = useState<QuotaResponse | null>(null);
+  const [quota, setQuota]             = useState<QuotaResponse | null>(null);
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
 
   useEffect(() => {
@@ -91,10 +96,10 @@ export default function BillingPage() {
     <div className="max-w-5xl mx-auto space-y-8">
 
       {/* ── Plan actuel ── */}
-      <div style={{ background: "#1a1a24", border: "1px solid #2a2a3a", borderRadius: 16, padding: "28px" }}>
+      <div style={CARD}>
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20 }}>
           <CreditCard size={18} style={{ color: planColor }} strokeWidth={1.5} />
-          <h3 style={{ fontSize: 15, fontWeight: 700, color: "#f1f5f9" }}>Plan actuel</h3>
+          <h3 style={{ fontSize: 15, fontWeight: 700, color: "#0f172a" }}>Plan actuel</h3>
         </div>
 
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 16, marginBottom: 24 }}>
@@ -104,21 +109,21 @@ export default function BillingPage() {
             </div>
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
-                <span style={{ fontSize: 18, fontWeight: 700, color: "#f1f5f9" }}>{PLAN_LABEL[currentPlan]}</span>
+                <span style={{ fontSize: 18, fontWeight: 700, color: "#0f172a" }}>{PLAN_LABEL[currentPlan]}</span>
                 {currentPlan === "free_trial" && (
-                  <span style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 11, fontWeight: 600, padding: "3px 8px", borderRadius: 6, background: "#f59e0b18", color: "#f59e0b" }}>
-                    <span style={{ display: "inline-block", width: 6, height: 6, borderRadius: "50%", background: "#f59e0b", animation: "pulse 1.5s infinite" }} />
+                  <span style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 11, fontWeight: 600, padding: "3px 8px", borderRadius: 6, background: "#fffbeb", color: "#f59e0b", border: "1px solid #fde68a" }}>
+                    <span style={{ display: "inline-block", width: 6, height: 6, borderRadius: "50%", background: "#f59e0b" }} />
                     Essai en cours
                   </span>
                 )}
               </div>
-              <div style={{ fontSize: 13, color: "#4a4a6a" }}>
+              <div style={{ fontSize: 13, color: "#94a3b8" }}>
                 {currentPlan === "free_trial" ? "5 utilisations gratuites par agent incluses" : "Abonnement mensuel actif"}
               </div>
             </div>
           </div>
 
-          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 10, padding: "8px 14px" }}>
             <Clock size={14} style={{ color: dayColor }} strokeWidth={1.5} />
             <span style={{ fontSize: 13, fontWeight: 600, color: dayColor }}>{planDays.remaining} jours restants</span>
           </div>
@@ -127,11 +132,11 @@ export default function BillingPage() {
         {/* Days bar */}
         <div style={{ marginBottom: 24 }}>
           <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
-            <span style={{ fontSize: 11, color: "#4a4a6a" }}>Durée de la période</span>
-            <span style={{ fontSize: 11, fontFamily: "monospace", color: "#4a4a6a" }}>{planDays.remaining}/{planDays.total} j</span>
+            <span style={{ fontSize: 11, color: "#94a3b8" }}>Durée de la période</span>
+            <span style={{ fontSize: 11, fontFamily: "monospace", color: "#64748b" }}>{planDays.remaining}/{planDays.total} j</span>
           </div>
-          <div style={{ height: 6, borderRadius: 4, background: "#2a2a3a", overflow: "hidden" }}>
-            <div style={{ height: "100%", width: `${dayPct}%`, borderRadius: 4, background: dayColor, transition: "width 1s" }} />
+          <div style={{ height: 6, borderRadius: 4, background: "#f1f5f9", overflow: "hidden" }}>
+            <div style={{ height: "100%", width: `${dayPct}%`, borderRadius: 4, background: `linear-gradient(90deg, ${dayColor}, ${dayColor}99)`, transition: "width 1s" }} />
           </div>
         </div>
 
@@ -142,17 +147,17 @@ export default function BillingPage() {
             const unlimited = q?.limite === "illimité";
             const pct = !q ? 0 : unlimited ? 10 : Math.min(100, (q.utilisé / (q.limite as number)) * 100);
             return (
-              <div key={key} style={{ background: "#0f0f13", borderRadius: 10, padding: "14px 16px", border: "1px solid #2a2a3a" }}>
+              <div key={key} style={{ background: "#f8fafc", borderRadius: 10, padding: "14px 16px", border: "1px solid #e2e8f0" }}>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                     <Icon size={13} style={{ color }} strokeWidth={1.5} />
-                    <span style={{ fontSize: 12, color: "#94a3b8" }}>{label}</span>
+                    <span style={{ fontSize: 12, color: "#64748b", fontWeight: 500 }}>{label}</span>
                   </div>
-                  <span style={{ fontSize: 11, fontFamily: "monospace", color: "#4a4a6a" }}>
+                  <span style={{ fontSize: 11, fontFamily: "monospace", color: "#94a3b8" }}>
                     {q ? `${q.utilisé} / ${unlimited ? "∞" : q.limite}` : "—"}
                   </span>
                 </div>
-                <div style={{ height: 3, borderRadius: 3, background: "#2a2a3a", overflow: "hidden" }}>
+                <div style={{ height: 3, borderRadius: 3, background: "#e2e8f0", overflow: "hidden" }}>
                   <div style={{ height: "100%", width: `${pct}%`, borderRadius: 3, background: color, transition: "width 1s" }} />
                 </div>
               </div>
@@ -163,7 +168,7 @@ export default function BillingPage() {
 
       {/* ── Plans ── */}
       <div>
-        <h3 style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.1em", color: "#3a3a5a", textTransform: "uppercase", marginBottom: 16 }}>
+        <h3 style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", color: "#94a3b8", textTransform: "uppercase", marginBottom: 16 }}>
           Passer à un plan supérieur
         </h3>
         <div className="grid md:grid-cols-3 gap-5">
@@ -172,19 +177,19 @@ export default function BillingPage() {
             return (
               <div key={plan.id}
                 style={{
-                  background: "#1a1a24", border: `1px solid ${plan.border}`, borderRadius: 16,
+                  background: "#ffffff",
+                  border: `1.5px solid ${plan.border}`,
+                  borderRadius: 16,
                   display: "flex", flexDirection: "column",
                   transform: plan.highlight ? "translateY(-4px)" : "none",
-                  boxShadow: plan.highlight ? `0 0 32px ${plan.glow}` : "none",
+                  boxShadow: plan.highlight ? `0 8px 32px ${plan.glow}` : "0 1px 4px rgba(0,0,0,0.06)",
                   transition: "box-shadow 0.2s, transform 0.2s",
                 }}
                 onMouseEnter={(e) => {
-                  if (!plan.highlight) {
-                    (e.currentTarget as HTMLElement).style.boxShadow = `0 0 20px ${plan.glow || "rgba(124,58,237,0.1)"}`;
-                  }
+                  if (!plan.highlight) { (e.currentTarget as HTMLElement).style.boxShadow = "0 4px 16px rgba(0,0,0,0.10)"; }
                 }}
                 onMouseLeave={(e) => {
-                  if (!plan.highlight) { (e.currentTarget as HTMLElement).style.boxShadow = "none"; }
+                  if (!plan.highlight) { (e.currentTarget as HTMLElement).style.boxShadow = "0 1px 4px rgba(0,0,0,0.06)"; }
                 }}
               >
                 <div style={{ padding: "24px 24px 0" }}>
@@ -194,20 +199,22 @@ export default function BillingPage() {
                     </div>
                   )}
                   {plan.id === "enterprise" && (
-                    <div style={{ display: "inline-flex", alignItems: "center", gap: 5, padding: "4px 10px", borderRadius: 6, background: "#f59e0b18", color: "#f59e0b", fontSize: 11, fontWeight: 700, marginBottom: 14 }}>
+                    <div style={{ display: "inline-flex", alignItems: "center", gap: 5, padding: "4px 10px", borderRadius: 6, background: "#fffbeb", color: "#f59e0b", border: "1px solid #fde68a", fontSize: 11, fontWeight: 700, marginBottom: 14 }}>
                       ✦ Enterprise
                     </div>
                   )}
-                  <h4 style={{ fontSize: 16, fontWeight: 700, color: "#f1f5f9", marginBottom: 4 }}>{plan.name}</h4>
-                  <p style={{ fontSize: 12, color: "#4a4a6a", marginBottom: 16 }}>{plan.desc}</p>
+                  <h4 style={{ fontSize: 16, fontWeight: 700, color: "#0f172a", marginBottom: 4 }}>{plan.name}</h4>
+                  <p style={{ fontSize: 12, color: "#94a3b8", marginBottom: 16 }}>{plan.desc}</p>
                   <div style={{ display: "flex", alignItems: "flex-end", gap: 4, marginBottom: 20 }}>
-                    <span style={{ fontSize: 38, fontWeight: 800, fontFamily: "monospace", color: "#f1f5f9", lineHeight: 1 }}>{plan.currency}{plan.price}</span>
-                    <span style={{ fontSize: 12, color: "#4a4a6a", marginBottom: 6 }}>/mois</span>
+                    <span style={{ fontSize: 38, fontWeight: 800, fontFamily: "monospace", color: "#0f172a", lineHeight: 1 }}>{plan.currency}{plan.price}</span>
+                    <span style={{ fontSize: 12, color: "#94a3b8", marginBottom: 6 }}>/mois</span>
                   </div>
                   <ul style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 20 }}>
                     {plan.features.map((f) => (
-                      <li key={f} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, color: "#94a3b8" }}>
-                        <Check size={13} style={{ color: plan.highlight ? "#7c3aed" : plan.id === "enterprise" ? "#f59e0b" : "#4a4a6a", flexShrink: 0 }} strokeWidth={2} />
+                      <li key={f} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, color: "#64748b" }}>
+                        <Check size={13}
+                          style={{ color: plan.highlight ? "#7c3aed" : plan.id === "enterprise" ? "#f59e0b" : "#94a3b8", flexShrink: 0 }}
+                          strokeWidth={2.5} />
                         {f}
                       </li>
                     ))}
@@ -215,24 +222,28 @@ export default function BillingPage() {
                 </div>
                 <div style={{ padding: "0 24px 24px", marginTop: "auto" }}>
                   {isCurrent ? (
-                    <div style={{ padding: "11px", borderRadius: 10, textAlign: "center", fontSize: 13, fontWeight: 600, color: "#4a4a6a", background: "#0f0f13", border: "1px solid #2a2a3a" }}>
+                    <div style={{ padding: "11px", borderRadius: 10, textAlign: "center", fontSize: 13, fontWeight: 600, color: "#94a3b8", background: "#f8fafc", border: "1px solid #e2e8f0" }}>
                       Plan actuel
                     </div>
                   ) : (
                     <button onClick={() => handleUpgrade(plan.id)} disabled={loadingPlan === plan.id}
                       style={{
                         width: "100%", padding: "12px", borderRadius: 10,
-                        border: plan.highlight ? "none" : "1px solid #2a2a3a",
-                        background: plan.highlight ? "linear-gradient(135deg, #7c3aed, #3b82f6)" : "#0f0f13",
-                        color: plan.highlight ? "#fff" : "#94a3b8",
+                        border: plan.highlight ? "none" : "1px solid #e2e8f0",
+                        background: plan.highlight ? "linear-gradient(135deg, #7c3aed, #6d28d9)" : "#f8fafc",
+                        color: plan.highlight ? "#fff" : "#0f172a",
                         fontSize: 13, fontWeight: 600, cursor: "pointer",
                         display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-                        boxShadow: plan.highlight ? "0 4px 14px rgba(124,58,237,0.4)" : "none",
-                        transition: "opacity 0.15s",
+                        boxShadow: plan.highlight ? "0 4px 14px rgba(124,58,237,0.35)" : "none",
+                        transition: "opacity 0.15s, background 0.15s",
                         opacity: loadingPlan === plan.id ? 0.7 : 1,
                       }}
-                      onMouseEnter={(e) => { if (!plan.highlight) e.currentTarget.style.borderColor = "#4a4a6a"; }}
-                      onMouseLeave={(e) => { if (!plan.highlight) e.currentTarget.style.borderColor = "#2a2a3a"; }}
+                      onMouseEnter={(e) => {
+                        if (!plan.highlight) { e.currentTarget.style.background = "#f1f5f9"; }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (!plan.highlight) { e.currentTarget.style.background = "#f8fafc"; }
+                      }}
                     >
                       {loadingPlan === plan.id
                         ? <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -247,52 +258,52 @@ export default function BillingPage() {
       </div>
 
       {/* ── Historique paiements ── */}
-      <div style={{ background: "#1a1a24", border: "1px solid #2a2a3a", borderRadius: 16, padding: "28px" }}>
+      <div style={CARD}>
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20 }}>
-          <Receipt size={16} style={{ color: "#4a4a6a" }} strokeWidth={1.5} />
-          <h3 style={{ fontSize: 15, fontWeight: 700, color: "#f1f5f9" }}>Historique des paiements</h3>
+          <Receipt size={16} style={{ color: "#94a3b8" }} strokeWidth={1.5} />
+          <h3 style={{ fontSize: 15, fontWeight: 700, color: "#0f172a" }}>Historique des paiements</h3>
         </div>
         {/* Table header */}
-        <div style={{ display: "grid", gridTemplateColumns: "1.2fr 2fr 1fr 1fr 0.8fr", gap: 12, padding: "0 16px 12px", borderBottom: "1px solid #2a2a3a" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1.2fr 2fr 1fr 1fr 0.8fr", gap: 12, padding: "0 16px 12px", borderBottom: "1px solid #f1f5f9" }}>
           {["Date", "Description", "Montant", "Statut", "Facture"].map((h) => (
-            <span key={h} style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.07em", color: "#3a3a5a", textTransform: "uppercase" }}>{h}</span>
+            <span key={h} style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.07em", color: "#94a3b8", textTransform: "uppercase" }}>{h}</span>
           ))}
         </div>
         {/* Empty state */}
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "48px 20px", textAlign: "center" }}>
-          <div style={{ width: 48, height: 48, borderRadius: 12, background: "#0f0f13", border: "1px solid #2a2a3a", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 12 }}>
-            <Receipt size={22} style={{ color: "#3a3a5a" }} strokeWidth={1.5} />
+          <div style={{ width: 48, height: 48, borderRadius: 12, background: "#f8fafc", border: "1px solid #e2e8f0", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 12 }}>
+            <Receipt size={22} style={{ color: "#cbd5e1" }} strokeWidth={1.5} />
           </div>
-          <p style={{ fontSize: 14, color: "#4a4a6a" }}>Aucun paiement pour le moment</p>
-          <p style={{ fontSize: 12, color: "#3a3a5a", marginTop: 4 }}>Vos factures apparaîtront ici après votre premier paiement</p>
+          <p style={{ fontSize: 14, color: "#64748b" }}>Aucun paiement pour le moment</p>
+          <p style={{ fontSize: 12, color: "#94a3b8", marginTop: 4 }}>Vos factures apparaîtront ici après votre premier paiement</p>
         </div>
       </div>
 
       {/* ── Sécurité paiement ── */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", flexWrap: "wrap", gap: 20, padding: "12px 20px", borderRadius: 12, background: "#1a1a24", border: "1px solid #2a2a3a" }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", flexWrap: "wrap", gap: 20, padding: "14px 24px", borderRadius: 12, background: "#fff", border: "1px solid #e2e8f0", boxShadow: "0 1px 3px rgba(0,0,0,0.04)" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-          <div style={{ width: 20, height: 20, borderRadius: 4, background: "#f97316", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div style={{ width: 22, height: 22, borderRadius: 5, background: "#f97316", display: "flex", alignItems: "center", justifyContent: "center" }}>
             <span style={{ fontSize: 9, fontWeight: 900, color: "#fff" }}>LS</span>
           </div>
-          <span style={{ fontSize: 12, color: "#4a4a6a", fontWeight: 600 }}>Lemon Squeezy</span>
+          <span style={{ fontSize: 12, color: "#64748b", fontWeight: 600 }}>Lemon Squeezy</span>
         </div>
-        <div style={{ width: 1, height: 16, background: "#2a2a3a" }} />
+        <div style={{ width: 1, height: 16, background: "#e2e8f0" }} />
         <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
           <span style={{ fontSize: 14 }}>🔒</span>
-          <span style={{ fontSize: 12, color: "#4a4a6a" }}>Paiements sécurisés SSL</span>
+          <span style={{ fontSize: 12, color: "#64748b" }}>Paiements sécurisés SSL</span>
         </div>
-        <div style={{ width: 1, height: 16, background: "#2a2a3a" }} />
+        <div style={{ width: 1, height: 16, background: "#e2e8f0" }} />
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <div style={{ padding: "3px 8px", borderRadius: 4, background: "#1a1ae0", display: "flex", alignItems: "center" }}>
             <span style={{ fontSize: 11, fontWeight: 900, color: "#fff", fontStyle: "italic" }}>VISA</span>
           </div>
-          <div style={{ padding: "3px 8px", borderRadius: 4, background: "#0f0f13", border: "1px solid #2a2a3a", display: "flex", alignItems: "center", gap: 3 }}>
+          <div style={{ padding: "3px 8px", borderRadius: 4, background: "#f8fafc", border: "1px solid #e2e8f0", display: "flex", alignItems: "center", gap: 2 }}>
             <span style={{ width: 10, height: 10, borderRadius: "50%", background: "#ef4444", display: "inline-block" }} />
             <span style={{ width: 10, height: 10, borderRadius: "50%", background: "#f97316", display: "inline-block", marginLeft: -4 }} />
           </div>
         </div>
-        <div style={{ width: 1, height: 16, background: "#2a2a3a" }} />
-        <span style={{ fontSize: 11, color: "#3a3a5a" }}>Annulation possible à tout moment</span>
+        <div style={{ width: 1, height: 16, background: "#e2e8f0" }} />
+        <span style={{ fontSize: 11, color: "#94a3b8" }}>Annulation possible à tout moment</span>
       </div>
 
     </div>

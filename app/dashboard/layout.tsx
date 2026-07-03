@@ -5,154 +5,213 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard, FileText, Mail, BarChart3, Shield,
-  Settings, CreditCard, LogOut, Menu, X, Rocket, Clock,
+  Settings, CreditCard, LogOut, Menu, X, Bell, Plus, Zap,
 } from "lucide-react";
 import { getUser, clearAuth } from "../lib/auth";
 import type { User } from "../lib/auth";
 
-const NAV = [
-  { href: "/dashboard",               label: "Vue d'ensemble", icon: LayoutDashboard, color: "#a78bfa" },
-  { href: "/dashboard/deal-draft",    label: "Deal Draft",     icon: FileText,         color: "#7c3aed" },
-  { href: "/dashboard/smart-chase",   label: "Smart Chase",    icon: Mail,             color: "#f97316" },
-  { href: "/dashboard/pitch-radar",   label: "Pitch Radar",    icon: BarChart3,        color: "#06b6d4" },
-  { href: "/dashboard/deep-due",      label: "Deep Due",       icon: Shield,           color: "#10b981" },
+const NAV_OVERVIEW = [
+  { href: "/dashboard", label: "Tableau de bord", sub: "Vue d'ensemble de votre activité", icon: LayoutDashboard, color: "#7c3aed", iconBg: "#ede9fe" },
 ];
 
-const NAV_BOTTOM = [
-  { href: "/dashboard/settings", label: "Paramètres", icon: Settings },
-  { href: "/dashboard/billing",  label: "Facturation", icon: CreditCard },
+const NAV_MODULES = [
+  { href: "/dashboard/deal-draft",  label: "Deal Draft",  sub: "Propositions commerciales IA",  icon: FileText,  color: "#7c3aed", iconBg: "#ede9fe" },
+  { href: "/dashboard/smart-chase", label: "Smart Chase", sub: "Relancez vos impayés",           icon: Mail,      color: "#f97316", iconBg: "#fff7ed" },
+  { href: "/dashboard/pitch-radar", label: "Pitch Radar", sub: "Analysez des pitch decks VC",   icon: BarChart3, color: "#06b6d4", iconBg: "#ecfeff" },
+  { href: "/dashboard/deep-due",    label: "Deep Due",    sub: "Due diligence automatisée",      icon: Shield,    color: "#10b981", iconBg: "#f0fdf4" },
 ];
 
-function planProgressColor(pct: number): string {
-  if (pct > 50) return "#10b981";
-  if (pct > 25) return "#f59e0b";
-  return "#ef4444";
-}
+const NAV_ACCOUNT = [
+  { href: "/dashboard/settings", label: "Paramètres", sub: "Compte et préférences",   icon: Settings,    color: "#64748b", iconBg: "#f8fafc" },
+  { href: "/dashboard/billing",  label: "Facturation", sub: "Plans et abonnements",   icon: CreditCard,  color: "#64748b", iconBg: "#f8fafc" },
+];
 
-const PLAN_INFO: Record<string, { label: string; daysRemaining: number; daysTotal: number }> = {
-  free_trial: { label: "Free Trial",  daysRemaining: 11, daysTotal: 14 },
-  starter:    { label: "Starter",     daysRemaining: 22, daysTotal: 30 },
-  growth:     { label: "Growth",      daysRemaining: 18, daysTotal: 30 },
-  enterprise: { label: "Enterprise",  daysRemaining: 30, daysTotal: 30 },
+const ALL_NAV = [...NAV_OVERVIEW, ...NAV_MODULES, ...NAV_ACCOUNT];
+
+const PLAN_PRICES: Record<string, string> = {
+  free_trial: "Gratuit",
+  starter:    "47$/mo",
+  growth:     "147$/mo",
+  enterprise: "Personnalisé",
 };
 
-function Sidebar({ user, onClose }: { user: User | null; onClose?: () => void }) {
+const PLAN_LABELS: Record<string, string> = {
+  free_trial: "Free Trial",
+  starter:    "Starter",
+  growth:     "Growth",
+  enterprise: "Enterprise",
+};
+
+const PLAN_INFO: Record<string, { daysRemaining: number; daysTotal: number }> = {
+  free_trial: { daysRemaining: 11, daysTotal: 14 },
+  starter:    { daysRemaining: 22, daysTotal: 30 },
+  growth:     { daysRemaining: 18, daysTotal: 30 },
+  enterprise: { daysRemaining: 30, daysTotal: 30 },
+};
+
+function SectionLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <div style={{
+      fontSize: 10, fontWeight: 700, letterSpacing: "0.09em",
+      color: "#94a3b8", textTransform: "uppercase",
+      padding: "12px 14px 4px",
+    }}>
+      {children}
+    </div>
+  );
+}
+
+type NavEntry = {
+  href: string; label: string; icon: React.ElementType;
+  color: string; iconBg: string; onClose?: () => void;
+};
+
+function NavItem({ href, label, icon: Icon, color, iconBg, onClose }: NavEntry) {
   const pathname = usePathname();
-  const router   = useRouter();
+  const active   = pathname === href;
+  return (
+    <Link
+      href={href}
+      onClick={onClose}
+      className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-all"
+      style={{
+        background: active ? "#ede9fe" : "transparent",
+        color: active ? "#7c3aed" : "#64748b",
+        textDecoration: "none",
+      }}
+      onMouseEnter={(e) => { if (!active) { e.currentTarget.style.background = "#f8fafc"; e.currentTarget.style.color = "#0f172a"; } }}
+      onMouseLeave={(e) => { if (!active) { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#64748b"; } }}
+    >
+      <div style={{
+        width: 28, height: 28, borderRadius: 7, flexShrink: 0,
+        background: active ? iconBg : "transparent",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        transition: "background 0.15s",
+      }}>
+        <Icon size={14} strokeWidth={2} style={{ color: active ? color : "#94a3b8" }} />
+      </div>
+      <span style={{ fontSize: 13, lineHeight: 1 }}>{label}</span>
+    </Link>
+  );
+}
+
+function Sidebar({ user, onClose }: { user: User | null; onClose?: () => void }) {
+  const router = useRouter();
 
   function handleLogout() { clearAuth(); router.push("/login"); }
 
   const planKey  = user?.plan ?? "free_trial";
-  const plan     = PLAN_INFO[planKey] ?? PLAN_INFO.free_trial;
-  const pct      = Math.round((plan.daysRemaining / plan.daysTotal) * 100);
-  const barColor = planProgressColor(pct);
-  const initials = user?.full_name?.split(" ").map((w) => w[0]).join("").toUpperCase().slice(0, 2) ?? "?";
+  const planInfo = PLAN_INFO[planKey] ?? PLAN_INFO.free_trial;
+  const pct      = Math.round((planInfo.daysRemaining / planInfo.daysTotal) * 100);
+  const price    = PLAN_PRICES[planKey] ?? "";
+  const planLabel = PLAN_LABELS[planKey] ?? "Free Trial";
+  const initials  = user?.full_name?.split(" ").map((w) => w[0]).join("").toUpperCase().slice(0, 2) ?? "?";
+  const role      = user?.profile === "PME" ? "PME" : user?.profile === "investisseur" ? "Investisseur" : "Utilisateur";
 
   return (
-    <aside className="flex flex-col h-full" style={{ background: "#13131a", borderRight: "1px solid #2a2a3a" }}>
+    <aside className="flex flex-col h-full" style={{ background: "#ffffff", borderRight: "1px solid #e2e8f0" }}>
 
       {/* Logo */}
-      <div className="flex items-center justify-between px-5 py-5">
+      <div className="flex items-center justify-between px-4 py-5" style={{ borderBottom: "1px solid #f1f5f9" }}>
         <Link href="/dashboard" className="flex items-center gap-2.5" style={{ textDecoration: "none" }}>
-          <div style={{ width: 32, height: 32, borderRadius: 8, background: "linear-gradient(135deg,#7c3aed,#3b82f6)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 0 16px rgba(124,58,237,0.35)" }}>
-            <FileText size={16} style={{ color: "#fff" }} strokeWidth={2} />
+          <div style={{
+            width: 32, height: 32, borderRadius: 8, flexShrink: 0,
+            background: "linear-gradient(135deg, #7c3aed, #a855f7)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            boxShadow: "0 2px 8px rgba(124,58,237,0.3)",
+          }}>
+            <Zap size={16} strokeWidth={2.5} style={{ color: "#fff" }} />
           </div>
-          <span className="font-display font-bold" style={{ fontSize: 20, letterSpacing: "-0.3px", background: "linear-gradient(135deg,#c4b5fd,#93c5fd)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Dealyze</span>
+          <span style={{ fontSize: 18, fontWeight: 800, letterSpacing: "-0.5px", color: "#0f172a" }}>
+            Dealyze<span style={{ color: "#7c3aed" }}>.</span>
+          </span>
         </Link>
         {onClose && (
-          <button onClick={onClose} className="lg:hidden" style={{ color: "#4a4a5a", background: "none", border: "none", cursor: "pointer" }}>
-            <X size={18} />
+          <button onClick={onClose} style={{ color: "#94a3b8", background: "none", border: "none", cursor: "pointer", padding: 4 }}>
+            <X size={16} />
           </button>
         )}
       </div>
 
-      {/* Plan badge */}
-      <div className="mx-4 mb-4 px-4 py-3 rounded-xl" style={{ background: "#1a1a24", border: "1px solid #2a2a3a" }}>
-        <div className="flex items-center justify-between mb-2">
-          <div className="flex items-center gap-1.5">
-            <Clock size={11} style={{ color: barColor }} />
-            <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.06em", color: barColor }}>{plan.label}</span>
-          </div>
-          <span style={{ fontSize: 11, color: pct <= 25 ? "#ef4444" : "#4a4a6a" }}>
-            {plan.daysRemaining} j. restants
-          </span>
-        </div>
-        <div style={{ height: 4, borderRadius: 4, background: "#2a2a3a", overflow: "hidden" }}>
-          <div style={{
-            height: "100%", width: `${pct}%`, borderRadius: 4,
-            background: `linear-gradient(90deg, ${barColor}, ${barColor}cc)`,
-            transition: "width 1s, background 0.5s",
-          }} />
-        </div>
-        {pct <= 25 && (
-          <p style={{ fontSize: 10, color: "#ef4444", marginTop: 6 }}>
-            ⚠ Expiration imminente — <Link href="/dashboard/billing" style={{ color: "#ef4444", textDecoration: "underline" }}>Upgrader</Link>
-          </p>
-        )}
-      </div>
+      {/* Nav */}
+      <nav className="flex-1 px-3 overflow-y-auto py-2">
+        <SectionLabel>Vue d&apos;ensemble</SectionLabel>
+        {NAV_OVERVIEW.map((n) => <NavItem key={n.href} {...n} onClose={onClose} />)}
 
-      {/* Main nav */}
-      <nav className="flex-1 px-3 space-y-0.5 overflow-y-auto">
-        {NAV.map(({ href, label, icon: Icon, color }) => {
-          const active = pathname === href;
-          return (
-            <Link key={href} href={href} onClick={onClose}
-              className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all"
-              style={{ background: active ? `${color}18` : "transparent", color: active ? "#fff" : "#5a5a7a", textDecoration: "none" }}
-              onMouseEnter={(e) => { if (!active) e.currentTarget.style.background = "#1a1a24"; }}
-              onMouseLeave={(e) => { if (!active) e.currentTarget.style.background = "transparent"; }}
-            >
-              <div style={{
-                width: 30, height: 30, borderRadius: 8, flexShrink: 0,
-                background: active ? `${color}22` : "transparent",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                color: active ? color : "#3a3a5a", transition: "all 0.15s",
-              }}>
-                <Icon size={16} strokeWidth={1.5} />
-              </div>
-              {label}
-              {active && <div style={{ marginLeft: "auto", width: 6, height: 6, borderRadius: "50%", background: color, boxShadow: `0 0 8px ${color}` }} />}
-            </Link>
-          );
-        })}
+        <SectionLabel>Modules</SectionLabel>
+        {NAV_MODULES.map((n) => <NavItem key={n.href} {...n} onClose={onClose} />)}
+
+        <SectionLabel>Compte</SectionLabel>
+        {NAV_ACCOUNT.map((n) => <NavItem key={n.href} {...n} onClose={onClose} />)}
+        <button
+          onClick={handleLogout}
+          className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-all"
+          style={{ color: "#94a3b8", background: "none", border: "none", cursor: "pointer", textAlign: "left" }}
+          onMouseEnter={(e) => { e.currentTarget.style.background = "#fef2f2"; e.currentTarget.style.color = "#ef4444"; }}
+          onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#94a3b8"; }}
+        >
+          <div style={{ width: 28, height: 28, borderRadius: 7, display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <LogOut size={14} strokeWidth={2} />
+          </div>
+          <span style={{ fontSize: 13 }}>Déconnexion</span>
+        </button>
       </nav>
 
-      {/* Bottom nav */}
-      <div className="px-3 pt-3 space-y-0.5" style={{ borderTop: "1px solid #1e1e2e" }}>
-        {NAV_BOTTOM.map(({ href, label, icon: Icon }) => {
-          const active = pathname === href;
-          return (
-            <Link key={href} href={href} onClick={onClose}
-              className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium"
-              style={{ color: active ? "#fff" : "#4a4a6a", background: active ? "#1a1a24" : "transparent", textDecoration: "none" }}
-              onMouseEnter={(e) => { if (!active) e.currentTarget.style.background = "#1a1a24"; }}
-              onMouseLeave={(e) => { if (!active) e.currentTarget.style.background = "transparent"; }}
-            >
-              <Icon size={16} strokeWidth={1.5} />
-              {label}
-            </Link>
-          );
-        })}
-        <button onClick={handleLogout}
-          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium"
-          style={{ color: "#4a4a6a", background: "none", border: "none", cursor: "pointer" }}
-          onMouseEnter={(e) => { e.currentTarget.style.background = "#1a1a24"; e.currentTarget.style.color = "#ef4444"; }}
-          onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#4a4a6a"; }}
+      {/* Plan card */}
+      <div style={{
+        margin: "4px 12px 10px",
+        padding: "14px 16px",
+        background: "#f8fafc",
+        border: "1px solid #e2e8f0",
+        borderRadius: 12,
+      }}>
+        <div className="flex items-center justify-between" style={{ marginBottom: 8 }}>
+          <span style={{ fontSize: 12, fontWeight: 700, color: "#0f172a" }}>Plan {planLabel}</span>
+          <span style={{ fontSize: 11, color: "#94a3b8" }}>{price}</span>
+        </div>
+        <div style={{ fontSize: 11, color: "#94a3b8", marginBottom: 8 }}>
+          {planInfo.daysRemaining} jours restants · {pct}% actif
+        </div>
+        <div style={{ height: 4, borderRadius: 4, background: "#e2e8f0", overflow: "hidden", marginBottom: 10 }}>
+          <div style={{
+            height: "100%", width: `${pct}%`,
+            background: "linear-gradient(90deg, #7c3aed, #a855f7)",
+            borderRadius: 4, transition: "width 1s",
+          }} />
+        </div>
+        <Link
+          href="/dashboard/billing"
+          style={{
+            display: "block", textAlign: "center", padding: "7px 0",
+            background: "linear-gradient(135deg, #7c3aed, #a855f7)",
+            color: "#fff", borderRadius: 8, fontSize: 12, fontWeight: 600,
+            textDecoration: "none", boxShadow: "0 2px 8px rgba(124,58,237,0.25)",
+          }}
         >
-          <LogOut size={16} strokeWidth={1.5} />
-          Déconnexion
-        </button>
+          Mettre à niveau
+        </Link>
       </div>
 
       {/* User avatar */}
       {user && (
-        <div className="m-4 mt-3 p-3 rounded-xl flex items-center gap-3" style={{ background: "#1a1a24", border: "1px solid #2a2a3a" }}>
-          <div className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold" style={{ background: "linear-gradient(135deg,#7c3aed,#3b82f6)", color: "#fff" }}>
+        <div style={{
+          padding: "12px 16px 16px",
+          borderTop: "1px solid #f1f5f9",
+          display: "flex", alignItems: "center", gap: 10,
+        }}>
+          <div style={{
+            width: 34, height: 34, borderRadius: "50%", flexShrink: 0,
+            background: "linear-gradient(135deg, #7c3aed, #a855f7)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            color: "#fff", fontSize: 12, fontWeight: 700,
+          }}>
             {initials}
           </div>
-          <div className="overflow-hidden min-w-0">
-            <div style={{ fontSize: 13, fontWeight: 600, color: "#e2e8f0", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{user.full_name}</div>
-            <div style={{ fontSize: 11, color: "#4a4a6a", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{user.email}</div>
+          <div className="min-w-0 flex-1">
+            <div style={{ fontSize: 13, fontWeight: 600, color: "#0f172a", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+              {user.full_name}
+            </div>
+            <div style={{ fontSize: 11, color: "#94a3b8" }}>{role}</div>
           </div>
         </div>
       )}
@@ -172,14 +231,16 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     setUser(u);
   }, [router]);
 
-  const pageTitle = [...NAV, ...NAV_BOTTOM].find((n) => n.href === pathname)?.label ?? "Dashboard";
+  const currentPage = ALL_NAV.find((n) => n.href === pathname);
+  const pageTitle   = currentPage?.label ?? "Dashboard";
+  const pageSub     = currentPage?.sub ?? "Bienvenue sur Dealyze";
 
   return (
-    <div className="min-h-screen flex" style={{ background: "#0f0f13" }}>
+    <div className="min-h-screen flex" style={{ background: "#f8fafc" }}>
 
       {/* Desktop sidebar */}
-      <div className="hidden lg:block w-60 flex-shrink-0">
-        <div className="fixed left-0 top-0 w-60 h-screen">
+      <div className="hidden lg:block w-56 flex-shrink-0">
+        <div className="fixed left-0 top-0 w-56 h-screen">
           <Sidebar user={user} />
         </div>
       </div>
@@ -187,8 +248,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       {/* Mobile overlay */}
       {sidebarOpen && (
         <div className="fixed inset-0 z-50 lg:hidden">
-          <div className="absolute inset-0 bg-black/70" onClick={() => setSidebarOpen(false)} />
-          <div className="absolute left-0 top-0 w-60 h-full shadow-2xl">
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setSidebarOpen(false)} />
+          <div className="absolute left-0 top-0 w-56 h-full shadow-2xl">
             <Sidebar user={user} onClose={() => setSidebarOpen(false)} />
           </div>
         </div>
@@ -196,30 +257,59 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
       {/* Main */}
       <div className="flex-1 flex flex-col min-h-screen min-w-0">
+
         {/* Header */}
-        <header className="sticky top-0 z-40 flex items-center justify-between px-6 py-4" style={{ background: "#0f0f13", borderBottom: "1px solid #1e1e2e" }}>
+        <header className="sticky top-0 z-40 flex items-center justify-between px-6 py-4"
+          style={{ background: "#ffffff", borderBottom: "1px solid #e2e8f0" }}>
+
           <div className="flex items-center gap-4">
-            <button className="lg:hidden" style={{ color: "#5a5a7a", background: "none", border: "none", cursor: "pointer" }} onClick={() => setSidebarOpen(true)}>
+            <button className="lg:hidden" onClick={() => setSidebarOpen(true)}
+              style={{ color: "#64748b", background: "none", border: "none", cursor: "pointer", padding: 4 }}>
               <Menu size={20} />
             </button>
-            <h1 style={{ fontSize: 15, fontWeight: 600, color: "#e2e8f0" }}>{pageTitle}</h1>
+            <div>
+              <h1 style={{ fontSize: 18, fontWeight: 700, color: "#0f172a", letterSpacing: "-0.3px", lineHeight: 1.2 }}>{pageTitle}</h1>
+              <p style={{ fontSize: 12, color: "#94a3b8", marginTop: 2 }}>{pageSub}</p>
+            </div>
           </div>
-          <Link href="/dashboard/billing"
-            className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold text-white"
-            style={{ background: "linear-gradient(135deg,#7c3aed,#3b82f6)", boxShadow: "0 4px 12px rgba(124,58,237,0.3)", textDecoration: "none", transition: "box-shadow 0.15s" }}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 6px 20px rgba(124,58,237,0.5)"; }}
-            onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 4px 12px rgba(124,58,237,0.3)"; }}
-          >
-            <Rocket size={14} strokeWidth={1.5} /> Upgrade
-          </Link>
+
+          <div className="flex items-center gap-3">
+            <button style={{
+              width: 36, height: 36, borderRadius: 8, border: "1px solid #e2e8f0",
+              background: "#fff", display: "flex", alignItems: "center", justifyContent: "center",
+              cursor: "pointer", flexShrink: 0, transition: "border-color 0.15s",
+            }}
+              onMouseEnter={(e) => { e.currentTarget.style.borderColor = "#cbd5e1"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.borderColor = "#e2e8f0"; }}
+            >
+              <Bell size={15} style={{ color: "#64748b" }} />
+            </button>
+
+            <Link href="/dashboard/deal-draft"
+              className="hidden sm:flex items-center gap-2 font-semibold"
+              style={{
+                padding: "8px 16px", background: "#7c3aed", color: "#fff",
+                borderRadius: 8, fontSize: 13, textDecoration: "none",
+                boxShadow: "0 2px 8px rgba(124,58,237,0.3)", transition: "box-shadow 0.15s, background 0.15s",
+              }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.background = "#6d28d9"; (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 4px 16px rgba(124,58,237,0.4)"; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.background = "#7c3aed"; (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 2px 8px rgba(124,58,237,0.3)"; }}
+            >
+              <Plus size={14} strokeWidth={2.5} />
+              Nouvelle action
+            </Link>
+          </div>
         </header>
 
         {/* Content */}
         <main className="flex-1 p-6">{children}</main>
 
         {/* Footer */}
-        <footer className="px-6 py-4 text-center" style={{ borderTop: "1px solid #1a1a24" }}>
-          <span style={{ fontSize: 11, color: "#2a2a4a" }}>Powered by Gemini 2.5 Flash · XPRIZE AI Hackathon 2026</span>
+        <footer className="px-6 py-3 flex items-center justify-center gap-2"
+          style={{ borderTop: "1px solid #f1f5f9" }}>
+          <span style={{ fontSize: 11, color: "#94a3b8" }}>
+            Dealyze · Gemini 2.5 Flash · XPRIZE AI Hackathon 2026
+          </span>
         </footer>
       </div>
     </div>

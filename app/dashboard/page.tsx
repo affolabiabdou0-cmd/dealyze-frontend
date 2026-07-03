@@ -2,73 +2,45 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { FileText, Mail, BarChart3, Shield, ArrowRight, Zap, TrendingUp, Target, Activity } from "lucide-react";
+import {
+  FileText, Mail, BarChart3, Shield, ArrowRight,
+  CheckCircle, TrendingUp, Sparkles, Clock,
+} from "lucide-react";
 import { api } from "../lib/api";
 import { getUser } from "../lib/auth";
 
-interface AgentQuota {
-  utilisé: number;
-  limite: number | "illimité";
-  restant: number | "illimité";
-}
+interface AgentQuota { utilisé: number; limite: number | "illimité"; restant: number | "illimité"; }
 interface QuotaResponse {
   plan: string; mois: string;
   quotas: { deal_draft: AgentQuota; smart_chase: AgentQuota; pitch_radar: AgentQuota; deep_due: AgentQuota };
 }
 
-const AGENTS = [
-  {
-    href: "/dashboard/deal-draft",  key: "deal_draft",
-    icon: FileText,  name: "Deal Draft",
-    desc: "Générez des propositions commerciales percutantes en 10 secondes.",
-    color: "#7c3aed", glow: "rgba(124,58,237,0.25)", border: "#7c3aed33",
-  },
-  {
-    href: "/dashboard/smart-chase", key: "smart_chase",
-    icon: Mail,      name: "Smart Chase",
-    desc: "Rédigez des relances intelligentes pour vos factures impayées.",
-    color: "#f97316", glow: "rgba(249,115,22,0.25)", border: "#f9731633",
-  },
-  {
-    href: "/dashboard/pitch-radar", key: "pitch_radar",
-    icon: BarChart3, name: "Pitch Radar",
-    desc: "Analysez et scorez n'importe quel pitch deck investisseur.",
-    color: "#06b6d4", glow: "rgba(6,182,212,0.25)", border: "#06b6d433",
-  },
-  {
-    href: "/dashboard/deep-due",    key: "deep_due",
-    icon: Shield,    name: "Deep Due",
-    desc: "Due diligence automatisée sur toute entreprise en 1 clic.",
-    color: "#10b981", glow: "rgba(16,185,129,0.25)", border: "#10b98133",
-  },
-];
-
 const STATS = [
-  { icon: FileText,  label: "Devis générés",    key: "deal_draft",  color: "#7c3aed" },
-  { icon: Mail,      label: "Relances envoyées", key: "smart_chase", color: "#f97316" },
-  { icon: Target,    label: "Pitchs analysés",   key: "pitch_radar", color: "#06b6d4" },
-  { icon: Activity,  label: "Rapports due dil.", key: "deep_due",    color: "#10b981" },
+  { key: "deal_draft",  label: "Devis générés",    desc: "ce mois",  icon: FileText,  color: "#7c3aed", iconBg: "#ede9fe", badge: "+3",  badgeBg: "#f0fdf4", badgeColor: "#16a34a" },
+  { key: "smart_chase", label: "Relances envoyées", desc: "ce mois",  icon: Mail,      color: "#f97316", iconBg: "#fff7ed", badge: "+8",  badgeBg: "#f0fdf4", badgeColor: "#16a34a" },
+  { key: "pitch_radar", label: "Pitchs analysés",   desc: "ce mois",  icon: BarChart3, color: "#06b6d4", iconBg: "#ecfeff", badge: "+5",  badgeBg: "#f0fdf4", badgeColor: "#16a34a" },
+  { key: "deep_due",    label: "Rapports DD générés",desc: "ce mois", icon: Shield,    color: "#10b981", iconBg: "#f0fdf4", badge: "+2",  badgeBg: "#f0fdf4", badgeColor: "#16a34a" },
 ];
 
-function UsageBar({ quota, color }: { quota: AgentQuota | undefined; color: string }) {
-  if (!quota) return <div style={{ height: 3, borderRadius: 4, background: "#2a2a3a" }} />;
-  const unlimited = quota.limite === "illimité";
-  const pct = unlimited ? 15 : Math.min(100, (quota.utilisé / (quota.limite as number)) * 100);
-  const danger = !unlimited && pct > 80;
-  return (
-    <div>
-      <div className="flex justify-between items-center" style={{ marginBottom: 6 }}>
-        <span style={{ fontSize: 11, color: "#4a4a6a" }}>Utilisations ce mois</span>
-        <span style={{ fontSize: 11, fontFamily: "monospace", color: danger ? "#ef4444" : "#7a7a9a" }}>
-          {quota.utilisé} / {unlimited ? "∞" : quota.limite}
-        </span>
-      </div>
-      <div style={{ height: 3, borderRadius: 4, background: "#2a2a3a", overflow: "hidden" }}>
-        <div style={{ height: "100%", width: `${pct}%`, borderRadius: 4, background: danger ? "#ef4444" : color, transition: "width 1s" }} />
-      </div>
-    </div>
-  );
-}
+const ACTIVITY = [
+  { icon: CheckCircle, color: "#10b981", bg: "#f0fdf4", title: "Facture #2291 marquée comme payée",     sub: "Client Atlas Logistique · 4 280 €",          time: "il y a 12 min" },
+  { icon: Mail,        color: "#f97316", bg: "#fff7ed", title: "Relance niveau 2 envoyée",               sub: "Facture #2287 · Maison Verlaine · 2 150 €",   time: "il y a 1h"     },
+  { icon: BarChart3,   color: "#06b6d4", bg: "#ecfeff", title: "Pitch deck analysé — score 7,8/10",     sub: "Nova Health · Seed",                           time: "il y a 2h"     },
+  { icon: FileText,    color: "#7c3aed", bg: "#ede9fe", title: "Devis #DV-2026-118 généré et envoyé",   sub: "Solaris Énergie · 18 400 €",                   time: "il y a 4h"     },
+  { icon: Shield,      color: "#10b981", bg: "#f0fdf4", title: "Rapport de due diligence finalisé",     sub: "Helix Robotics · Risque modéré",               time: "hier"          },
+  { icon: Sparkles,    color: "#7c3aed", bg: "#ede9fe", title: "Nouveau modèle de relance proposé",     sub: "Réduction du délai moyen estimée à -3 jours",  time: "hier"          },
+];
+
+const QUICK = [
+  { href: "/dashboard/smart-chase", icon: Mail,      color: "#f97316", bg: "#fff7ed", name: "Smart Chase", desc: "Relancez automatiquement vos impayés" },
+  { href: "/dashboard/pitch-radar", icon: BarChart3, color: "#06b6d4", bg: "#ecfeff", name: "Pitch Radar", desc: "Notez un pitch deck en 30 secondes" },
+  { href: "/dashboard/deep-due",    icon: Shield,    color: "#10b981", bg: "#f0fdf4", name: "Deep Due",    desc: "Lancez une due diligence complète" },
+];
+
+const CARD: React.CSSProperties = {
+  background: "#ffffff", border: "1px solid #e2e8f0",
+  borderRadius: 14, boxShadow: "0 1px 3px rgba(0,0,0,0.07)",
+};
 
 export default function DashboardPage() {
   const user = getUser();
@@ -82,137 +54,164 @@ export default function DashboardPage() {
       .finally(() => setLoading(false));
   }, []);
 
-  const hour     = new Date().getHours();
-  const greeting = hour < 12 ? "Bonjour" : hour < 18 ? "Bon après-midi" : "Bonsoir";
-  const today    = new Date().toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" });
   const firstName = user?.full_name?.split(" ")[0] ?? "—";
 
   return (
-    <div className="max-w-6xl mx-auto space-y-8">
+    <div className="max-w-6xl mx-auto space-y-6">
 
-      {/* Header */}
-      <div className="flex items-start justify-between gap-4">
+      {/* Welcome */}
+      <div className="flex items-center justify-between gap-4">
         <div>
-          <h2 style={{ fontSize: 26, fontWeight: 700, color: "#f1f5f9", letterSpacing: "-0.5px", marginBottom: 4 }}>
-            {greeting}, {firstName} 👋
+          <h2 style={{ fontSize: 22, fontWeight: 700, color: "#0f172a", letterSpacing: "-0.3px" }}>
+            Bonjour, {firstName} 👋
           </h2>
-          <p style={{ fontSize: 14, color: "#4a4a6a", textTransform: "capitalize" }}>{today}</p>
+          <p style={{ fontSize: 13, color: "#94a3b8", marginTop: 2 }}>
+            Voici un aperçu de votre activité aujourd&apos;hui.
+          </p>
         </div>
-        <div style={{ flexShrink: 0, padding: "8px 16px", borderRadius: 10, background: "#1a1a24", border: "1px solid #2a2a3a", fontSize: 13, color: "#7a7a9a" }}>
-          Plan · <span style={{ color: "#a78bfa", fontWeight: 600 }}>{quota?.plan ?? user?.plan ?? "—"}</span>
+        <div style={{
+          flexShrink: 0, padding: "6px 12px", borderRadius: 8,
+          background: "#f8fafc", border: "1px solid #e2e8f0",
+          fontSize: 12, color: "#64748b", display: "flex", alignItems: "center", gap: 6,
+        }}>
+          <div style={{ width: 7, height: 7, borderRadius: "50%", background: "#10b981" }} />
+          Plan · <span style={{ color: "#7c3aed", fontWeight: 600 }}>{quota?.plan ?? user?.plan ?? "—"}</span>
         </div>
       </div>
 
-      {/* Stats row */}
+      {/* Stat cards */}
       <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
-        {STATS.map(({ icon: Icon, label, key, color }) => {
+        {STATS.map(({ key, label, desc, icon: Icon, color, iconBg, badge, badgeBg, badgeColor }) => {
           const val = quota?.quotas?.[key as keyof QuotaResponse["quotas"]]?.utilisé ?? 0;
           return (
-            <div key={key} style={{ background: "#1a1a24", border: "1px solid #2a2a3a", borderRadius: 14, padding: "18px 20px" }}>
-              <div className="flex items-center gap-2" style={{ marginBottom: 12 }}>
-                <div style={{ width: 28, height: 28, borderRadius: 8, background: `${color}18`, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <Icon size={14} style={{ color }} strokeWidth={1.5} />
+            <div key={key} style={{ ...CARD, padding: "20px" }}>
+              {/* Top row */}
+              <div className="flex items-center justify-between" style={{ marginBottom: 16 }}>
+                <div style={{ width: 36, height: 36, borderRadius: 10, background: iconBg, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <Icon size={17} style={{ color }} strokeWidth={1.75} />
                 </div>
-                <span style={{ fontSize: 12, color: "#4a4a6a" }}>{label}</span>
+                <span style={{ fontSize: 11, fontWeight: 700, padding: "3px 8px", borderRadius: 20, background: badgeBg, color: badgeColor, letterSpacing: "0.02em" }}>
+                  {badge}
+                </span>
               </div>
-              <div style={{ fontSize: 28, fontWeight: 700, color: "#f1f5f9", lineHeight: 1 }}>
-                {loadingQuota ? <span style={{ fontSize: 20, color: "#2a2a3a" }}>—</span> : val}
+              {/* Number */}
+              <div style={{ fontSize: 32, fontWeight: 800, color: "#0f172a", lineHeight: 1, letterSpacing: "-1px" }}>
+                {loadingQuota ? <span style={{ fontSize: 24, color: "#e2e8f0" }}>—</span> : val}
               </div>
-              <div style={{ fontSize: 11, color: "#3a3a5a", marginTop: 4 }}>ce mois</div>
+              {/* Label */}
+              <div style={{ fontSize: 13, color: "#64748b", marginTop: 4 }}>{label}</div>
+              {/* Tag */}
+              <div style={{ marginTop: 12, paddingTop: 12, borderTop: "1px solid #f1f5f9" }}>
+                <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color, background: iconBg, padding: "3px 8px", borderRadius: 6 }}>
+                  {key.replace("_", " ").toUpperCase().replace("DEAL DRAFT", "DEAL DRAFT").replace("SMART CHASE", "SMART CHASE")}
+                </span>
+              </div>
             </div>
           );
         })}
       </div>
 
-      {/* Agent cards */}
-      <div>
-        <h3 style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.1em", color: "#3a3a5a", textTransform: "uppercase", marginBottom: 16 }}>
-          Vos agents IA
-        </h3>
-        <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-4">
-          {AGENTS.map((a) => {
-            const q       = quota?.quotas?.[a.key as keyof QuotaResponse["quotas"]];
-            const blocked = q ? q.limite === 0 : false;
-            const Icon    = a.icon;
-            return (
-              <Link key={a.key} href={blocked ? "/dashboard/billing" : a.href}
-                className="block group" style={{ textDecoration: "none" }}
-                onMouseEnter={(e) => {
-                  const el = e.currentTarget as HTMLElement;
-                  el.style.border      = `1px solid ${a.color}66`;
-                  el.style.boxShadow   = `0 0 28px ${a.glow}`;
-                  el.style.transform   = "translateY(-3px)";
-                }}
-                onMouseLeave={(e) => {
-                  const el = e.currentTarget as HTMLElement;
-                  el.style.border      = `1px solid ${a.border}`;
-                  el.style.boxShadow   = "none";
-                  el.style.transform   = "translateY(0)";
-                }}
-              >
-                <div style={{
-                  background: "#1a1a24", border: `1px solid ${a.border}`, borderRadius: 16, padding: "22px 20px",
-                  transition: "border 0.2s, box-shadow 0.2s, transform 0.2s",
-                  height: "100%", display: "flex", flexDirection: "column",
-                }}>
-                  <div className="flex items-center justify-between" style={{ marginBottom: 14 }}>
-                    <div style={{ width: 44, height: 44, borderRadius: 12, background: `${a.color}18`, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                      <Icon size={22} style={{ color: a.color }} strokeWidth={1.5} />
-                    </div>
-                    <ArrowRight size={16} style={{ color: "#3a3a5a" }} strokeWidth={1.5} />
+      {/* Two-column layout */}
+      <div className="grid xl:grid-cols-3 gap-6">
+
+        {/* Activity feed (2/3) */}
+        <div className="xl:col-span-2" style={{ ...CARD, padding: 0, overflow: "hidden" }}>
+          <div className="flex items-center justify-between px-6 py-4" style={{ borderBottom: "1px solid #f1f5f9" }}>
+            <div className="flex items-center gap-2">
+              <Clock size={15} style={{ color: "#94a3b8" }} strokeWidth={1.75} />
+              <span style={{ fontSize: 14, fontWeight: 700, color: "#0f172a" }}>Activité récente</span>
+            </div>
+            <Link href="/dashboard" style={{ fontSize: 12, color: "#7c3aed", fontWeight: 600, textDecoration: "none" }}>
+              Tout voir →
+            </Link>
+          </div>
+          <div>
+            {ACTIVITY.map((item, i) => {
+              const Icon = item.icon;
+              return (
+                <div key={i} className="flex items-start gap-4 px-6 py-4"
+                  style={{ borderBottom: i < ACTIVITY.length - 1 ? "1px solid #f8fafc" : "none" }}>
+                  <div style={{
+                    width: 34, height: 34, borderRadius: 10, flexShrink: 0,
+                    background: item.bg, display: "flex", alignItems: "center", justifyContent: "center",
+                  }}>
+                    <Icon size={15} style={{ color: item.color }} strokeWidth={1.75} />
                   </div>
-                  <div style={{ fontSize: 15, fontWeight: 700, color: "#f1f5f9", marginBottom: 6 }}>{a.name}</div>
-                  <div style={{ fontSize: 12, color: "#4a4a6a", lineHeight: 1.6, marginBottom: 16, flex: 1 }}>{a.desc}</div>
-                  {loadingQuota ? (
-                    <div style={{ height: 3, borderRadius: 4, background: "#2a2a3a" }} className="animate-pulse" />
-                  ) : blocked ? (
-                    <span style={{ fontSize: 11, color: "#ef4444", padding: "4px 10px", borderRadius: 6, background: "#ef444415", display: "inline-block" }}>
-                      Quota épuisé · Upgrader
-                    </span>
-                  ) : (
-                    <UsageBar quota={q} color={a.color} />
-                  )}
+                  <div className="flex-1 min-w-0">
+                    <div style={{ fontSize: 13, fontWeight: 600, color: "#0f172a", marginBottom: 2 }}>{item.title}</div>
+                    <div style={{ fontSize: 12, color: "#94a3b8" }}>{item.sub}</div>
+                  </div>
+                  <div style={{ fontSize: 11, color: "#cbd5e1", flexShrink: 0, whiteSpace: "nowrap" }}>{item.time}</div>
                 </div>
-              </Link>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
-      </div>
 
-      {/* Quick actions */}
-      <div>
-        <h3 style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.1em", color: "#3a3a5a", textTransform: "uppercase", marginBottom: 16 }}>
-          Démarrage rapide
-        </h3>
-        <div className="grid sm:grid-cols-2 gap-3">
-          {AGENTS.map((a) => {
-            const Icon = a.icon;
-            return (
-              <Link key={a.href} href={a.href}
-                className="flex items-center gap-4"
-                style={{ background: "#1a1a24", border: "1px solid #2a2a3a", borderRadius: 12, padding: "16px 18px", textDecoration: "none", transition: "border 0.2s, background 0.2s" }}
-                onMouseEnter={(e) => { const el = e.currentTarget as HTMLElement; el.style.border = `1px solid ${a.color}44`; el.style.background = "#1e1e2a"; }}
-                onMouseLeave={(e) => { const el = e.currentTarget as HTMLElement; el.style.border = "1px solid #2a2a3a"; el.style.background = "#1a1a24"; }}
-              >
-                <div style={{ width: 36, height: 36, borderRadius: 10, background: `${a.color}18`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                  <Icon size={18} style={{ color: a.color }} strokeWidth={1.5} />
-                </div>
-                <div className="min-w-0">
-                  <div style={{ fontSize: 13, fontWeight: 600, color: "#e2e8f0" }}>{a.name}</div>
-                  <div style={{ fontSize: 12, color: "#4a4a6a", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{a.desc}</div>
-                </div>
-                <ArrowRight size={15} style={{ color: "#3a3a5a", marginLeft: "auto", flexShrink: 0 }} strokeWidth={1.5} />
-              </Link>
-            );
-          })}
+        {/* Quick access (1/3) */}
+        <div className="flex flex-col gap-4">
+          <div style={{ ...CARD, padding: 0, overflow: "hidden" }}>
+            <div className="px-5 py-4" style={{ borderBottom: "1px solid #f1f5f9" }}>
+              <div className="flex items-center gap-2">
+                <TrendingUp size={14} style={{ color: "#94a3b8" }} strokeWidth={1.75} />
+                <span style={{ fontSize: 14, fontWeight: 700, color: "#0f172a" }}>Accès rapide</span>
+              </div>
+            </div>
+            {QUICK.map((q, i) => {
+              const Icon = q.icon;
+              return (
+                <Link key={q.href} href={q.href} style={{ textDecoration: "none" }}>
+                  <div
+                    className="flex items-center gap-3 px-5 py-4 transition-all"
+                    style={{ borderBottom: i < QUICK.length - 1 ? "1px solid #f8fafc" : "none", cursor: "pointer" }}
+                    onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.background = "#f8fafc"; }}
+                    onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.background = "transparent"; }}
+                  >
+                    <div style={{
+                      width: 36, height: 36, borderRadius: 10, flexShrink: 0,
+                      background: q.bg, display: "flex", alignItems: "center", justifyContent: "center",
+                    }}>
+                      <Icon size={16} style={{ color: q.color }} strokeWidth={1.75} />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div style={{ fontSize: 13, fontWeight: 600, color: "#0f172a" }}>{q.name}</div>
+                      <div style={{ fontSize: 11, color: "#94a3b8", marginTop: 1 }}>{q.desc}</div>
+                    </div>
+                    <ArrowRight size={14} style={{ color: "#cbd5e1", flexShrink: 0 }} strokeWidth={1.75} />
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+
+          {/* Deal Draft CTA */}
+          <Link href="/dashboard/deal-draft" style={{ textDecoration: "none" }}>
+            <div style={{
+              ...CARD, padding: "20px",
+              background: "linear-gradient(135deg, #7c3aed, #a855f7)",
+              border: "none", cursor: "pointer",
+            }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.opacity = "0.9"; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.opacity = "1"; }}
+            >
+              <div style={{ width: 38, height: 38, borderRadius: 10, background: "rgba(255,255,255,0.2)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 12 }}>
+                <FileText size={18} style={{ color: "#fff" }} strokeWidth={1.75} />
+              </div>
+              <div style={{ fontSize: 14, fontWeight: 700, color: "#fff", marginBottom: 4 }}>Deal Draft</div>
+              <div style={{ fontSize: 12, color: "rgba(255,255,255,0.75)", marginBottom: 14, lineHeight: 1.5 }}>
+                Générez une proposition commerciale professionnelle en 10 secondes.
+              </div>
+              <div style={{
+                display: "inline-flex", alignItems: "center", gap: 6,
+                padding: "7px 14px", background: "rgba(255,255,255,0.15)",
+                borderRadius: 8, color: "#fff", fontSize: 12, fontWeight: 600,
+                border: "1px solid rgba(255,255,255,0.2)",
+              }}>
+                Lancer maintenant <ArrowRight size={12} strokeWidth={2.5} />
+              </div>
+            </div>
+          </Link>
         </div>
-      </div>
-
-      {/* Footer badge */}
-      <div className="flex items-center justify-center gap-2" style={{ paddingTop: 8 }}>
-        <Zap size={13} style={{ color: "#3a3a5a" }} strokeWidth={1.5} />
-        <span style={{ fontSize: 12, color: "#2a2a4a" }}>Propulsé par Gemini 2.5 Flash · XPRIZE AI Hackathon 2026</span>
-        <TrendingUp size={13} style={{ color: "#3a3a5a" }} strokeWidth={1.5} />
       </div>
     </div>
   );
