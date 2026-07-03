@@ -109,8 +109,8 @@ export default function RegisterPage() {
         style={{ padding:"52px 64px", background:"linear-gradient(150deg,#060C1A 0%,#0B1830 52%,#0F2552 100%)" }}>
         <div className="absolute inset-0 pointer-events-none" style={{ background:"radial-gradient(ellipse 70% 55% at 65% 25%, rgba(37,99,235,0.13) 0%, transparent 70%)" }} />
 
-        <Link href="/" className="relative z-10 font-display text-[26px] font-bold text-white"
-          style={{ letterSpacing:"-0.3px", textDecoration:"none" }}>Dealyze</Link>
+        <Link href="/" className="relative z-10"
+          style={{ textDecoration:"none", fontFamily:"Georgia, 'Times New Roman', serif", fontSize:22, letterSpacing:"3px", color:"rgba(255,255,255,0.95)" }}>VY<span style={{ color:"#60a5fa" }}>X</span>EN</Link>
 
         <div className="relative z-10">
           <div className="inline-flex items-center gap-2" style={{ background:"rgba(37,99,235,0.14)", border:"1px solid rgba(37,99,235,0.28)", borderRadius:100, padding:"5px 14px", marginBottom:28 }}>
@@ -143,7 +143,7 @@ export default function RegisterPage() {
           </div>
         </div>
 
-        <div className="relative z-10" style={{ fontSize:12, color:"rgba(255,255,255,0.18)" }}>© 2026 Dealyze · XPRIZE Hackathon</div>
+        <div className="relative z-10" style={{ fontSize:12, color:"rgba(255,255,255,0.18)" }}>© 2026 VYXEN · XPRIZE Hackathon</div>
       </div>
 
       {/* ── RIGHT ── */}
@@ -152,7 +152,7 @@ export default function RegisterPage() {
         <div style={{ width:"100%", maxWidth:380, paddingTop:8, paddingBottom:8 }}>
 
           <Link href="/" className="lg:hidden font-display text-xl font-bold"
-            style={{ color:"#0A1628", textDecoration:"none", display:"block", marginBottom:36 }}>Dealyze</Link>
+            style={{ color:"#0A1628", textDecoration:"none", display:"block", marginBottom:36, fontFamily:"Georgia, serif", letterSpacing:"3px", fontSize:18 }}>VY<span style={{ color:"#1a45d6" }}>X</span>EN</Link>
 
           <h2 style={{ fontSize:28, fontWeight:700, color:"#0A1628", letterSpacing:"-0.75px", marginBottom:4 }}>Créer votre compte</h2>
           <p style={{ fontSize:14, color:"#94A3B8", marginBottom:26 }}>Gratuit · Sans CB · 30 secondes</p>

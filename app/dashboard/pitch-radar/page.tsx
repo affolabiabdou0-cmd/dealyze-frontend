@@ -176,9 +176,9 @@ h1{font-size:26px;font-weight:800;color:#1a1a2e;letter-spacing:-0.5px;margin-bot
 .footer-left{font-size:11px;color:#9090b0;line-height:1.6}.footer-badge{background:#0891b2;color:#fff;font-size:11px;font-weight:700;padding:6px 16px;border-radius:8px}
 @media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact}.page{padding:24px 32px}}
 </style></head><body><div class="page">
-<div class="header"><div class="logo">Pitch<span>Radar</span> <span style="font-size:13px;color:#9090b0;font-weight:400">by Dealyze</span></div><div class="meta-right"><div class="radar-id">${result.radar_id}</div><div class="radar-date">Analysé le ${new Date(result.generated_at).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })}</div></div></div>
+<div class="header"><div class="logo">Pitch<span>Radar</span> <span style="font-size:13px;color:#9090b0;font-weight:400">by VYXEN</span></div><div class="meta-right"><div class="radar-id">${result.radar_id}</div><div class="radar-date">Analysé le ${new Date(result.generated_at).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })}</div></div></div>
 <h1>Rapport d'analyse — ${result.startup_name}</h1>
-<div class="subtitle">Scoring VC par critères pondérés · Dealyze AI</div>
+<div class="subtitle">Scoring VC par critères pondérés · VYXEN AI</div>
 <div class="score-hero">
   <div style="text-align:center;flex-shrink:0"><div class="score-big">${result.score_global.toFixed(1)}<span class="score-denom">/10</span></div><div style="font-size:12px;color:#9090b0;margin-top:4px">Score global</div></div>
   <div class="score-desc"><h2>${result.startup_name}</h2><p>Analyse sur 8 critères VC pondérés : équipe, marché, traction, modèle économique, solution, problème, concurrence et demande financement.</p><div class="reco-box">${rc.icon} ${result.recommandation}</div></div>
@@ -191,7 +191,7 @@ h1{font-size:26px;font-weight:800;color:#1a1a2e;letter-spacing:-0.5px;margin-bot
 </div>
 <div class="section-title">Questions à poser au fondateur</div>
 <div class="q-list">${result.questions_suggerees.map((q, i) => `<div class="q-item"><span class="q-num">Q${i+1}</span><span class="q-text">${q}</span></div>`).join("")}</div>
-<div class="footer"><div class="footer-left">Document généré par Dealyze Pitch Radar IA · ${new Date().getFullYear()}<br>Rapport confidentiel · Usage investisseur uniquement</div><div class="footer-badge">Dealyze · XPRIZE 2026</div></div>
+<div class="footer"><div class="footer-left">Document généré par VYXEN Pitch Radar IA · ${new Date().getFullYear()}<br>Rapport confidentiel · Usage investisseur uniquement</div><div class="footer-badge">VYXEN · XPRIZE 2026</div></div>
 </div></body></html>`);
     setTimeout(() => { win.print(); }, 300);
   }
@@ -444,7 +444,7 @@ h1{font-size:26px;font-weight:800;color:#1a1a2e;letter-spacing:-0.5px;margin-bot
 
               {/* Footer */}
               <div style={{ padding: "20px 32px", background: "#f8fafc", borderTop: "1px solid #f1f5f9", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                <p style={{ fontSize: 11, color: "#94a3b8" }}>Rapport généré par Dealyze Pitch Radar IA · XPRIZE 2026</p>
+                <p style={{ fontSize: 11, color: "#94a3b8" }}>Rapport généré par VYXEN Pitch Radar IA · XPRIZE 2026</p>
                 <button onClick={downloadPDF} style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 18px", borderRadius: 10, border: "none", background: `linear-gradient(135deg,${COLOR},#0891b2)`, cursor: "pointer", color: "#fff", fontSize: 12, fontWeight: 700, boxShadow: `0 4px 14px ${GLOW}` }}>
                   <Download size={13} strokeWidth={1.75} /> Télécharger PDF
                 </button>

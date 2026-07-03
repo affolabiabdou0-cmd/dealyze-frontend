@@ -141,7 +141,7 @@ h1{font-size:22px;font-weight:800;color:#1a1a2e;letter-spacing:-0.5px}
 .footer-left{font-size:11px;color:#9090b0;line-height:1.6}.footer-badge{background:#f97316;color:#fff;font-size:11px;font-weight:700;padding:6px 16px;border-radius:8px}
 @media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact}.page{padding:24px 32px}}
 </style></head><body><div class="page">
-<div class="header"><div class="logo">Smart<span>Chase</span> <span style="font-size:13px;color:#9090b0;font-weight:400">by Dealyze</span></div><div class="meta-right"><div class="chase-id">${result.chase_id}</div><div class="chase-date">Généré le ${new Date(result.generated_at).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })}</div></div></div>
+<div class="header"><div class="logo">Smart<span>Chase</span> <span style="font-size:13px;color:#9090b0;font-weight:400">by VYXEN</span></div><div class="meta-right"><div class="chase-id">${result.chase_id}</div><div class="chase-date">Généré le ${new Date(result.generated_at).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })}</div></div></div>
 <div class="title-row"><h1>Relance — ${result.client_name}</h1><span class="level-badge">${esc.label}</span></div>
 <div class="info-grid">
   <div><div class="info-label">Client</div><div class="info-value">${result.client_name}</div></div>
@@ -152,7 +152,7 @@ h1{font-size:22px;font-weight:800;color:#1a1a2e;letter-spacing:-0.5px}
 <div class="alert-bar"><div><div class="alert-text">Niveau d'escalade ${result.escalation_level}/4 — ${esc.label}</div><div class="alert-sub">Ton appliqué : ${result.tone}</div></div></div>
 <div class="email-wrap"><div class="email-head"><div class="email-label">Objet de l'email</div><div class="email-subject">${result.email_subject}</div></div><div class="email-body">${emailLines}</div></div>
 ${result.next_action_date ? `<div class="next-box"><span style="font-size:18px">📅</span><div><div class="next-label">Prochaine action recommandée</div><div class="next-date">${new Date(result.next_action_date).toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" })}</div></div></div>` : ""}
-<div class="footer"><div class="footer-left">Document généré par Dealyze Smart Chase IA · ${new Date().getFullYear()}<br>Ce document est confidentiel et destiné uniquement au destinataire désigné.</div><div class="footer-badge">Dealyze · XPRIZE 2026</div></div>
+<div class="footer"><div class="footer-left">Document généré par VYXEN Smart Chase IA · ${new Date().getFullYear()}<br>Ce document est confidentiel et destiné uniquement au destinataire désigné.</div><div class="footer-badge">VYXEN · XPRIZE 2026</div></div>
 </div></body></html>`);
     setTimeout(() => { win.print(); }, 300);
   }
@@ -367,7 +367,7 @@ ${result.next_action_date ? `<div class="next-box"><span style="font-size:18px">
 
               {/* Footer */}
               <div style={{ padding: "20px 32px", background: "#f8fafc", borderTop: "1px solid #f1f5f9", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                <p style={{ fontSize: 11, color: "#94a3b8" }}>Généré par Dealyze Smart Chase IA · XPRIZE 2026</p>
+                <p style={{ fontSize: 11, color: "#94a3b8" }}>Généré par VYXEN Smart Chase IA · XPRIZE 2026</p>
                 <button onClick={downloadPDF} style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 18px", borderRadius: 10, border: "none", background: `linear-gradient(135deg,${COLOR},#ea580c)`, cursor: "pointer", color: "#fff", fontSize: 12, fontWeight: 700, boxShadow: `0 4px 14px ${GLOW}` }}>
                   <Download size={13} strokeWidth={1.75} /> Télécharger PDF
                 </button>

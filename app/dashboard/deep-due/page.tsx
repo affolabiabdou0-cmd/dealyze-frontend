@@ -160,7 +160,7 @@ h1{font-size:26px;font-weight:800;color:#1a1a2e;letter-spacing:-0.5px;margin-bot
 .footer-left{font-size:11px;color:#9090b0;line-height:1.6}.footer-badge{background:#059669;color:#fff;font-size:11px;font-weight:700;padding:6px 16px;border-radius:8px}
 @media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact}.page{padding:24px 32px}}
 </style></head><body><div class="page">
-<div class="header"><div class="logo">Deep<span>Due</span> <span style="font-size:13px;color:#9090b0;font-weight:400">by Dealyze</span></div><div class="meta-right"><div class="due-id">${result.due_id}</div><div class="due-date">Analysé le ${new Date(result.generated_at).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })}</div></div></div>
+<div class="header"><div class="logo">Deep<span>Due</span> <span style="font-size:13px;color:#9090b0;font-weight:400">by VYXEN</span></div><div class="meta-right"><div class="due-id">${result.due_id}</div><div class="due-date">Analysé le ${new Date(result.generated_at).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })}</div></div></div>
 <h1>Due Diligence — ${result.company_name}</h1>
 <div class="subtitle">${result.founder_name ? `Fondateur : ${result.founder_name}` : "Analyse entreprise"}</div>
 <div class="hero">
@@ -178,7 +178,7 @@ ${result.analyse_entreprise.structure ? `<p class="prose"><strong>Structure :</s
 ${result.analyse_entreprise.position_marche ? `<p class="prose"><strong>Position marché :</strong> ${result.analyse_entreprise.position_marche}</p>` : ""}
 ${result.analyse_entreprise.concurrents?.length ? `<p class="prose"><strong>Concurrents :</strong></p><div class="tag-list">${result.analyse_entreprise.concurrents.map((c) => `<span class="tag">${c}</span>`).join("")}</div>` : ""}` : ""}
 ${result.risques_identifies?.length ? `<div class="section-title">Risques identifiés</div>${risksHtml}` : ""}
-<div class="footer"><div class="footer-left">Document généré par Dealyze Deep Due IA · ${new Date().getFullYear()}<br>Rapport confidentiel — Usage investisseur uniquement</div><div class="footer-badge">Dealyze · XPRIZE 2026</div></div>
+<div class="footer"><div class="footer-left">Document généré par VYXEN Deep Due IA · ${new Date().getFullYear()}<br>Rapport confidentiel — Usage investisseur uniquement</div><div class="footer-badge">VYXEN · XPRIZE 2026</div></div>
 </div></body></html>`);
     setTimeout(() => { win.print(); }, 300);
   }
@@ -433,7 +433,7 @@ ${result.risques_identifies?.length ? `<div class="section-title">Risques identi
 
               {/* Footer */}
               <div style={{ padding: "20px 32px", background: "#f8fafc", borderTop: "1px solid #f1f5f9", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                <p style={{ fontSize: 11, color: "#94a3b8" }}>Rapport généré par Dealyze Deep Due IA · XPRIZE 2026</p>
+                <p style={{ fontSize: 11, color: "#94a3b8" }}>Rapport généré par VYXEN Deep Due IA · XPRIZE 2026</p>
                 <button onClick={downloadPDF} style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 18px", borderRadius: 10, border: "none", background: `linear-gradient(135deg,${COLOR},#059669)`, cursor: "pointer", color: "#fff", fontSize: 12, fontWeight: 700, boxShadow: `0 4px 14px ${GLOW}` }}>
                   <Download size={13} strokeWidth={1.75} /> Télécharger PDF
                 </button>

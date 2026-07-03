@@ -237,10 +237,10 @@ export default function DashboardPage() {
         {/* ══════════════════════════════════════
             ACTIVITY + QUICK ACCESS
         ══════════════════════════════════════ */}
-        <div className="grid xl:grid-cols-3 gap-4 items-start">
+        <div className="grid xl:grid-cols-4 gap-4 items-start">
 
-          {/* Activity feed — 2/3 */}
-          <div className="xl:col-span-2" style={{ background: "#fff", borderRadius: 14, overflow: "hidden", boxShadow: "0 2px 12px rgba(0,0,0,0.06)", border: "1px solid #f0f4f8" }}>
+          {/* Activity feed — 3/4 */}
+          <div className="xl:col-span-3" style={{ background: "#fff", borderRadius: 14, overflow: "hidden", boxShadow: "0 2px 12px rgba(0,0,0,0.06)", border: "1px solid #f0f4f8" }}>
             {/* Card header */}
             <div style={{ padding: "12px 18px 10px", borderBottom: "1px solid #f1f5f9", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 7 }}>

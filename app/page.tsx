@@ -30,8 +30,8 @@ function Navbar() {
       }}
     >
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-16">
-        <a href="#" className="font-display text-2xl font-bold" style={{ color: scrolled ? "#0F2552" : "#fff" }}>
-          Dealyze
+        <a href="#" style={{ fontFamily:"Georgia, 'Times New Roman', serif", fontSize:20, letterSpacing:"3px", color: scrolled ? "#0d2461" : "rgba(255,255,255,0.95)", textDecoration:"none" }}>
+          VY<span style={{ color: scrolled ? "#1a45d6" : "#60a5fa" }}>X</span>EN
         </a>
         <div className="hidden md:flex items-center gap-8">
           {["Fonctionnalités", "Tarifs"].map((item) => (
@@ -218,7 +218,7 @@ function AgentsSection() {
             Un agent pour chaque étape<br />de votre deal
           </h2>
           <p className="text-lg text-gray-500 max-w-2xl mx-auto leading-relaxed">
-            Dealyze centralise 4 agents IA dans une seule plateforme. Chacun maîtrise une étape critique de vos cycles de vente et d&apos;investissement.
+            VYXEN centralise 4 agents IA dans une seule plateforme. Chacun maîtrise une étape critique de vos cycles de vente et d&apos;investissement.
           </p>
         </div>
         <div className="grid md:grid-cols-2 gap-8">
@@ -270,7 +270,7 @@ function HowItWorks() {
           <h2 className="font-display text-4xl md:text-5xl font-bold mb-4" style={{ color: "#0F2552" }}>
             Opérationnel en 3 étapes
           </h2>
-          <p className="text-lg text-gray-500 max-w-xl mx-auto">Pas de configuration complexe. Dealyze est prêt en quelques minutes.</p>
+          <p className="text-lg text-gray-500 max-w-xl mx-auto">Pas de configuration complexe. VYXEN est prêt en quelques minutes.</p>
         </div>
         <div className="grid md:grid-cols-3 gap-8">
           {steps.map((step) => (
@@ -378,7 +378,7 @@ function CTABanner() {
           <span style={{ color: "#60A5FA" }}>commence maintenant.</span>
         </h2>
         <p className="text-xl text-white/60 mb-10 max-w-xl mx-auto">
-          Rejoignez Dealyze et transformez chaque opportunité en contrat signé grâce à l&apos;IA.
+          Rejoignez VYXEN et transformez chaque opportunité en contrat signé grâce à l&apos;IA.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
@@ -406,11 +406,11 @@ function Footer() {
     <footer className="py-10 border-t border-gray-100">
       <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
         <div>
-          <div className="font-display text-xl font-bold" style={{ color: "#0F2552" }}>Dealyze</div>
+          <div style={{ fontFamily:"Georgia, 'Times New Roman', serif", fontSize:18, letterSpacing:"3px", color:"#0d2461" }}>VY<span style={{ color:"#1a45d6" }}>X</span>EN</div>
           <p className="text-xs text-gray-400 mt-1">Turn every deal into done.</p>
         </div>
         <div className="text-xs text-gray-400">Powered by Gemini 2.5 · Firebase · Supabase</div>
-        <div className="text-xs text-gray-400">© 2026 Dealyze · XPRIZE Hackathon 2026</div>
+        <div className="text-xs text-gray-400">© 2026 VYXEN · XPRIZE Hackathon 2026</div>
       </div>
     </footer>
   );

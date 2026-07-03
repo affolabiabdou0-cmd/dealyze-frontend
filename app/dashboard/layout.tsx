@@ -101,21 +101,13 @@ function Sidebar({ user, onClose }: { user: User | null; onClose?: () => void })
     <aside className="flex flex-col h-full" style={{ background: "#0b1526" }}>
 
       {/* Logo */}
-      <div className="flex items-center justify-between px-5 py-6">
-        <Link href="/dashboard" className="flex items-center gap-3" style={{ textDecoration: "none" }}>
-          <div style={{
-            width: 36, height: 36, borderRadius: 10, flexShrink: 0,
-            background: "linear-gradient(135deg, #7c3aed, #a855f7)",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            boxShadow: "0 4px 16px rgba(124,58,237,0.5)",
-          }}>
-            <Zap size={18} strokeWidth={2.5} style={{ color: "#fff" }} />
-          </div>
+      <div className="flex items-center justify-between px-5 py-5">
+        <Link href="/dashboard" className="flex items-center gap-0" style={{ textDecoration: "none" }}>
           <div>
-            <span style={{ fontSize: 18, fontWeight: 800, letterSpacing: "-0.5px", color: "#f8fafc", display: "block", lineHeight: 1 }}>
-              Dealyze<span style={{ color: "#a78bfa" }}>.</span>
+            <span style={{ fontFamily: "Georgia, 'Times New Roman', serif", fontSize: 20, fontWeight: 400, letterSpacing: "3px", color: "rgba(255,255,255,0.95)", display: "block", lineHeight: 1 }}>
+              VY<span style={{ color: "#60a5fa" }}>X</span>EN
             </span>
-            <span style={{ fontSize: 10, color: "rgba(255,255,255,0.28)", letterSpacing: "0.08em", fontWeight: 600 }}>AI PLATFORM</span>
+            <span style={{ fontSize: 9, color: "rgba(255,255,255,0.22)", letterSpacing: "0.14em", fontWeight: 700, textTransform: "uppercase" }}>AI PLATFORM</span>
           </div>
         </Link>
         {onClose && (
@@ -349,7 +341,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   const currentPage = ALL_NAV.find((n) => n.href === pathname);
   const pageTitle   = currentPage?.label ?? "Dashboard";
-  const pageSub     = currentPage?.sub   ?? "Bienvenue sur Dealyze";
+  const pageSub     = currentPage?.sub   ?? "Bienvenue sur VYXEN";
 
   return (
     <div className="min-h-screen flex" style={{ background: "#f1f5f9" }}>
@@ -416,7 +408,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <main className="flex-1 p-5">{children}</main>
 
         <footer className="px-7 py-3 flex items-center justify-center" style={{ borderTop: "1px solid #e9eef5", background: "rgba(255,255,255,0.8)" }}>
-          <span style={{ fontSize: 11, color: "#94a3b8" }}>Dealyze · Gemini 2.5 Flash · XPRIZE AI Hackathon 2026</span>
+          <span style={{ fontSize: 11, color: "#94a3b8" }}>VYXEN · Gemini 2.5 Flash · XPRIZE AI Hackathon 2026</span>
         </footer>
       </div>
     </div>

@@ -114,7 +114,7 @@ export default function LoginPage() {
 
         <Link href="/" className="relative z-10 flex items-center gap-2.5" style={{ textDecoration: "none" }}>
           <div style={{ width:36, height:36, borderRadius:10, background:"linear-gradient(135deg,#7c3aed,#2563eb)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:18, boxShadow:"0 0 20px rgba(124,58,237,0.4)" }}>⚡</div>
-          <span className="font-display font-bold" style={{ fontSize:28, letterSpacing:"-0.5px", background:"linear-gradient(135deg,#c4b5fd,#93c5fd)", WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent", backgroundClip:"text" }}>Dealyze</span>
+          <span style={{ fontFamily:"Georgia, 'Times New Roman', serif", fontSize:22, letterSpacing:"3px", color:"rgba(255,255,255,0.95)" }}>VY<span style={{ color:"#60a5fa" }}>X</span>EN</span>
         </Link>
 
         <div className="relative z-10">
@@ -142,7 +142,7 @@ export default function LoginPage() {
         </div>
 
         <div className="relative z-10" style={{ fontSize:12, color:"rgba(255,255,255,0.18)" }}>
-          © 2026 Dealyze · XPRIZE Hackathon
+          © 2026 VYXEN · XPRIZE Hackathon
         </div>
       </div>
 
@@ -152,10 +152,10 @@ export default function LoginPage() {
         <div style={{ width:"100%", maxWidth:380 }}>
 
           <Link href="/" className="lg:hidden font-display text-xl font-bold"
-            style={{ color:"#0A1628", textDecoration:"none", display:"block", marginBottom:40 }}>Dealyze</Link>
+            style={{ color:"#0A1628", textDecoration:"none", display:"block", marginBottom:40, fontFamily:"Georgia, serif", letterSpacing:"3px", fontSize:18 }}>VY<span style={{ color:"#1a45d6" }}>X</span>EN</Link>
 
           <h2 style={{ fontSize:30, fontWeight:700, color:"#0A1628", letterSpacing:"-0.75px", marginBottom:6 }}>Bon retour</h2>
-          <p style={{ fontSize:14, color:"#94A3B8", marginBottom:36 }}>Connectez-vous à votre espace Dealyze</p>
+          <p style={{ fontSize:14, color:"#94A3B8", marginBottom:36 }}>Connectez-vous à votre espace VYXEN</p>
 
           {/* Google */}
           <button type="button" onClick={handleGoogle} disabled={gLoading || loading}

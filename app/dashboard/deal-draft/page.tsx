@@ -165,7 +165,7 @@ ul li::before{content:"✓";color:#7c3aed;font-weight:700;flex-shrink:0;margin-t
     <div><div class="client-item-label">Délai</div><div class="client-item-value">${form.timeline || "—"}</div></div>
   </div>
   ${sectionsHtml}${livrablesHtml}
-  <div class="footer"><div class="footer-left">Document généré par Dealyze AI · ${new Date().getFullYear()}<br>Ce devis est valable 30 jours à compter de sa date d'émission.</div><div class="footer-badge">Dealyze · XPRIZE 2026</div></div>
+  <div class="footer"><div class="footer-left">Document généré par VYXEN AI · ${new Date().getFullYear()}<br>Ce devis est valable 30 jours à compter de sa date d'émission.</div><div class="footer-badge">VYXEN · XPRIZE 2026</div></div>
 </div></body></html>`);
     setTimeout(() => { win.print(); }, 300);
   }
@@ -363,7 +363,7 @@ ul li::before{content:"✓";color:#7c3aed;font-weight:700;flex-shrink:0;margin-t
               {/* Footer */}
               <div style={{ padding: "20px 32px", borderTop: "1px solid #f1f5f9", background: "#f8fafc", display: "flex", alignItems: "center", justifyContent: "space-between", animation: "fadeInSection 0.4s ease both", animationDelay: "640ms" }}>
                 <div>
-                  <p style={{ fontSize: 11, color: "#94a3b8", lineHeight: 1.6 }}>Devis valable 30 jours · Généré par Dealyze AI</p>
+                  <p style={{ fontSize: 11, color: "#94a3b8", lineHeight: 1.6 }}>Devis valable 30 jours · Généré par VYXEN AI</p>
                   <p style={{ fontSize: 11, color: "#cbd5e1" }}>XPRIZE AI Hackathon 2026</p>
                 </div>
                 <button onClick={downloadPDF} style={{ display: "flex", alignItems: "center", gap: 8, padding: "11px 20px", borderRadius: 10, border: "none", background: `linear-gradient(135deg,${COLOR},#6d28d9)`, cursor: "pointer", color: "#fff", fontSize: 13, fontWeight: 700, boxShadow: `0 4px 14px ${GLOW}` }}>
