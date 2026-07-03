@@ -93,7 +93,7 @@ export default function BillingPage() {
   }
 
   return (
-    <div className="max-w-5xl mx-auto space-y-8">
+    <div className="w-full space-y-8">
 
       {/* ── Plan actuel ── */}
       <div style={CARD}>

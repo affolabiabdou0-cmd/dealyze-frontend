@@ -171,20 +171,20 @@ ${result.risques_identifies?.length ? `<div class="section-title">Risques identi
   const rc = result ? recoConfig(result.recommandation_finale) : null;
 
   return (
-    <div className="max-w-6xl mx-auto">
+    <div className="w-full">
       <style>{ANIM_STYLE}</style>
 
       <div className="flex items-center gap-3 mb-6">
-        <div style={{ width: 42, height: 42, borderRadius: 12, background: "#f0fdf4", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div style={{ width: 44, height: 44, borderRadius: 12, background: "#f0fdf4", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
           <Shield size={22} style={{ color: COLOR }} strokeWidth={1.75} />
         </div>
         <div>
-          <h2 style={{ fontSize: 18, fontWeight: 700, color: "#0f172a", marginBottom: 2 }}>Deep Due</h2>
-          <p style={{ fontSize: 13, color: "#94a3b8" }}>Due diligence automatisée · Profil fondateur · Cartographie des risques</p>
+          <h2 style={{ fontSize: 18, fontWeight: 700, color: "#0f172a", marginBottom: 2, letterSpacing: "-0.3px" }}>Deep Due</h2>
+          <p style={{ fontSize: 13, color: "#94a3b8" }}>Due diligence IA complète — profil fondateur, analyse concurrentielle et cartographie des risques</p>
         </div>
       </div>
 
-      <div className={result ? "block" : "grid lg:grid-cols-2 gap-5"}>
+      <div className={result ? "block" : "grid lg:grid-cols-2 gap-6"}>
         {/* FORM */}
         {!result && (
           <div style={{ ...CARD, padding: 24 }}>
@@ -221,18 +221,43 @@ ${result.risques_identifies?.length ? `<div class="section-title">Risques identi
         )}
 
         {loading && !result && (
-          <div style={{ ...CARD, padding: 24, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: 320 }}>
-            <div className="w-10 h-10 rounded-full animate-spin mb-4" style={{ border: "3px solid #f0fdf4", borderTopColor: COLOR }} />
-            <p style={{ fontSize: 13, color: "#64748b" }}>Due diligence en cours…</p>
-            <p style={{ fontSize: 11, color: "#94a3b8", marginTop: 4 }}>Cela peut prendre 30 à 60 secondes</p>
+          <div style={{ ...CARD, padding: 32, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: 400 }}>
+            <div className="w-12 h-12 rounded-full animate-spin mb-5" style={{ border: "3px solid #f0fdf4", borderTopColor: COLOR }} />
+            <p style={{ fontSize: 14, fontWeight: 600, color: "#0f172a", marginBottom: 4 }}>Due diligence en cours…</p>
+            <p style={{ fontSize: 12, color: "#94a3b8" }}>Analyse approfondie — cela peut prendre 30 à 60 secondes</p>
           </div>
         )}
         {!result && !loading && (
-          <div style={{ ...CARD, padding: 24, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: 320, textAlign: "center" }}>
-            <div style={{ width: 64, height: 64, borderRadius: 16, background: "#f0fdf4", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 16 }}>
-              <Shield size={30} style={{ color: COLOR }} strokeWidth={1.5} />
+          <div style={{ ...CARD, padding: 28, display: "flex", flexDirection: "column", minHeight: 400 }}>
+            <div style={{ marginBottom: 22 }}>
+              <div style={{ width: 50, height: 50, borderRadius: 13, background: "#f0fdf4", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 16 }}>
+                <Shield size={24} style={{ color: COLOR }} strokeWidth={1.5} />
+              </div>
+              <h3 style={{ fontSize: 15, fontWeight: 700, color: "#0f172a", marginBottom: 6 }}>Due diligence de niveau institutionnel</h3>
+              <p style={{ fontSize: 13, color: "#94a3b8", lineHeight: 1.6 }}>
+                Deep Due agrège et analyse les signaux disponibles pour produire un rapport d'investigation complet sur n'importe quelle cible.
+              </p>
             </div>
-            <p style={{ fontSize: 13, color: "#94a3b8", maxWidth: 250, lineHeight: 1.6 }}>Entrez le nom d&apos;une entreprise pour lancer une due diligence complète avec cartographie des risques.</p>
+            <div style={{ display: "flex", flexDirection: "column", gap: 9, marginBottom: 24 }}>
+              {[
+                "Synthèse exécutive avec score de confiance",
+                "Profil détaillé du fondateur",
+                "Analyse concurrentielle et positionnement marché",
+                "Cartographie des risques par niveau de criticité",
+                "Recommandation d'investissement argumentée",
+              ].map((f, i) => (
+                <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13, color: "#334155" }}>
+                  <div style={{ width: 20, height: 20, borderRadius: 6, background: "#f0fdf4", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                    <Check size={11} style={{ color: COLOR }} strokeWidth={2.5} />
+                  </div>
+                  {f}
+                </div>
+              ))}
+            </div>
+            <div style={{ marginTop: "auto", padding: "14px 18px", borderRadius: 11, background: "#f8fafc", border: "1px solid #e2e8f0" }}>
+              <div style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.07em", textTransform: "uppercase", color: "#94a3b8", marginBottom: 4 }}>Profondeur d'analyse</div>
+              <div style={{ fontSize: 14, fontWeight: 700, color: "#0f172a" }}>Équivalent à 4h de recherche humaine</div>
+            </div>
           </div>
         )}
 

@@ -120,7 +120,7 @@ export default function SettingsPage() {
   const planColor = planColors[user?.plan ?? "free_trial"] ?? "#a78bfa";
 
   return (
-    <div className="max-w-5xl mx-auto">
+    <div className="w-full">
       <div className="grid lg:grid-cols-[200px_1fr] gap-6">
 
         {/* Left nav */}

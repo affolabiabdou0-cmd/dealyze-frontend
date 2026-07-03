@@ -155,21 +155,21 @@ ul li::before{content:"✓";color:#7c3aed;font-weight:700;flex-shrink:0;margin-t
   }
 
   return (
-    <div className="max-w-6xl mx-auto">
+    <div className="w-full">
       <style>{ANIM_STYLE}</style>
 
       {/* Page header */}
       <div className="flex items-center gap-3 mb-6">
-        <div style={{ width: 42, height: 42, borderRadius: 12, background: "#ede9fe", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div style={{ width: 44, height: 44, borderRadius: 12, background: "#ede9fe", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
           <FileText size={22} style={{ color: COLOR }} strokeWidth={1.75} />
         </div>
         <div>
-          <h2 style={{ fontSize: 18, fontWeight: 700, color: "#0f172a", marginBottom: 2 }}>Deal Draft</h2>
-          <p style={{ fontSize: 13, color: "#94a3b8" }}>Devis professionnel généré par IA en quelques secondes</p>
+          <h2 style={{ fontSize: 18, fontWeight: 700, color: "#0f172a", marginBottom: 2, letterSpacing: "-0.3px" }}>Deal Draft</h2>
+          <p style={{ fontSize: 13, color: "#94a3b8" }}>Générez une proposition commerciale professionnelle sur-mesure en moins de 30 secondes</p>
         </div>
       </div>
 
-      <div className={result ? "block" : "grid lg:grid-cols-2 gap-5"}>
+      <div className={result ? "block" : "grid lg:grid-cols-2 gap-6"}>
         {/* FORM */}
         {!result && (
           <div style={{ ...CARD, padding: 24 }}>
@@ -206,19 +206,45 @@ ul li::before{content:"✓";color:#7c3aed;font-weight:700;flex-shrink:0;margin-t
           </div>
         )}
 
-        {/* Loading / Empty state */}
+        {/* Loading / Preview panel */}
         {loading && !result && (
-          <div style={{ ...CARD, padding: 24, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: 320 }}>
-            <div className="w-10 h-10 rounded-full animate-spin mb-4" style={{ border: `3px solid #ede9fe`, borderTopColor: COLOR }} />
-            <p style={{ fontSize: 13, color: "#64748b" }}>Gemini génère votre devis…</p>
+          <div style={{ ...CARD, padding: 32, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: 400 }}>
+            <div className="w-12 h-12 rounded-full animate-spin mb-5" style={{ border: `3px solid #ede9fe`, borderTopColor: COLOR }} />
+            <p style={{ fontSize: 14, fontWeight: 600, color: "#0f172a", marginBottom: 4 }}>Gemini rédige votre proposition…</p>
+            <p style={{ fontSize: 12, color: "#94a3b8" }}>Personnalisation en cours selon vos critères</p>
           </div>
         )}
         {!result && !loading && (
-          <div style={{ ...CARD, padding: 24, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: 320, textAlign: "center" }}>
-            <div style={{ width: 64, height: 64, borderRadius: 16, background: "#ede9fe", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 16 }}>
-              <FileText size={30} style={{ color: COLOR }} strokeWidth={1.5} />
+          <div style={{ ...CARD, padding: 28, display: "flex", flexDirection: "column", minHeight: 400 }}>
+            <div style={{ marginBottom: 22 }}>
+              <div style={{ width: 50, height: 50, borderRadius: 13, background: "#ede9fe", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 16 }}>
+                <FileText size={24} style={{ color: COLOR }} strokeWidth={1.5} />
+              </div>
+              <h3 style={{ fontSize: 15, fontWeight: 700, color: "#0f172a", marginBottom: 6 }}>Ce que vous obtiendrez</h3>
+              <p style={{ fontSize: 13, color: "#94a3b8", lineHeight: 1.6 }}>
+                Deal Draft génère une proposition structurée, calibrée sur votre secteur et sur les attentes de votre client.
+              </p>
             </div>
-            <p style={{ fontSize: 13, color: "#94a3b8", maxWidth: 220, lineHeight: 1.6 }}>Remplissez le formulaire et cliquez sur Générer pour obtenir votre devis instantanément.</p>
+            <div style={{ display: "flex", flexDirection: "column", gap: 9, marginBottom: 24 }}>
+              {[
+                "Proposition structurée en 9 sections détaillées",
+                "Ton personnalisé selon votre secteur d'activité",
+                "Livrables et calendrier sur-mesure",
+                "Export PDF prêt à envoyer au client",
+                "Disponible en français et en anglais",
+              ].map((f, i) => (
+                <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13, color: "#334155" }}>
+                  <div style={{ width: 20, height: 20, borderRadius: 6, background: "#ede9fe", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                    <Check size={11} style={{ color: COLOR }} strokeWidth={2.5} />
+                  </div>
+                  {f}
+                </div>
+              ))}
+            </div>
+            <div style={{ marginTop: "auto", padding: "14px 18px", borderRadius: 11, background: "#f8fafc", border: "1px solid #e2e8f0" }}>
+              <div style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.07em", textTransform: "uppercase", color: "#94a3b8", marginBottom: 4 }}>Temps de génération</div>
+              <div style={{ fontSize: 14, fontWeight: 700, color: "#0f172a" }}>15 – 30 secondes</div>
+            </div>
           </div>
         )}
 

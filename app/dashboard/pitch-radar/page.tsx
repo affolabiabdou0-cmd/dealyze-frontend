@@ -184,20 +184,20 @@ h1{font-size:26px;font-weight:800;color:#1a1a2e;letter-spacing:-0.5px;margin-bot
   const rc = result ? recoConfig(result.recommandation) : null;
 
   return (
-    <div className="max-w-6xl mx-auto">
+    <div className="w-full">
       <style>{ANIM_STYLE}</style>
 
       <div className="flex items-center gap-3 mb-6">
-        <div style={{ width: 42, height: 42, borderRadius: 12, background: "#ecfeff", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div style={{ width: 44, height: 44, borderRadius: 12, background: "#ecfeff", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
           <BarChart3 size={22} style={{ color: COLOR }} strokeWidth={1.75} />
         </div>
         <div>
-          <h2 style={{ fontSize: 18, fontWeight: 700, color: "#0f172a", marginBottom: 2 }}>Pitch Radar</h2>
-          <p style={{ fontSize: 13, color: "#94a3b8" }}>Score VC par dimension · Forces · Recommandation investisseur</p>
+          <h2 style={{ fontSize: 18, fontWeight: 700, color: "#0f172a", marginBottom: 2, letterSpacing: "-0.3px" }}>Pitch Radar</h2>
+          <p style={{ fontSize: 13, color: "#94a3b8" }}>Notation IA multicritère d'un pitch deck · Score VC · Forces & alertes · Recommandation investisseur</p>
         </div>
       </div>
 
-      <div className={result ? "block" : "grid lg:grid-cols-2 gap-5"}>
+      <div className={result ? "block" : "grid lg:grid-cols-2 gap-6"}>
         {/* FORM */}
         {!result && (
           <div style={{ ...CARD, padding: 24 }}>
@@ -245,17 +245,43 @@ h1{font-size:26px;font-weight:800;color:#1a1a2e;letter-spacing:-0.5px;margin-bot
         )}
 
         {loading && !result && (
-          <div style={{ ...CARD, padding: 24, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: 320 }}>
-            <div className="w-10 h-10 rounded-full animate-spin mb-4" style={{ border: "3px solid #ecfeff", borderTopColor: COLOR }} />
-            <p style={{ fontSize: 13, color: "#64748b" }}>Analyse du pitch en cours…</p>
+          <div style={{ ...CARD, padding: 32, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: 400 }}>
+            <div className="w-12 h-12 rounded-full animate-spin mb-5" style={{ border: "3px solid #ecfeff", borderTopColor: COLOR }} />
+            <p style={{ fontSize: 14, fontWeight: 600, color: "#0f172a", marginBottom: 4 }}>Analyse du pitch en cours…</p>
+            <p style={{ fontSize: 12, color: "#94a3b8" }}>Évaluation multicritère par Gemini IA</p>
           </div>
         )}
         {!result && !loading && (
-          <div style={{ ...CARD, padding: 24, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: 320, textAlign: "center" }}>
-            <div style={{ width: 64, height: 64, borderRadius: 16, background: "#ecfeff", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 16 }}>
-              <BarChart3 size={30} style={{ color: COLOR }} strokeWidth={1.5} />
+          <div style={{ ...CARD, padding: 28, display: "flex", flexDirection: "column", minHeight: 400 }}>
+            <div style={{ marginBottom: 22 }}>
+              <div style={{ width: 50, height: 50, borderRadius: 13, background: "#ecfeff", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 16 }}>
+                <BarChart3 size={24} style={{ color: COLOR }} strokeWidth={1.5} />
+              </div>
+              <h3 style={{ fontSize: 15, fontWeight: 700, color: "#0f172a", marginBottom: 6 }}>Notation VC complète</h3>
+              <p style={{ fontSize: 13, color: "#94a3b8", lineHeight: 1.6 }}>
+                Pitch Radar évalue votre deck selon les critères utilisés par les fonds d'investissement et vous livre un rapport actionnable.
+              </p>
             </div>
-            <p style={{ fontSize: 13, color: "#94a3b8", maxWidth: 260, lineHeight: 1.6 }}>Uploadez un PDF ou collez le contenu pour obtenir un score VC complet avec recommandation.</p>
+            <div style={{ display: "flex", flexDirection: "column", gap: 9, marginBottom: 24 }}>
+              {[
+                "Score global sur 10 avec jauge visuelle",
+                "Notation par dimension : équipe, marché, traction...",
+                "Points forts et alertes prioritaires identifiés",
+                "Questions probables d'un investisseur VC",
+                "Recommandation d'investissement argumentée",
+              ].map((f, i) => (
+                <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13, color: "#334155" }}>
+                  <div style={{ width: 20, height: 20, borderRadius: 6, background: "#ecfeff", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                    <Check size={11} style={{ color: COLOR }} strokeWidth={2.5} />
+                  </div>
+                  {f}
+                </div>
+              ))}
+            </div>
+            <div style={{ marginTop: "auto", padding: "14px 18px", borderRadius: 11, background: "#f8fafc", border: "1px solid #e2e8f0" }}>
+              <div style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.07em", textTransform: "uppercase", color: "#94a3b8", marginBottom: 4 }}>Temps d'analyse estimé</div>
+              <div style={{ fontSize: 14, fontWeight: 700, color: "#0f172a" }}>20 – 40 secondes</div>
+            </div>
           </div>
         )}
 
