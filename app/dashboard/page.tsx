@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { FileText, Mail, BarChart2, Shield, ArrowRight, Zap, TrendingUp, Activity, Target } from "lucide-react";
+import { FileText, Mail, BarChart3, Shield, ArrowRight, Zap, TrendingUp, Target, Activity } from "lucide-react";
 import { api } from "../lib/api";
 import { getUser } from "../lib/auth";
 
@@ -12,48 +12,42 @@ interface AgentQuota {
   restant: number | "illimité";
 }
 interface QuotaResponse {
-  plan: string;
-  mois: string;
-  quotas: {
-    deal_draft:  AgentQuota;
-    smart_chase: AgentQuota;
-    pitch_radar: AgentQuota;
-    deep_due:    AgentQuota;
-  };
+  plan: string; mois: string;
+  quotas: { deal_draft: AgentQuota; smart_chase: AgentQuota; pitch_radar: AgentQuota; deep_due: AgentQuota };
 }
 
 const AGENTS = [
   {
     href: "/dashboard/deal-draft",  key: "deal_draft",
-    icon: FileText, emoji: "⚡",
-    name: "Deal Draft",   desc: "Générez des propositions commerciales percutantes en 10 secondes.",
+    icon: FileText,  name: "Deal Draft",
+    desc: "Générez des propositions commerciales percutantes en 10 secondes.",
     color: "#7c3aed", glow: "rgba(124,58,237,0.25)", border: "#7c3aed33",
   },
   {
     href: "/dashboard/smart-chase", key: "smart_chase",
-    icon: Mail, emoji: "💬",
-    name: "Smart Chase",  desc: "Rédigez des relances intelligentes pour vos factures impayées.",
+    icon: Mail,      name: "Smart Chase",
+    desc: "Rédigez des relances intelligentes pour vos factures impayées.",
     color: "#f97316", glow: "rgba(249,115,22,0.25)", border: "#f9731633",
   },
   {
     href: "/dashboard/pitch-radar", key: "pitch_radar",
-    icon: BarChart2, emoji: "🎯",
-    name: "Pitch Radar",  desc: "Analysez et scorez n'importe quel pitch deck investisseur.",
+    icon: BarChart3, name: "Pitch Radar",
+    desc: "Analysez et scorez n'importe quel pitch deck investisseur.",
     color: "#06b6d4", glow: "rgba(6,182,212,0.25)", border: "#06b6d433",
   },
   {
     href: "/dashboard/deep-due",    key: "deep_due",
-    icon: Shield, emoji: "🔍",
-    name: "Deep Due",     desc: "Due diligence automatisée sur toute entreprise en 1 clic.",
+    icon: Shield,    name: "Deep Due",
+    desc: "Due diligence automatisée sur toute entreprise en 1 clic.",
     color: "#10b981", glow: "rgba(16,185,129,0.25)", border: "#10b98133",
   },
 ];
 
 const STATS = [
-  { icon: FileText,   label: "Devis générés",      key: "deal_draft",  color: "#7c3aed" },
-  { icon: Mail,       label: "Relances envoyées",   key: "smart_chase", color: "#f97316" },
-  { icon: Target,     label: "Pitchs analysés",     key: "pitch_radar", color: "#06b6d4" },
-  { icon: Activity,   label: "Rapports due dil.",   key: "deep_due",    color: "#10b981" },
+  { icon: FileText,  label: "Devis générés",    key: "deal_draft",  color: "#7c3aed" },
+  { icon: Mail,      label: "Relances envoyées", key: "smart_chase", color: "#f97316" },
+  { icon: Target,    label: "Pitchs analysés",   key: "pitch_radar", color: "#06b6d4" },
+  { icon: Activity,  label: "Rapports due dil.", key: "deep_due",    color: "#10b981" },
 ];
 
 function UsageBar({ quota, color }: { quota: AgentQuota | undefined; color: string }) {
@@ -78,8 +72,8 @@ function UsageBar({ quota, color }: { quota: AgentQuota | undefined; color: stri
 
 export default function DashboardPage() {
   const user = getUser();
-  const [quota, setQuota]           = useState<QuotaResponse | null>(null);
-  const [loadingQuota, setLoading]  = useState(true);
+  const [quota, setQuota]          = useState<QuotaResponse | null>(null);
+  const [loadingQuota, setLoading] = useState(true);
 
   useEffect(() => {
     api.get<QuotaResponse>("/auth/quota")
@@ -117,7 +111,7 @@ export default function DashboardPage() {
             <div key={key} style={{ background: "#1a1a24", border: "1px solid #2a2a3a", borderRadius: 14, padding: "18px 20px" }}>
               <div className="flex items-center gap-2" style={{ marginBottom: 12 }}>
                 <div style={{ width: 28, height: 28, borderRadius: 8, background: `${color}18`, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <Icon size={14} style={{ color }} />
+                  <Icon size={14} style={{ color }} strokeWidth={1.5} />
                 </div>
                 <span style={{ fontSize: 12, color: "#4a4a6a" }}>{label}</span>
               </div>
@@ -137,42 +131,35 @@ export default function DashboardPage() {
         </h3>
         <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-4">
           {AGENTS.map((a) => {
-            const q = quota?.quotas?.[a.key as keyof QuotaResponse["quotas"]];
+            const q       = quota?.quotas?.[a.key as keyof QuotaResponse["quotas"]];
             const blocked = q ? q.limite === 0 : false;
+            const Icon    = a.icon;
             return (
               <Link key={a.key} href={blocked ? "/dashboard/billing" : a.href}
-                className="block group"
-                style={{ textDecoration: "none" }}
+                className="block group" style={{ textDecoration: "none" }}
                 onMouseEnter={(e) => {
                   const el = e.currentTarget as HTMLElement;
-                  el.style.border = `1px solid ${a.color}66`;
-                  el.style.boxShadow = `0 0 24px ${a.glow}`;
-                  el.style.transform = "translateY(-2px)";
+                  el.style.border      = `1px solid ${a.color}66`;
+                  el.style.boxShadow   = `0 0 28px ${a.glow}`;
+                  el.style.transform   = "translateY(-3px)";
                 }}
                 onMouseLeave={(e) => {
                   const el = e.currentTarget as HTMLElement;
-                  el.style.border = `1px solid ${a.border}`;
-                  el.style.boxShadow = "none";
-                  el.style.transform = "translateY(0)";
+                  el.style.border      = `1px solid ${a.border}`;
+                  el.style.boxShadow   = "none";
+                  el.style.transform   = "translateY(0)";
                 }}
               >
                 <div style={{
-                  background: "#1a1a24",
-                  border: `1px solid ${a.border}`,
-                  borderRadius: 16, padding: "22px 20px",
+                  background: "#1a1a24", border: `1px solid ${a.border}`, borderRadius: 16, padding: "22px 20px",
                   transition: "border 0.2s, box-shadow 0.2s, transform 0.2s",
                   height: "100%", display: "flex", flexDirection: "column",
                 }}>
                   <div className="flex items-center justify-between" style={{ marginBottom: 14 }}>
-                    <div style={{
-                      width: 44, height: 44, borderRadius: 12,
-                      background: `${a.color}18`,
-                      display: "flex", alignItems: "center", justifyContent: "center",
-                      fontSize: 22,
-                    }}>
-                      {a.emoji}
+                    <div style={{ width: 44, height: 44, borderRadius: 12, background: `${a.color}18`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                      <Icon size={22} style={{ color: a.color }} strokeWidth={1.5} />
                     </div>
-                    <ArrowRight size={16} style={{ color: "#3a3a5a", transition: "color 0.2s" }} className="group-hover:text-white" />
+                    <ArrowRight size={16} style={{ color: "#3a3a5a" }} strokeWidth={1.5} />
                   </div>
                   <div style={{ fontSize: 15, fontWeight: 700, color: "#f1f5f9", marginBottom: 6 }}>{a.name}</div>
                   <div style={{ fontSize: 12, color: "#4a4a6a", lineHeight: 1.6, marginBottom: 16, flex: 1 }}>{a.desc}</div>
@@ -198,34 +185,34 @@ export default function DashboardPage() {
           Démarrage rapide
         </h3>
         <div className="grid sm:grid-cols-2 gap-3">
-          {AGENTS.map((a) => (
-            <Link key={a.href} href={a.href}
-              className="flex items-center gap-4 group"
-              style={{
-                background: "#1a1a24", border: "1px solid #2a2a3a", borderRadius: 12,
-                padding: "16px 18px", textDecoration: "none", transition: "border 0.2s, background 0.2s",
-              }}
-              onMouseEnter={(e) => { const el = e.currentTarget as HTMLElement; el.style.border = `1px solid ${a.color}44`; el.style.background = "#1e1e2a"; }}
-              onMouseLeave={(e) => { const el = e.currentTarget as HTMLElement; el.style.border = "1px solid #2a2a3a"; el.style.background = "#1a1a24"; }}
-            >
-              <div style={{ width: 36, height: 36, borderRadius: 10, background: `${a.color}18`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, fontSize: 18 }}>
-                {a.emoji}
-              </div>
-              <div className="min-w-0">
-                <div style={{ fontSize: 13, fontWeight: 600, color: "#e2e8f0" }}>{a.name}</div>
-                <div style={{ fontSize: 12, color: "#4a4a6a", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{a.desc}</div>
-              </div>
-              <ArrowRight size={15} style={{ color: "#3a3a5a", marginLeft: "auto", flexShrink: 0 }} />
-            </Link>
-          ))}
+          {AGENTS.map((a) => {
+            const Icon = a.icon;
+            return (
+              <Link key={a.href} href={a.href}
+                className="flex items-center gap-4"
+                style={{ background: "#1a1a24", border: "1px solid #2a2a3a", borderRadius: 12, padding: "16px 18px", textDecoration: "none", transition: "border 0.2s, background 0.2s" }}
+                onMouseEnter={(e) => { const el = e.currentTarget as HTMLElement; el.style.border = `1px solid ${a.color}44`; el.style.background = "#1e1e2a"; }}
+                onMouseLeave={(e) => { const el = e.currentTarget as HTMLElement; el.style.border = "1px solid #2a2a3a"; el.style.background = "#1a1a24"; }}
+              >
+                <div style={{ width: 36, height: 36, borderRadius: 10, background: `${a.color}18`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                  <Icon size={18} style={{ color: a.color }} strokeWidth={1.5} />
+                </div>
+                <div className="min-w-0">
+                  <div style={{ fontSize: 13, fontWeight: 600, color: "#e2e8f0" }}>{a.name}</div>
+                  <div style={{ fontSize: 12, color: "#4a4a6a", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{a.desc}</div>
+                </div>
+                <ArrowRight size={15} style={{ color: "#3a3a5a", marginLeft: "auto", flexShrink: 0 }} strokeWidth={1.5} />
+              </Link>
+            );
+          })}
         </div>
       </div>
 
-      {/* Gemini badge */}
+      {/* Footer badge */}
       <div className="flex items-center justify-center gap-2" style={{ paddingTop: 8 }}>
-        <Zap size={13} style={{ color: "#3a3a5a" }} />
+        <Zap size={13} style={{ color: "#3a3a5a" }} strokeWidth={1.5} />
         <span style={{ fontSize: 12, color: "#2a2a4a" }}>Propulsé par Gemini 2.5 Flash · XPRIZE AI Hackathon 2026</span>
-        <TrendingUp size={13} style={{ color: "#3a3a5a" }} />
+        <TrendingUp size={13} style={{ color: "#3a3a5a" }} strokeWidth={1.5} />
       </div>
     </div>
   );

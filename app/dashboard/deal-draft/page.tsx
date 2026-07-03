@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { FileText, Copy, Check, AlertCircle, Sparkles } from "lucide-react";
+import { FileText, Copy, Check, AlertCircle, Sparkles, Download } from "lucide-react";
 import { api } from "../../lib/api";
 
 interface DealDraftContent {
@@ -15,14 +15,9 @@ interface DealDraftContent {
   conclusion?: string;
   [key: string]: unknown;
 }
-
 interface DealDraftResult {
-  quote_id: string;
-  client_name: string;
-  generated_at: string;
-  tone: string;
-  language: string;
-  content: DealDraftContent;
+  quote_id: string; client_name: string; generated_at: string;
+  tone: string; language: string; content: DealDraftContent;
 }
 
 const COLOR = "#7c3aed";
@@ -30,27 +25,16 @@ const GLOW  = "rgba(124,58,237,0.45)";
 
 const inputStyle: React.CSSProperties = {
   width: "100%", padding: "12px 14px", borderRadius: 10,
-  border: "1px solid #2a2a3a", background: "#0f0f13",
-  color: "#e2e8f0", fontSize: 14, outline: "none",
-  transition: "border-color 0.15s", boxSizing: "border-box",
+  border: "1px solid #2a2a3a", background: "#0f0f13", color: "#e2e8f0",
+  fontSize: 14, outline: "none", transition: "border-color 0.15s", boxSizing: "border-box",
 };
-const onFocus = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-  e.target.style.borderColor = COLOR;
-};
-const onBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-  e.target.style.borderColor = "#2a2a3a";
-};
-
-const Label = ({ children }: { children: React.ReactNode }) => (
-  <label style={{ display: "block", fontSize: 11, fontWeight: 600, letterSpacing: "0.07em", color: "rgba(255,255,255,0.45)", textTransform: "uppercase", marginBottom: 6 }}>
-    {children}
-  </label>
+const onFocus = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => (e.target.style.borderColor = COLOR);
+const onBlur  = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => (e.target.style.borderColor = "#2a2a3a");
+const Label   = ({ children }: { children: React.ReactNode }) => (
+  <label style={{ display: "block", fontSize: 11, fontWeight: 600, letterSpacing: "0.07em", color: "rgba(255,255,255,0.45)", textTransform: "uppercase", marginBottom: 6 }}>{children}</label>
 );
-
 const Card = ({ children, style }: { children: React.ReactNode; style?: React.CSSProperties }) => (
-  <div style={{ background: "#1a1a24", border: "1px solid #2a2a3a", borderRadius: 16, padding: "24px", ...style }}>
-    {children}
-  </div>
+  <div style={{ background: "#1a1a24", border: "1px solid #2a2a3a", borderRadius: 16, padding: "24px", ...style }}>{children}</div>
 );
 
 const SECTIONS: { key: keyof DealDraftContent; label: string }[] = [
@@ -62,6 +46,13 @@ const SECTIONS: { key: keyof DealDraftContent; label: string }[] = [
   { key: "conditions_paiement", label: "Conditions de paiement"},
   { key: "conclusion",          label: "Conclusion"            },
 ];
+
+const ANIM_STYLE = `
+  @keyframes fadeInSection {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+`;
 
 export default function DealDraftPage() {
   const [form, setForm] = useState({ client_name: "", sector: "", need: "", budget: "", timeline: "", language: "fr" });
@@ -82,25 +73,53 @@ export default function DealDraftPage() {
     } finally { setLoading(false); }
   }
 
-  function copyText() {
-    if (!result) return;
+  function buildText() {
+    if (!result) return "";
     const lines = [`DEVIS — ${result.quote_id}`, `Client : ${result.client_name}`, `Généré le : ${new Date(result.generated_at).toLocaleDateString("fr-FR")}`, ""];
     for (const s of SECTIONS) {
       const val = result.content[s.key];
-      if (val && typeof val === "string") lines.push(`${s.label}:`, val, "");
+      if (val && typeof val === "string") lines.push(`${s.label} :`, val, "");
     }
-    if (result.content.livrables?.length) {
-      lines.push("Livrables:", ...(result.content.livrables as string[]).map((l) => `• ${l}`), "");
-    }
-    navigator.clipboard.writeText(lines.join("\n")).then(() => { setCopied(true); setTimeout(() => setCopied(false), 2000); });
+    if (result.content.livrables?.length) lines.push("Livrables :", ...(result.content.livrables as string[]).map((l) => `• ${l}`), "");
+    return lines.join("\n");
+  }
+
+  function copyText() {
+    navigator.clipboard.writeText(buildText()).then(() => { setCopied(true); setTimeout(() => setCopied(false), 2000); });
+  }
+
+  function downloadPDF() {
+    if (!result) return;
+    const win = window.open("", "_blank");
+    if (!win) return;
+    const sectionsHtml = SECTIONS.map((s) => {
+      const val = result.content[s.key];
+      if (!val || typeof val !== "string") return "";
+      return `<h2>${s.label}</h2><p>${val.replace(/\n/g, "<br>")}</p>`;
+    }).join("");
+    const livrablesHtml = Array.isArray(result.content.livrables) && result.content.livrables.length
+      ? `<h2>Livrables</h2><ul>${(result.content.livrables as string[]).map((l) => `<li>${l}</li>`).join("")}</ul>` : "";
+    win.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Devis — ${result.client_name}</title>
+    <style>body{font-family:system-ui,sans-serif;max-width:800px;margin:40px auto;color:#111;line-height:1.7;padding:0 20px}
+    h1{font-size:22px;font-weight:700;margin-bottom:4px}
+    .meta{color:#666;font-size:13px;margin-bottom:32px}
+    h2{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#7c3aed;margin:24px 0 8px}
+    p{margin:0 0 12px}ul{padding-left:20px}li{margin-bottom:4px}
+    @media print{body{margin:20px}}</style></head>
+    <body><h1>Devis — ${result.client_name}</h1>
+    <p class="meta">${result.quote_id} · Généré le ${new Date(result.generated_at).toLocaleDateString("fr-FR")}</p>
+    ${sectionsHtml}${livrablesHtml}</body></html>`);
+    win.print(); win.close();
   }
 
   return (
     <div className="max-w-6xl mx-auto">
+      <style>{ANIM_STYLE}</style>
+
       {/* Header */}
       <div className="flex items-center gap-3 mb-6">
         <div style={{ width: 42, height: 42, borderRadius: 12, background: `${COLOR}18`, display: "flex", alignItems: "center", justifyContent: "center" }}>
-          <span style={{ fontSize: 22 }}>⚡</span>
+          <FileText size={22} style={{ color: COLOR }} strokeWidth={1.5} />
         </div>
         <div>
           <h2 style={{ fontSize: 18, fontWeight: 700, color: "#f1f5f9", marginBottom: 2 }}>Deal Draft</h2>
@@ -123,7 +142,8 @@ export default function DealDraftPage() {
             </div>
             <div>
               <Label>Besoin / Prestation *</Label>
-              <textarea required value={form.need} onChange={(e) => set("need", e.target.value)} placeholder="Création d'un site e-commerce avec tableau de bord analytique..." rows={3}
+              <textarea required value={form.need} onChange={(e) => set("need", e.target.value)}
+                placeholder="Création d'un site e-commerce avec tableau de bord analytique..." rows={3}
                 style={{ ...inputStyle, resize: "none", minHeight: 90 }} onFocus={onFocus} onBlur={onBlur} />
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
@@ -143,19 +163,16 @@ export default function DealDraftPage() {
                 <option value="en">English</option>
               </select>
             </div>
-
             {error && (
               <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "11px 14px", borderRadius: 10, background: "#1f1015", border: "1px solid #ef444433", color: "#f87171", fontSize: 13 }}>
-                <AlertCircle size={14} style={{ flexShrink: 0 }} /> {error}
+                <AlertCircle size={14} strokeWidth={1.5} style={{ flexShrink: 0 }} /> {error}
               </div>
             )}
-
             <button type="submit" disabled={loading}
               style={{
                 width: "100%", padding: "14px 20px", borderRadius: 10, border: "none",
-                background: `linear-gradient(135deg, ${COLOR}, #6d28d9)`,
-                color: "#fff", fontSize: 14, fontWeight: 600,
-                display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+                background: `linear-gradient(135deg, ${COLOR}, #6d28d9)`, color: "#fff",
+                fontSize: 14, fontWeight: 600, display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
                 cursor: loading ? "default" : "pointer", opacity: loading ? 0.7 : 1,
                 boxShadow: `0 4px 14px ${GLOW}`, transition: "box-shadow 0.15s",
               }}
@@ -164,7 +181,7 @@ export default function DealDraftPage() {
             >
               {loading
                 ? <><span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Génération…</>
-                : <><Sparkles size={15} /> Générer le devis</>}
+                : <><Sparkles size={15} strokeWidth={1.5} /> Générer le devis</>}
             </button>
           </form>
         </Card>
@@ -173,7 +190,9 @@ export default function DealDraftPage() {
         <Card style={{ minHeight: 400 }}>
           {!result && !loading && (
             <div style={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: "40px 20px" }}>
-              <div style={{ width: 64, height: 64, borderRadius: 16, background: `${COLOR}18`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 30, marginBottom: 16 }}>⚡</div>
+              <div style={{ width: 64, height: 64, borderRadius: 16, background: `${COLOR}18`, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 16 }}>
+                <FileText size={30} style={{ color: COLOR }} strokeWidth={1.5} />
+              </div>
               <p style={{ fontSize: 13, color: "#4a4a6a", maxWidth: 240, lineHeight: 1.6 }}>Remplissez le formulaire et cliquez sur Générer pour obtenir votre devis instantanément.</p>
             </div>
           )}
@@ -186,31 +205,32 @@ export default function DealDraftPage() {
           {result && (
             <div>
               <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 20 }}>
-                <div>
+                <div style={{ animation: "fadeInSection 0.4s ease both" }}>
                   <div style={{ fontFamily: "monospace", fontSize: 11, color: "#3a3a5a", marginBottom: 4 }}>{result.quote_id}</div>
                   <h4 style={{ fontSize: 17, fontWeight: 700, color: "#f1f5f9" }}>{result.client_name}</h4>
                 </div>
-                <button onClick={copyText} style={{
-                  display: "flex", alignItems: "center", gap: 6, padding: "7px 12px", borderRadius: 8,
-                  border: "1px solid #2a2a3a", background: "none", cursor: "pointer",
-                  color: "#6a6a8a", fontSize: 12,
-                }}>
-                  {copied ? <><Check size={13} style={{ color: "#10b981" }} /> Copié</> : <><Copy size={13} /> Copier</>}
-                </button>
+                <div style={{ display: "flex", gap: 8, animation: "fadeInSection 0.4s ease both" }}>
+                  <button onClick={copyText} style={{ display: "flex", alignItems: "center", gap: 5, padding: "7px 12px", borderRadius: 8, border: "1px solid #2a2a3a", background: "none", cursor: "pointer", color: "#6a6a8a", fontSize: 12 }}>
+                    {copied ? <><Check size={12} style={{ color: "#10b981" }} /> Copié</> : <><Copy size={12} strokeWidth={1.5} /> Copier</>}
+                  </button>
+                  <button onClick={downloadPDF} style={{ display: "flex", alignItems: "center", gap: 5, padding: "7px 12px", borderRadius: 8, border: "1px solid #2a2a3a", background: "none", cursor: "pointer", color: "#6a6a8a", fontSize: 12 }}>
+                    <Download size={12} strokeWidth={1.5} /> PDF
+                  </button>
+                </div>
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: 16, maxHeight: 480, overflowY: "auto", paddingRight: 4 }}>
-                {SECTIONS.map((s) => {
+                {SECTIONS.map((s, i) => {
                   const val = result.content[s.key];
                   if (!val || typeof val !== "string") return null;
                   return (
-                    <div key={s.key}>
+                    <div key={s.key} style={{ animation: "fadeInSection 0.4s ease both", animationDelay: `${i * 80}ms` }}>
                       <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: COLOR, marginBottom: 6 }}>{s.label}</div>
                       <p style={{ fontSize: 13, color: "#94a3b8", lineHeight: 1.7 }}>{val}</p>
                     </div>
                   );
                 })}
                 {Array.isArray(result.content.livrables) && result.content.livrables.length > 0 && (
-                  <div>
+                  <div style={{ animation: "fadeInSection 0.4s ease both", animationDelay: "640ms" }}>
                     <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: COLOR, marginBottom: 6 }}>Livrables</div>
                     <ul style={{ display: "flex", flexDirection: "column", gap: 4 }}>
                       {(result.content.livrables as string[]).map((l, i) => (

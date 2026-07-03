@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
-  LayoutDashboard, FileText, Mail, BarChart2, Shield,
-  Settings, CreditCard, LogOut, Menu, X,
+  LayoutDashboard, FileText, Mail, BarChart3, Shield,
+  Settings, CreditCard, LogOut, Menu, X, Rocket, Clock,
 } from "lucide-react";
 import { getUser, clearAuth } from "../lib/auth";
 import type { User } from "../lib/auth";
@@ -14,7 +14,7 @@ const NAV = [
   { href: "/dashboard",               label: "Vue d'ensemble", icon: LayoutDashboard, color: "#a78bfa" },
   { href: "/dashboard/deal-draft",    label: "Deal Draft",     icon: FileText,         color: "#7c3aed" },
   { href: "/dashboard/smart-chase",   label: "Smart Chase",    icon: Mail,             color: "#f97316" },
-  { href: "/dashboard/pitch-radar",   label: "Pitch Radar",    icon: BarChart2,        color: "#06b6d4" },
+  { href: "/dashboard/pitch-radar",   label: "Pitch Radar",    icon: BarChart3,        color: "#06b6d4" },
   { href: "/dashboard/deep-due",      label: "Deep Due",       icon: Shield,           color: "#10b981" },
 ];
 
@@ -23,11 +23,17 @@ const NAV_BOTTOM = [
   { href: "/dashboard/billing",  label: "Facturation", icon: CreditCard },
 ];
 
-const PLAN_INFO: Record<string, { label: string; days: number; max: number; color: string }> = {
-  free_trial: { label: "Free Trial", days: 14, max: 14, color: "#a78bfa" },
-  starter:    { label: "Starter",    days: 30, max: 30, color: "#3b82f6" },
-  growth:     { label: "Growth",     days: 30, max: 30, color: "#7c3aed" },
-  enterprise: { label: "Enterprise", days: 30, max: 30, color: "#10b981" },
+function planProgressColor(pct: number): string {
+  if (pct > 50) return "#10b981";
+  if (pct > 25) return "#f59e0b";
+  return "#ef4444";
+}
+
+const PLAN_INFO: Record<string, { label: string; daysRemaining: number; daysTotal: number }> = {
+  free_trial: { label: "Free Trial",  daysRemaining: 11, daysTotal: 14 },
+  starter:    { label: "Starter",     daysRemaining: 22, daysTotal: 30 },
+  growth:     { label: "Growth",      daysRemaining: 18, daysTotal: 30 },
+  enterprise: { label: "Enterprise",  daysRemaining: 30, daysTotal: 30 },
 };
 
 function Sidebar({ user, onClose }: { user: User | null; onClose?: () => void }) {
@@ -36,7 +42,10 @@ function Sidebar({ user, onClose }: { user: User | null; onClose?: () => void })
 
   function handleLogout() { clearAuth(); router.push("/login"); }
 
-  const plan = PLAN_INFO[user?.plan ?? "free_trial"] ?? PLAN_INFO.free_trial;
+  const planKey  = user?.plan ?? "free_trial";
+  const plan     = PLAN_INFO[planKey] ?? PLAN_INFO.free_trial;
+  const pct      = Math.round((plan.daysRemaining / plan.daysTotal) * 100);
+  const barColor = planProgressColor(pct);
   const initials = user?.full_name?.split(" ").map((w) => w[0]).join("").toUpperCase().slice(0, 2) ?? "?";
 
   return (
@@ -45,8 +54,10 @@ function Sidebar({ user, onClose }: { user: User | null; onClose?: () => void })
       {/* Logo */}
       <div className="flex items-center justify-between px-5 py-5">
         <Link href="/dashboard" className="flex items-center gap-2.5" style={{ textDecoration: "none" }}>
-          <div style={{ width:32, height:32, borderRadius:8, background:"linear-gradient(135deg,#7c3aed,#3b82f6)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:16, boxShadow:"0 0 16px rgba(124,58,237,0.35)" }}>⚡</div>
-          <span className="font-display font-bold" style={{ fontSize:20, letterSpacing:"-0.3px", background:"linear-gradient(135deg,#c4b5fd,#93c5fd)", WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent", backgroundClip:"text" }}>Dealyze</span>
+          <div style={{ width: 32, height: 32, borderRadius: 8, background: "linear-gradient(135deg,#7c3aed,#3b82f6)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 0 16px rgba(124,58,237,0.35)" }}>
+            <FileText size={16} style={{ color: "#fff" }} strokeWidth={2} />
+          </div>
+          <span className="font-display font-bold" style={{ fontSize: 20, letterSpacing: "-0.3px", background: "linear-gradient(135deg,#c4b5fd,#93c5fd)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Dealyze</span>
         </Link>
         {onClose && (
           <button onClick={onClose} className="lg:hidden" style={{ color: "#4a4a5a", background: "none", border: "none", cursor: "pointer" }}>
@@ -58,12 +69,26 @@ function Sidebar({ user, onClose }: { user: User | null; onClose?: () => void })
       {/* Plan badge */}
       <div className="mx-4 mb-4 px-4 py-3 rounded-xl" style={{ background: "#1a1a24", border: "1px solid #2a2a3a" }}>
         <div className="flex items-center justify-between mb-2">
-          <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.06em", color: plan.color }}>{plan.label}</span>
-          <span style={{ fontSize: 11, color: "#4a4a6a" }}>{plan.days}/{plan.max} j</span>
+          <div className="flex items-center gap-1.5">
+            <Clock size={11} style={{ color: barColor }} />
+            <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.06em", color: barColor }}>{plan.label}</span>
+          </div>
+          <span style={{ fontSize: 11, color: pct <= 25 ? "#ef4444" : "#4a4a6a" }}>
+            {plan.daysRemaining} j. restants
+          </span>
         </div>
         <div style={{ height: 4, borderRadius: 4, background: "#2a2a3a", overflow: "hidden" }}>
-          <div style={{ height: "100%", width: `${(plan.days / plan.max) * 100}%`, borderRadius: 4, background: `linear-gradient(90deg, ${plan.color}, ${plan.color}aa)`, transition: "width 1s" }} />
+          <div style={{
+            height: "100%", width: `${pct}%`, borderRadius: 4,
+            background: `linear-gradient(90deg, ${barColor}, ${barColor}cc)`,
+            transition: "width 1s, background 0.5s",
+          }} />
         </div>
+        {pct <= 25 && (
+          <p style={{ fontSize: 10, color: "#ef4444", marginTop: 6 }}>
+            ⚠ Expiration imminente — <Link href="/dashboard/billing" style={{ color: "#ef4444", textDecoration: "underline" }}>Upgrader</Link>
+          </p>
+        )}
       </div>
 
       {/* Main nav */}
@@ -73,11 +98,7 @@ function Sidebar({ user, onClose }: { user: User | null; onClose?: () => void })
           return (
             <Link key={href} href={href} onClick={onClose}
               className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all"
-              style={{
-                background: active ? `${color}18` : "transparent",
-                color: active ? "#fff" : "#5a5a7a",
-                textDecoration: "none",
-              }}
+              style={{ background: active ? `${color}18` : "transparent", color: active ? "#fff" : "#5a5a7a", textDecoration: "none" }}
               onMouseEnter={(e) => { if (!active) e.currentTarget.style.background = "#1a1a24"; }}
               onMouseLeave={(e) => { if (!active) e.currentTarget.style.background = "transparent"; }}
             >
@@ -85,10 +106,9 @@ function Sidebar({ user, onClose }: { user: User | null; onClose?: () => void })
                 width: 30, height: 30, borderRadius: 8, flexShrink: 0,
                 background: active ? `${color}22` : "transparent",
                 display: "flex", alignItems: "center", justifyContent: "center",
-                color: active ? color : "#3a3a5a",
-                transition: "all 0.15s",
+                color: active ? color : "#3a3a5a", transition: "all 0.15s",
               }}>
-                <Icon size={16} />
+                <Icon size={16} strokeWidth={1.5} />
               </div>
               {label}
               {active && <div style={{ marginLeft: "auto", width: 6, height: 6, borderRadius: "50%", background: color, boxShadow: `0 0 8px ${color}` }} />}
@@ -103,23 +123,23 @@ function Sidebar({ user, onClose }: { user: User | null; onClose?: () => void })
           const active = pathname === href;
           return (
             <Link key={href} href={href} onClick={onClose}
-              className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all"
+              className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium"
               style={{ color: active ? "#fff" : "#4a4a6a", background: active ? "#1a1a24" : "transparent", textDecoration: "none" }}
               onMouseEnter={(e) => { if (!active) e.currentTarget.style.background = "#1a1a24"; }}
               onMouseLeave={(e) => { if (!active) e.currentTarget.style.background = "transparent"; }}
             >
-              <Icon size={16} />
+              <Icon size={16} strokeWidth={1.5} />
               {label}
             </Link>
           );
         })}
         <button onClick={handleLogout}
-          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all"
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium"
           style={{ color: "#4a4a6a", background: "none", border: "none", cursor: "pointer" }}
           onMouseEnter={(e) => { e.currentTarget.style.background = "#1a1a24"; e.currentTarget.style.color = "#ef4444"; }}
           onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#4a4a6a"; }}
         >
-          <LogOut size={16} />
+          <LogOut size={16} strokeWidth={1.5} />
           Déconnexion
         </button>
       </div>
@@ -190,7 +210,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 6px 20px rgba(124,58,237,0.5)"; }}
             onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 4px 12px rgba(124,58,237,0.3)"; }}
           >
-            ✦ Upgrade
+            <Rocket size={14} strokeWidth={1.5} /> Upgrade
           </Link>
         </header>
 
