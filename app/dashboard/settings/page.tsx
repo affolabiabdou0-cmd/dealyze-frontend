@@ -291,10 +291,9 @@ export default function SettingsPage() {
                 <div style={{ display: "flex", justifyContent: "flex-end" }}>
                   <button type="submit" disabled={pwSaving}
                     style={{
-                      padding: "11px 24px", borderRadius: 10, border: "none",
+                      padding: "11px 24px", borderRadius: 10, border: "1px solid #2a2a3a",
                       background: "#1a1a24", color: "#e2e8f0", fontSize: 14, fontWeight: 600,
                       display: "flex", alignItems: "center", gap: 8, cursor: pwSaving ? "default" : "pointer",
-                      border: "1px solid #2a2a3a",
                     }}
                   >
                     {pwSaving ? <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
