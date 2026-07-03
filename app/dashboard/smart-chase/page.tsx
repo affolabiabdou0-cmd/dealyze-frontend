@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Mail, Copy, Check, AlertCircle, Sparkles, Calendar, Download, Building2, Wallet, Clock, AlertTriangle, TrendingUp, User } from "lucide-react";
 import { api } from "../../lib/api";
+import { addActivity } from "../../lib/activity";
 
 interface SmartChaseResult {
   chase_id: string; invoice_id: string; client_name: string; amount_display: string;
@@ -78,6 +79,22 @@ export default function SmartChasePage() {
         language:     form.language,
       });
       setResult(res.data);
+      const esc = ESCALATION_CONFIG[res.data.escalation_level] ?? ESCALATION_CONFIG[0];
+      addActivity({
+        type: "smart_chase",
+        title: `Relance générée — ${esc.label}`,
+        subtitle: `${res.data.client_name} · ${res.data.amount_display} · ${res.data.days_overdue}j de retard`,
+        timestamp: new Date().toISOString(),
+        href: "/dashboard/smart-chase",
+        details: [
+          { label: "Client",          value: res.data.client_name },
+          { label: "Montant",         value: res.data.amount_display },
+          { label: "Retard",          value: `${res.data.days_overdue} jours` },
+          { label: "Niveau escalade", value: `${res.data.escalation_level}/4 — ${esc.label}` },
+          { label: "Objet email",     value: res.data.email_subject },
+          { label: "Facture",         value: res.data.invoice_id },
+        ],
+      });
     } catch (err: unknown) {
       setError((err as { response?: { data?: { detail?: string } } })?.response?.data?.detail || "Erreur lors de la génération. Réessayez.");
     } finally { setLoading(false); }

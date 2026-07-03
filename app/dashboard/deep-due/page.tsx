@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Shield, Copy, Check, AlertCircle, Sparkles, Download, User, Building2, AlertTriangle, CheckCircle2, XCircle, FileSearch } from "lucide-react";
 import { api } from "../../lib/api";
+import { addActivity } from "../../lib/activity";
 
 interface RiskItem { level: string; description: string; }
 interface FounderProfile { resume: string; experience: string; reputation: string; signaux_positifs: string[]; signaux_negatifs: string[]; }
@@ -70,6 +71,20 @@ export default function DeepDuePage() {
     try {
       const res = await api.post<DeepDueResult>("/agents/deep-due", form);
       setResult(res.data);
+      addActivity({
+        type: "deep_due",
+        title: `Due diligence — ${res.data.recommandation_finale}`,
+        subtitle: `${res.data.company_name} · Score de confiance ${res.data.score_confiance}%`,
+        timestamp: new Date().toISOString(),
+        href: "/dashboard/deep-due",
+        details: [
+          { label: "Entreprise",       value: res.data.company_name },
+          { label: "Fondateur",        value: res.data.founder_name || "—" },
+          { label: "Score confiance",  value: `${res.data.score_confiance}%` },
+          { label: "Recommandation",   value: res.data.recommandation_finale },
+          { label: "Risques détectés", value: `${res.data.risques_identifies.length} risque(s) identifié(s)` },
+        ],
+      });
     } catch (err: unknown) {
       setError((err as { response?: { data?: { detail?: string } } })?.response?.data?.detail || "Erreur lors de l'analyse. Réessayez.");
     } finally { setLoading(false); }

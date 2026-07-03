@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { BarChart3, Copy, Check, AlertCircle, Sparkles, Upload, Download, TrendingUp, AlertTriangle, HelpCircle, Star } from "lucide-react";
 import { api } from "../../lib/api";
+import { addActivity } from "../../lib/activity";
 
 interface CriterionScore { key: string; label: string; score: number; weight: number; note: string; }
 interface PitchRadarResult {
@@ -89,6 +90,20 @@ export default function PitchRadarPage() {
       if (file) formData.append("file", file);
       const res = await api.post<PitchRadarResult>("/agents/pitch-radar/analyze", formData, { headers: { "Content-Type": "multipart/form-data" } });
       setResult(res.data);
+      addActivity({
+        type: "pitch_radar",
+        title: `Pitch analysé — Score ${res.data.score_global.toFixed(1)}/10`,
+        subtitle: `${res.data.startup_name} · ${res.data.recommandation}`,
+        timestamp: new Date().toISOString(),
+        href: "/dashboard/pitch-radar",
+        details: [
+          { label: "Startup",         value: res.data.startup_name },
+          { label: "Score global",    value: `${res.data.score_global.toFixed(1)} / 10` },
+          { label: "Recommandation",  value: res.data.recommandation },
+          { label: "Points forts",    value: res.data.points_forts.slice(0, 2).join(" · ") || "—" },
+          { label: "Alertes",         value: `${res.data.points_alerte.length} point(s) à surveiller` },
+        ],
+      });
     } catch (err: unknown) {
       setError((err as { response?: { data?: { detail?: string } } })?.response?.data?.detail || "Erreur lors de l'analyse. Réessayez.");
     } finally { setLoading(false); }

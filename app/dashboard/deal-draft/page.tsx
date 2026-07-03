@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { FileText, Copy, Check, AlertCircle, Sparkles, Download, Building2, Clock, Wallet, Globe, Tag, Lightbulb, Package, Calendar, CreditCard, Zap, CheckCircle2 } from "lucide-react";
 import { api } from "../../lib/api";
+import { addActivity } from "../../lib/activity";
 
 interface DealDraftContent {
   titre?:                string;
@@ -74,6 +75,21 @@ export default function DealDraftPage() {
     try {
       const res = await api.post<DealDraftResult>("/agents/deal-draft/generate", form);
       setResult(res.data);
+      addActivity({
+        type: "deal_draft",
+        title: `Devis ${res.data.quote_id} généré`,
+        subtitle: `${res.data.client_name} · ${form.budget}`,
+        timestamp: new Date().toISOString(),
+        href: "/dashboard/deal-draft",
+        details: [
+          { label: "Client",    value: res.data.client_name },
+          { label: "Secteur",   value: form.sector },
+          { label: "Budget",    value: form.budget },
+          { label: "Délai",     value: form.timeline },
+          { label: "Référence", value: res.data.quote_id },
+          { label: "Titre",     value: res.data.content.titre ?? "—" },
+        ],
+      });
     } catch (err: unknown) {
       setError((err as { response?: { data?: { detail?: string } } })?.response?.data?.detail || "Erreur lors de la génération. Réessayez.");
     } finally { setLoading(false); }
