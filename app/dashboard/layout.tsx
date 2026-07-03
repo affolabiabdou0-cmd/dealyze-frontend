@@ -413,7 +413,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </div>
         </header>
 
-        <main className="flex-1 p-7">{children}</main>
+        <main className="flex-1 p-5">{children}</main>
 
         <footer className="px-7 py-3 flex items-center justify-center" style={{ borderTop: "1px solid #e9eef5", background: "rgba(255,255,255,0.8)" }}>
           <span style={{ fontSize: 11, color: "#94a3b8" }}>Dealyze · Gemini 2.5 Flash · XPRIZE AI Hackathon 2026</span>

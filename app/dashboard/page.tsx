@@ -129,47 +129,44 @@ export default function DashboardPage() {
     <>
       {selected && <ActivityDrawer item={selected} onClose={() => setSelected(null)} />}
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
 
         {/* ══════════════════════════════════════
             WELCOME BANNER
         ══════════════════════════════════════ */}
         <div style={{
           background: "linear-gradient(135deg, #0b1526 0%, #0f2040 50%, #0b1a35 100%)",
-          borderRadius: 20, padding: "32px 36px",
+          borderRadius: 16, padding: "16px 24px",
           position: "relative", overflow: "hidden",
-          boxShadow: "0 8px 32px rgba(11,21,38,0.18), 0 1px 0 rgba(255,255,255,0.06) inset",
+          boxShadow: "0 4px 20px rgba(11,21,38,0.16), 0 1px 0 rgba(255,255,255,0.06) inset",
         }}>
           {/* Decorative orbs */}
-          <div style={{ position: "absolute", top: -40, right: 60, width: 220, height: 220, borderRadius: "50%", background: "radial-gradient(circle, rgba(124,58,237,0.15) 0%, transparent 70%)" }} />
-          <div style={{ position: "absolute", bottom: -30, right: 200, width: 160, height: 160, borderRadius: "50%", background: "radial-gradient(circle, rgba(6,182,212,0.1) 0%, transparent 70%)" }} />
-          <div style={{ position: "absolute", top: 20, right: 30, width: 80, height: 80, borderRadius: "50%", background: "rgba(167,139,250,0.08)", border: "1px solid rgba(167,139,250,0.12)" }} />
+          <div style={{ position: "absolute", top: -30, right: 40, width: 160, height: 160, borderRadius: "50%", background: "radial-gradient(circle, rgba(124,58,237,0.15) 0%, transparent 70%)" }} />
+          <div style={{ position: "absolute", top: 10, right: 20, width: 60, height: 60, borderRadius: "50%", background: "rgba(167,139,250,0.08)", border: "1px solid rgba(167,139,250,0.12)" }} />
 
-          <div style={{ position: "relative", display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: 20 }}>
+          <div style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>
             <div>
-              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14 }}>
-                <Calendar size={12} style={{ color: "rgba(255,255,255,0.38)" }} strokeWidth={1.75} />
-                <span style={{ fontSize: 12, color: "rgba(255,255,255,0.38)", letterSpacing: "0.02em" }}>{todayCapital}</span>
+              <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6 }}>
+                <Calendar size={11} style={{ color: "rgba(255,255,255,0.35)" }} strokeWidth={1.75} />
+                <span style={{ fontSize: 11, color: "rgba(255,255,255,0.35)", letterSpacing: "0.02em" }}>{todayCapital}</span>
               </div>
-              <h2 style={{ fontSize: 30, fontWeight: 800, color: "#fff", letterSpacing: "-0.8px", lineHeight: 1.1, marginBottom: 10 }}>
+              <h2 style={{ fontSize: 22, fontWeight: 800, color: "#fff", letterSpacing: "-0.5px", lineHeight: 1.2, marginBottom: 0 }}>
                 Bonjour,{" "}
                 <span style={{ background: "linear-gradient(135deg, #a78bfa, #60a5fa)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
                   {firstName}
-                </span>
+                </span>{" "}
+                <span style={{ fontSize: 14, fontWeight: 400, color: "rgba(255,255,255,0.38)" }}>— vos 4 agents sont opérationnels.</span>
               </h2>
-              <p style={{ fontSize: 14, color: "rgba(255,255,255,0.45)", lineHeight: 1.6, maxWidth: 380 }}>
-                Vos 4 agents IA sont opérationnels. Chaque action génère un résultat en moins de 60 secondes.
-              </p>
             </div>
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 10 }}>
-              <div style={{ padding: "8px 16px", background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 12, display: "flex", alignItems: "center", gap: 8 }}>
-                <div style={{ width: 7, height: 7, borderRadius: "50%", background: "#10b981" }} />
-                <span style={{ fontSize: 12, color: "rgba(255,255,255,0.55)" }}>Plan</span>
-                <span style={{ fontSize: 12, color: "#a78bfa", fontWeight: 700 }}>{planLabel}</span>
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <div style={{ padding: "6px 14px", background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 10, display: "flex", alignItems: "center", gap: 7 }}>
+                <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#10b981" }} />
+                <span style={{ fontSize: 11.5, color: "rgba(255,255,255,0.5)" }}>Plan</span>
+                <span style={{ fontSize: 11.5, color: "#a78bfa", fontWeight: 700 }}>{planLabel}</span>
               </div>
-              <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: "rgba(255,255,255,0.25)" }}>
-                <Sparkles size={10} strokeWidth={1.5} />
-                Gemini 2.5 Flash · XPRIZE 2026
+              <div style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 10.5, color: "rgba(255,255,255,0.22)" }}>
+                <Sparkles size={9} strokeWidth={1.5} />
+                Gemini 2.5 Flash
               </div>
             </div>
           </div>
@@ -179,11 +176,11 @@ export default function DashboardPage() {
             STAT CARDS
         ══════════════════════════════════════ */}
         <div>
-          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
-            <TrendingUp size={14} style={{ color: "#94a3b8" }} strokeWidth={1.75} />
-            <span style={{ fontSize: 12, fontWeight: 700, color: "#94a3b8", letterSpacing: "0.08em", textTransform: "uppercase" }}>Métriques du mois</span>
+          <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 10 }}>
+            <TrendingUp size={12} style={{ color: "#94a3b8" }} strokeWidth={1.75} />
+            <span style={{ fontSize: 11, fontWeight: 700, color: "#94a3b8", letterSpacing: "0.08em", textTransform: "uppercase" }}>Métriques du mois</span>
           </div>
-          <div className="grid grid-cols-2 xl:grid-cols-4 gap-5">
+          <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
             {STATS.map(({ key, label, sub, icon: Icon, color, iconBg, gradFrom, gradTo }) => {
               const q   = quota?.quotas?.[key as keyof QuotaResponse["quotas"]];
               const val = q?.utilisé ?? 0;
@@ -191,44 +188,41 @@ export default function DashboardPage() {
               const pct = lim && lim !== "illimité" && (lim as number) > 0 ? Math.min(100, (val / (lim as number)) * 100) : null;
               return (
                 <div key={key} style={{
-                  background: "#fff", borderRadius: 18, overflow: "hidden",
-                  boxShadow: "0 4px 20px rgba(0,0,0,0.07), 0 1px 3px rgba(0,0,0,0.06)",
+                  background: "#fff", borderRadius: 14, overflow: "hidden",
+                  boxShadow: "0 2px 12px rgba(0,0,0,0.07), 0 1px 3px rgba(0,0,0,0.05)",
                   border: "1px solid #f0f4f8",
                   transition: "transform 0.2s, box-shadow 0.2s",
                 }}
-                  onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.transform = "translateY(-3px)"; (e.currentTarget as HTMLDivElement).style.boxShadow = `0 12px 32px ${color}20, 0 4px 12px rgba(0,0,0,0.08)`; }}
-                  onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.transform = "none"; (e.currentTarget as HTMLDivElement).style.boxShadow = "0 4px 20px rgba(0,0,0,0.07), 0 1px 3px rgba(0,0,0,0.06)"; }}
+                  onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.transform = "translateY(-2px)"; (e.currentTarget as HTMLDivElement).style.boxShadow = `0 8px 24px ${color}18, 0 2px 8px rgba(0,0,0,0.06)`; }}
+                  onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.transform = "none"; (e.currentTarget as HTMLDivElement).style.boxShadow = "0 2px 12px rgba(0,0,0,0.07), 0 1px 3px rgba(0,0,0,0.05)"; }}
                 >
-                  {/* Colored top gradient bar */}
-                  <div style={{ height: 4, background: `linear-gradient(90deg, ${gradFrom}, ${gradTo})` }} />
-                  <div style={{ padding: "20px 22px 22px" }}>
-                    <div className="flex items-center justify-between" style={{ marginBottom: 16 }}>
-                      <div style={{ width: 42, height: 42, borderRadius: 12, background: iconBg, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                        <Icon size={20} style={{ color }} strokeWidth={1.75} />
+                  <div style={{ height: 3, background: `linear-gradient(90deg, ${gradFrom}, ${gradTo})` }} />
+                  <div style={{ padding: "14px 16px 16px" }}>
+                    <div className="flex items-center justify-between" style={{ marginBottom: 10 }}>
+                      <div style={{ width: 34, height: 34, borderRadius: 10, background: iconBg, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        <Icon size={16} style={{ color }} strokeWidth={1.75} />
                       </div>
-                      <div style={{ textAlign: "right" }}>
-                        <div style={{ fontSize: 10, color: "#94a3b8", fontWeight: 500 }}>ce mois</div>
-                      </div>
+                      <div style={{ fontSize: 9.5, color: "#94a3b8", fontWeight: 500 }}>ce mois</div>
                     </div>
-                    <div style={{ fontSize: 38, fontWeight: 900, color: "#0f172a", lineHeight: 1, letterSpacing: "-2px", marginBottom: 6 }}>
-                      {loading ? <span style={{ fontSize: 28, color: "#e2e8f0" }}>—</span> : val}
+                    <div style={{ fontSize: 30, fontWeight: 900, color: "#0f172a", lineHeight: 1, letterSpacing: "-1.5px", marginBottom: 4 }}>
+                      {loading ? <span style={{ fontSize: 22, color: "#e2e8f0" }}>—</span> : val}
                     </div>
-                    <div style={{ fontSize: 13.5, fontWeight: 600, color: "#334155", marginBottom: 2 }}>{label}</div>
-                    <div style={{ fontSize: 11, color: "#94a3b8" }}>{sub}</div>
+                    <div style={{ fontSize: 12.5, fontWeight: 600, color: "#334155", marginBottom: 1 }}>{label}</div>
+                    <div style={{ fontSize: 10.5, color: "#94a3b8" }}>{sub}</div>
                     {pct !== null && (
-                      <div style={{ marginTop: 16 }}>
-                        <div style={{ height: 4, borderRadius: 4, background: "#f1f5f9", overflow: "hidden", marginBottom: 6 }}>
-                          <div style={{ height: "100%", width: `${pct}%`, background: `linear-gradient(90deg, ${gradFrom}, ${gradTo})`, borderRadius: 4, transition: "width 1.2s ease" }} />
+                      <div style={{ marginTop: 10 }}>
+                        <div style={{ height: 3, borderRadius: 3, background: "#f1f5f9", overflow: "hidden", marginBottom: 4 }}>
+                          <div style={{ height: "100%", width: `${pct}%`, background: `linear-gradient(90deg, ${gradFrom}, ${gradTo})`, borderRadius: 3, transition: "width 1.2s ease" }} />
                         </div>
-                        <div style={{ fontSize: 10.5, color: "#94a3b8", display: "flex", justifyContent: "space-between" }}>
+                        <div style={{ fontSize: 10, color: "#94a3b8", display: "flex", justifyContent: "space-between" }}>
                           <span>{val} utilisé{val > 1 ? "s" : ""}</span>
                           <span style={{ color }}>{lim} max</span>
                         </div>
                       </div>
                     )}
                     {pct === null && !loading && (
-                      <div style={{ marginTop: 16 }}>
-                        <span style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", color, background: iconBg, padding: "4px 10px", borderRadius: 7 }}>
+                      <div style={{ marginTop: 10 }}>
+                        <span style={{ fontSize: 9.5, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", color, background: iconBg, padding: "3px 8px", borderRadius: 6 }}>
                           ∞ Illimité
                         </span>
                       </div>
@@ -243,75 +237,68 @@ export default function DashboardPage() {
         {/* ══════════════════════════════════════
             ACTIVITY + QUICK ACCESS
         ══════════════════════════════════════ */}
-        <div className="grid xl:grid-cols-3 gap-6 items-start">
+        <div className="grid xl:grid-cols-3 gap-4 items-start">
 
           {/* Activity feed — 2/3 */}
-          <div className="xl:col-span-2" style={{ background: "#fff", borderRadius: 18, overflow: "hidden", boxShadow: "0 4px 20px rgba(0,0,0,0.06)", border: "1px solid #f0f4f8" }}>
+          <div className="xl:col-span-2" style={{ background: "#fff", borderRadius: 14, overflow: "hidden", boxShadow: "0 2px 12px rgba(0,0,0,0.06)", border: "1px solid #f0f4f8" }}>
             {/* Card header */}
-            <div style={{ padding: "20px 24px 16px", borderBottom: "1px solid #f1f5f9", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-              <div>
-                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 2 }}>
-                  <div style={{ width: 28, height: 28, borderRadius: 8, background: "linear-gradient(135deg, #ede9fe, #f5f3ff)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                    <Clock size={13} style={{ color: "#7c3aed" }} strokeWidth={2} />
-                  </div>
-                  <span style={{ fontSize: 15, fontWeight: 700, color: "#0f172a", letterSpacing: "-0.2px" }}>Activité récente</span>
+            <div style={{ padding: "12px 18px 10px", borderBottom: "1px solid #f1f5f9", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
+                <div style={{ width: 24, height: 24, borderRadius: 7, background: "linear-gradient(135deg, #ede9fe, #f5f3ff)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <Clock size={11} style={{ color: "#7c3aed" }} strokeWidth={2} />
                 </div>
-                <p style={{ fontSize: 11.5, color: "#94a3b8", paddingLeft: 36 }}>Toutes vos actions enregistrées</p>
+                <span style={{ fontSize: 13.5, fontWeight: 700, color: "#0f172a", letterSpacing: "-0.2px" }}>Activité récente</span>
               </div>
-              <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "5px 12px", background: "#f8fafc", borderRadius: 9, border: "1px solid #e2e8f0" }}>
-                <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#10b981" }} />
-                <span style={{ fontSize: 11, color: "#64748b", fontWeight: 600 }}>{activities.length} action{activities.length !== 1 ? "s" : ""}</span>
+              <div style={{ display: "flex", alignItems: "center", gap: 5, padding: "4px 10px", background: "#f8fafc", borderRadius: 8, border: "1px solid #e2e8f0" }}>
+                <div style={{ width: 5, height: 5, borderRadius: "50%", background: "#10b981" }} />
+                <span style={{ fontSize: 10.5, color: "#64748b", fontWeight: 600 }}>{activities.length} action{activities.length !== 1 ? "s" : ""}</span>
               </div>
             </div>
 
             {activities.length === 0 ? (
-              <div className="flex flex-col items-center justify-center" style={{ padding: "60px 24px", textAlign: "center" }}>
-                <div style={{ width: 64, height: 64, borderRadius: 18, background: "linear-gradient(135deg, #f8fafc, #f1f5f9)", border: "1px solid #e2e8f0", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 18 }}>
-                  <Inbox size={28} style={{ color: "#cbd5e1" }} strokeWidth={1.5} />
+              <div className="flex flex-col items-center justify-center" style={{ padding: "32px 20px", textAlign: "center" }}>
+                <div style={{ width: 48, height: 48, borderRadius: 14, background: "linear-gradient(135deg, #f8fafc, #f1f5f9)", border: "1px solid #e2e8f0", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 12 }}>
+                  <Inbox size={22} style={{ color: "#cbd5e1" }} strokeWidth={1.5} />
                 </div>
-                <p style={{ fontSize: 15, fontWeight: 700, color: "#334155", marginBottom: 8 }}>Aucune activité pour le moment</p>
-                <p style={{ fontSize: 13, color: "#94a3b8", lineHeight: 1.7, maxWidth: 300, marginBottom: 22 }}>
-                  Chaque devis, relance ou analyse que vous lancez apparaîtra ici avec son résultat consultable.
+                <p style={{ fontSize: 13.5, fontWeight: 700, color: "#334155", marginBottom: 6 }}>Aucune activité pour le moment</p>
+                <p style={{ fontSize: 12, color: "#94a3b8", lineHeight: 1.6, maxWidth: 280, marginBottom: 16 }}>
+                  Lancez un agent pour voir vos actions apparaître ici.
                 </p>
-                <Link href="/dashboard/deal-draft" style={{ padding: "10px 22px", background: "linear-gradient(135deg, #7c3aed, #6d28d9)", color: "#fff", borderRadius: 11, fontSize: 13.5, fontWeight: 700, textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 8, boxShadow: "0 4px 16px rgba(124,58,237,0.38)", letterSpacing: "-0.01em" }}>
-                  <Zap size={14} strokeWidth={2.5} /> Lancer votre premier agent
+                <Link href="/dashboard/deal-draft" style={{ padding: "8px 18px", background: "linear-gradient(135deg, #7c3aed, #6d28d9)", color: "#fff", borderRadius: 10, fontSize: 12.5, fontWeight: 700, textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 7, boxShadow: "0 4px 14px rgba(124,58,237,0.36)", letterSpacing: "-0.01em" }}>
+                  <Zap size={12} strokeWidth={2.5} /> Lancer votre premier agent
                 </Link>
               </div>
             ) : (
               <div>
-                {activities.slice(0, 8).map((item, i, arr) => {
+                {activities.slice(0, 6).map((item, i, arr) => {
                   const meta = ACTIVITY_META[item.type];
                   return (
                     <button key={item.id} onClick={() => setSelected(item)}
                       className="w-full text-left transition-all"
                       style={{
-                        display: "flex", alignItems: "center", gap: 14,
-                        padding: "14px 24px",
+                        display: "flex", alignItems: "center", gap: 11,
+                        padding: "10px 18px",
                         borderBottom: i < arr.length - 1 ? "1px solid #f8fafc" : "none",
                         background: "transparent", border: "none", cursor: "pointer",
                         borderLeft: `3px solid ${meta.color}`,
-                        marginLeft: 0,
                       }}
                       onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "#fafbfd"; }}
                       onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "transparent"; }}
                     >
-                      {/* Agent dot + icon */}
-                      <div style={{ width: 38, height: 38, borderRadius: 11, flexShrink: 0, background: meta.bg, display: "flex", alignItems: "center", justifyContent: "center", border: `1px solid ${meta.color}22` }}>
-                        <div style={{ width: 12, height: 12, borderRadius: "50%", background: meta.color }} />
+                      <div style={{ width: 32, height: 32, borderRadius: 9, flexShrink: 0, background: meta.bg, display: "flex", alignItems: "center", justifyContent: "center", border: `1px solid ${meta.color}22` }}>
+                        <div style={{ width: 10, height: 10, borderRadius: "50%", background: meta.color }} />
                       </div>
-                      {/* Text */}
                       <div className="flex-1 min-w-0">
-                        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 3 }}>
-                          <span style={{ fontSize: 13, fontWeight: 700, color: "#0f172a" }}>{item.title}</span>
-                          <span style={{ fontSize: 9.5, fontWeight: 800, letterSpacing: "0.08em", textTransform: "uppercase", color: meta.color, background: meta.bg, padding: "2px 7px", borderRadius: 5, flexShrink: 0 }}>{meta.label}</span>
+                        <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 2 }}>
+                          <span style={{ fontSize: 12.5, fontWeight: 700, color: "#0f172a" }}>{item.title}</span>
+                          <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: "0.07em", textTransform: "uppercase", color: meta.color, background: meta.bg, padding: "2px 6px", borderRadius: 4, flexShrink: 0 }}>{meta.label}</span>
                         </div>
-                        <div style={{ fontSize: 12, color: "#94a3b8" }}>{item.subtitle}</div>
+                        <div style={{ fontSize: 11, color: "#94a3b8" }}>{item.subtitle}</div>
                       </div>
-                      {/* Time + arrow */}
-                      <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
-                        <span style={{ fontSize: 11, color: "#cbd5e1" }}>{relativeTime(item.timestamp)}</span>
-                        <div style={{ width: 22, height: 22, borderRadius: 7, background: "#f8fafc", border: "1px solid #e2e8f0", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                          <ChevronRight size={11} style={{ color: "#94a3b8" }} />
+                      <div style={{ display: "flex", alignItems: "center", gap: 6, flexShrink: 0 }}>
+                        <span style={{ fontSize: 10.5, color: "#cbd5e1" }}>{relativeTime(item.timestamp)}</span>
+                        <div style={{ width: 20, height: 20, borderRadius: 6, background: "#f8fafc", border: "1px solid #e2e8f0", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                          <ChevronRight size={10} style={{ color: "#94a3b8" }} />
                         </div>
                       </div>
                     </button>
@@ -322,18 +309,15 @@ export default function DashboardPage() {
           </div>
 
           {/* Right column — 1/3 */}
-          <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
 
             {/* Quick access */}
-            <div style={{ background: "#fff", borderRadius: 18, overflow: "hidden", boxShadow: "0 4px 20px rgba(0,0,0,0.06)", border: "1px solid #f0f4f8" }}>
-              <div style={{ padding: "20px 22px 16px", borderBottom: "1px solid #f1f5f9" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 2 }}>
-                  <div style={{ width: 28, height: 28, borderRadius: 8, background: "linear-gradient(135deg, #ecfeff, #f0fdff)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                    <Zap size={13} style={{ color: "#06b6d4" }} strokeWidth={2} />
-                  </div>
-                  <span style={{ fontSize: 15, fontWeight: 700, color: "#0f172a", letterSpacing: "-0.2px" }}>Accès rapide</span>
+            <div style={{ background: "#fff", borderRadius: 14, overflow: "hidden", boxShadow: "0 2px 12px rgba(0,0,0,0.06)", border: "1px solid #f0f4f8" }}>
+              <div style={{ padding: "12px 16px 10px", borderBottom: "1px solid #f1f5f9", display: "flex", alignItems: "center", gap: 7 }}>
+                <div style={{ width: 24, height: 24, borderRadius: 7, background: "linear-gradient(135deg, #ecfeff, #f0fdff)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <Zap size={11} style={{ color: "#06b6d4" }} strokeWidth={2} />
                 </div>
-                <p style={{ fontSize: 11.5, color: "#94a3b8", paddingLeft: 36 }}>Lancez un agent directement</p>
+                <span style={{ fontSize: 13.5, fontWeight: 700, color: "#0f172a", letterSpacing: "-0.2px" }}>Accès rapide</span>
               </div>
               {QUICK.map((q, i) => {
                 const Icon = q.icon;
@@ -341,19 +325,19 @@ export default function DashboardPage() {
                   <Link key={q.href} href={q.href} style={{ textDecoration: "none", display: "block" }}>
                     <div
                       className="flex items-center gap-3 transition-all"
-                      style={{ padding: "14px 22px", borderBottom: i < QUICK.length - 1 ? "1px solid #f8fafc" : "none", cursor: "pointer" }}
+                      style={{ padding: "10px 16px", borderBottom: i < QUICK.length - 1 ? "1px solid #f8fafc" : "none", cursor: "pointer" }}
                       onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.background = "#fafbfd"; }}
                       onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.background = "transparent"; }}
                     >
-                      <div style={{ width: 40, height: 40, borderRadius: 12, flexShrink: 0, background: q.bg, border: `1px solid ${q.border}`, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                        <Icon size={18} style={{ color: q.color }} strokeWidth={1.75} />
+                      <div style={{ width: 34, height: 34, borderRadius: 10, flexShrink: 0, background: q.bg, border: `1px solid ${q.border}`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        <Icon size={15} style={{ color: q.color }} strokeWidth={1.75} />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div style={{ fontSize: 13.5, fontWeight: 700, color: "#0f172a", marginBottom: 2 }}>{q.name}</div>
-                        <div style={{ fontSize: 11.5, color: "#94a3b8", lineHeight: 1.4 }}>{q.desc}</div>
+                        <div style={{ fontSize: 12.5, fontWeight: 700, color: "#0f172a", marginBottom: 1 }}>{q.name}</div>
+                        <div style={{ fontSize: 11, color: "#94a3b8", lineHeight: 1.4 }}>{q.desc}</div>
                       </div>
-                      <div style={{ width: 26, height: 26, borderRadius: 8, background: "#f8fafc", border: "1px solid #e2e8f0", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                        <ArrowRight size={12} style={{ color: "#94a3b8" }} strokeWidth={1.75} />
+                      <div style={{ width: 22, height: 22, borderRadius: 7, background: "#f8fafc", border: "1px solid #e2e8f0", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                        <ArrowRight size={10} style={{ color: "#94a3b8" }} strokeWidth={1.75} />
                       </div>
                     </div>
                   </Link>
@@ -364,28 +348,28 @@ export default function DashboardPage() {
             {/* Deal Draft CTA */}
             <Link href="/dashboard/deal-draft" style={{ textDecoration: "none" }}>
               <div style={{
-                borderRadius: 18, padding: "26px 24px",
+                borderRadius: 14, padding: "18px 18px",
                 background: "linear-gradient(135deg, #5b21b6 0%, #7c3aed 50%, #9333ea 100%)",
                 cursor: "pointer", position: "relative", overflow: "hidden",
-                boxShadow: "0 12px 36px rgba(91,33,182,0.38)",
+                boxShadow: "0 8px 28px rgba(91,33,182,0.36)",
                 transition: "transform 0.2s, box-shadow 0.2s",
               }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.transform = "translateY(-3px)"; (e.currentTarget as HTMLDivElement).style.boxShadow = "0 18px 48px rgba(91,33,182,0.52)"; }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.transform = "none"; (e.currentTarget as HTMLDivElement).style.boxShadow = "0 12px 36px rgba(91,33,182,0.38)"; }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.transform = "translateY(-2px)"; (e.currentTarget as HTMLDivElement).style.boxShadow = "0 14px 40px rgba(91,33,182,0.50)"; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.transform = "none"; (e.currentTarget as HTMLDivElement).style.boxShadow = "0 8px 28px rgba(91,33,182,0.36)"; }}
               >
-                {/* Orbs */}
-                <div style={{ position: "absolute", top: -30, right: -20, width: 100, height: 100, borderRadius: "50%", background: "rgba(255,255,255,0.08)" }} />
-                <div style={{ position: "absolute", bottom: -20, left: 30, width: 70, height: 70, borderRadius: "50%", background: "rgba(255,255,255,0.05)" }} />
+                <div style={{ position: "absolute", top: -20, right: -15, width: 80, height: 80, borderRadius: "50%", background: "rgba(255,255,255,0.07)" }} />
                 <div style={{ position: "relative" }}>
-                  <div style={{ width: 44, height: 44, borderRadius: 13, background: "rgba(255,255,255,0.2)", border: "1px solid rgba(255,255,255,0.25)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 16, boxShadow: "0 4px 12px rgba(0,0,0,0.15)" }}>
-                    <FileText size={22} style={{ color: "#fff" }} strokeWidth={1.75} />
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
+                    <div style={{ width: 36, height: 36, borderRadius: 11, background: "rgba(255,255,255,0.2)", border: "1px solid rgba(255,255,255,0.25)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                      <FileText size={17} style={{ color: "#fff" }} strokeWidth={1.75} />
+                    </div>
+                    <div style={{ fontSize: 15, fontWeight: 800, color: "#fff", letterSpacing: "-0.3px" }}>Deal Draft</div>
                   </div>
-                  <div style={{ fontSize: 17, fontWeight: 800, color: "#fff", marginBottom: 7, letterSpacing: "-0.3px" }}>Deal Draft</div>
-                  <div style={{ fontSize: 12.5, color: "rgba(255,255,255,0.65)", marginBottom: 20, lineHeight: 1.65 }}>
-                    Générez une proposition commerciale premium sur-mesure en moins de 30 secondes.
+                  <div style={{ fontSize: 11.5, color: "rgba(255,255,255,0.62)", marginBottom: 14, lineHeight: 1.6 }}>
+                    Proposition commerciale sur-mesure en 30 secondes.
                   </div>
-                  <div style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "9px 18px", background: "rgba(255,255,255,0.2)", borderRadius: 11, color: "#fff", fontSize: 13, fontWeight: 700, border: "1px solid rgba(255,255,255,0.28)", letterSpacing: "-0.01em" }}>
-                    <Zap size={13} strokeWidth={2.5} /> Lancer maintenant
+                  <div style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "7px 14px", background: "rgba(255,255,255,0.2)", borderRadius: 9, color: "#fff", fontSize: 12, fontWeight: 700, border: "1px solid rgba(255,255,255,0.28)" }}>
+                    <Zap size={11} strokeWidth={2.5} /> Lancer maintenant
                   </div>
                 </div>
               </div>
