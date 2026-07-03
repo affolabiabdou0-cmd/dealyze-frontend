@@ -250,11 +250,11 @@ export default function LoginPage() {
               className="w-full flex items-center justify-center gap-2"
               style={{
                 padding: "15px 20px", borderRadius: 12,
-                background: "#2563EB", color: "#fff",
+                background: "linear-gradient(135deg, #7c3aed 0%, #2563eb 100%)",
+                color: "#fff",
                 border: "none", cursor: (loading || gLoading) ? "default" : "pointer",
                 fontSize: 14, fontWeight: 700,
                 opacity: (loading || gLoading) ? 0.7 : 1,
-                background: "linear-gradient(135deg, #7c3aed 0%, #2563eb 100%)",
                 boxShadow: "0 4px 14px rgba(124,58,237,0.35)",
                 transition: "box-shadow 0.15s, opacity 0.15s",
               }}
