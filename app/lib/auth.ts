@@ -6,6 +6,7 @@ export interface User {
   full_name: string;
   profile: string;
   plan: string;
+  created_at?: string;
 }
 
 export function getToken(): string | null {
