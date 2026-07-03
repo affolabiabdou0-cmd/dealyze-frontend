@@ -221,10 +221,10 @@ export default function BillingPage() {
                   ) : (
                     <button onClick={() => handleUpgrade(plan.id)} disabled={loadingPlan === plan.id}
                       style={{
-                        width: "100%", padding: "12px", borderRadius: 10, border: "none",
+                        width: "100%", padding: "12px", borderRadius: 10,
+                        border: plan.highlight ? "none" : "1px solid #2a2a3a",
                         background: plan.highlight ? "linear-gradient(135deg, #7c3aed, #3b82f6)" : "#0f0f13",
                         color: plan.highlight ? "#fff" : "#94a3b8",
-                        border: plan.highlight ? "none" : "1px solid #2a2a3a",
                         fontSize: 13, fontWeight: 600, cursor: "pointer",
                         display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
                         boxShadow: plan.highlight ? "0 4px 14px rgba(124,58,237,0.4)" : "none",

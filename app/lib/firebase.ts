@@ -1,5 +1,5 @@
 import { initializeApp, getApps, type FirebaseApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
 function getFirebaseApp(): FirebaseApp {
   if (getApps().length > 0) return getApps()[0];
@@ -13,20 +13,11 @@ function getFirebaseApp(): FirebaseApp {
   });
 }
 
-export function startGoogleRedirect(): void {
-  if (typeof window === "undefined") return;
+export async function signInWithGoogle(): Promise<string> {
   const app      = getFirebaseApp();
   const auth     = getAuth(app);
   const provider = new GoogleAuthProvider();
   provider.setCustomParameters({ prompt: "select_account" });
-  signInWithRedirect(auth, provider);
-}
-
-export async function getGoogleIdTokenFromRedirect(): Promise<string | null> {
-  if (typeof window === "undefined") return null;
-  const app    = getFirebaseApp();
-  const auth   = getAuth(app);
-  const result = await getRedirectResult(auth);
-  if (!result) return null;
+  const result = await signInWithPopup(auth, provider);
   return result.user.getIdToken();
 }

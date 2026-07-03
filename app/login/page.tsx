@@ -4,9 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff, ArrowRight, AlertCircle } from "lucide-react";
-import { useEffect } from "react";
 import { login, saveAuth } from "../lib/auth";
-import { startGoogleRedirect, getGoogleIdTokenFromRedirect } from "../lib/firebase";
+import { signInWithGoogle } from "../lib/firebase";
 import { api, type TokenResponse } from "../lib/api";
 
 const AGENTS = [
@@ -50,33 +49,32 @@ export default function LoginPage() {
     } finally { setLoading(false); }
   }
 
-  useEffect(() => {
-    async function checkRedirect() {
-      setGLoading(true);
-      try {
-        const idToken = await getGoogleIdTokenFromRedirect();
-        if (!idToken) { setGLoading(false); return; }
-        const res = await api.post<TokenResponse>("/auth/google", {
-          firebase_token: idToken,
-          profile: "pme",
-        });
-        saveAuth(res.data);
-        router.push("/dashboard");
-      } catch (err: unknown) {
-        console.error("[Dealyze] Google redirect error:", err);
+  async function handleGoogle() {
+    setError(""); setGLoading(true);
+    try {
+      const idToken = await signInWithGoogle();
+      const res = await api.post<TokenResponse>("/auth/google", {
+        firebase_token: idToken,
+        profile: "pme",
+      });
+      saveAuth(res.data);
+      router.push("/dashboard");
+    } catch (err: unknown) {
+      const code = (err as { code?: string }).code;
+      if (code === "auth/popup-blocked" || code === "auth/popup-closed-by-user") {
+        setError("Popup fermée. Réessayez ou désactivez votre bloqueur de popups.");
+      } else if (code === "auth/unauthorized-domain") {
+        setError("Domaine non autorisé dans Firebase. Contactez le support.");
+      } else if (code === "auth/cancelled-popup-request") {
+        setError(""); // user opened multiple popups, ignore
+      } else {
         setError(
           (err as { response?: { data?: { detail?: string } } })?.response?.data?.detail
-            ?? "Connexion Google échouée. Réessayez."
+            || "Connexion Google échouée. Réessayez."
         );
-        setGLoading(false);
       }
+      setGLoading(false);
     }
-    checkRedirect();
-  }, [router]);
-
-  function handleGoogle() {
-    setError("");
-    startGoogleRedirect();
   }
 
   const inputBase: React.CSSProperties = {
@@ -96,7 +94,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex">
 
-      {/* ── LEFT — dark brand panel ──────────────────── */}
+      {/* ── LEFT — dark brand panel ── */}
       <div
         className="hidden lg:flex flex-col justify-between flex-1 relative overflow-hidden"
         style={{ padding: "52px 64px", background: "linear-gradient(150deg,#060C1A 0%,#0B1830 52%,#0F2552 100%)" }}
@@ -120,92 +118,51 @@ export default function LoginPage() {
         </Link>
 
         <div className="relative z-10">
-          <div className="inline-flex items-center gap-2" style={{
-            background: "rgba(37,99,235,0.14)", border: "1px solid rgba(37,99,235,0.28)",
-            borderRadius: 100, padding: "5px 14px", marginBottom: 28,
-          }}>
-            <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#34D399", display: "inline-block" }} />
-            <span style={{ fontSize: 11, color: "rgba(255,255,255,0.6)", fontWeight: 600, letterSpacing: "0.08em" }}>
-              XPRIZE AI HACKATHON 2026
-            </span>
+          <div className="inline-flex items-center gap-2" style={{ background:"rgba(37,99,235,0.14)", border:"1px solid rgba(37,99,235,0.28)", borderRadius:100, padding:"5px 14px", marginBottom:28 }}>
+            <span style={{ width:7, height:7, borderRadius:"50%", background:"#34D399", display:"inline-block" }} />
+            <span style={{ fontSize:11, color:"rgba(255,255,255,0.6)", fontWeight:600, letterSpacing:"0.08em" }}>XPRIZE AI HACKATHON 2026</span>
           </div>
-
-          <h1 className="font-display" style={{
-            fontSize: "clamp(38px,3.8vw,56px)", fontWeight: 700, color: "#fff",
-            lineHeight: 1.08, letterSpacing: "-1px", marginBottom: 20,
-          }}>
-            Turn every deal<br />
-            <em style={{ color: "#60A5FA", fontStyle: "italic" }}>into done.</em>
+          <h1 className="font-display" style={{ fontSize:"clamp(38px,3.8vw,56px)", fontWeight:700, color:"#fff", lineHeight:1.08, letterSpacing:"-1px", marginBottom:20 }}>
+            Turn every deal<br /><em style={{ color:"#60A5FA", fontStyle:"italic" }}>into done.</em>
           </h1>
-
-          <p style={{ fontSize: 15, color: "rgba(255,255,255,0.42)", lineHeight: 1.8, marginBottom: 48, maxWidth: 380 }}>
+          <p style={{ fontSize:15, color:"rgba(255,255,255,0.42)", lineHeight:1.8, marginBottom:48, maxWidth:380 }}>
             4 agents IA spécialisés pour automatiser chaque étape de vos deals — de la proposition commerciale au due diligence.
           </p>
-
-          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
             {AGENTS.map((a) => (
-              <div key={a.name} style={{
-                display: "flex", alignItems: "center", gap: 14,
-                padding: "14px 18px",
-                background: "rgba(255,255,255,0.035)",
-                border: "1px solid rgba(255,255,255,0.07)",
-                borderRadius: 14,
-              }}>
-                <div style={{
-                  width: 42, height: 42, borderRadius: 11, flexShrink: 0,
-                  background: "rgba(37,99,235,0.22)",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: 20,
-                }}>{a.icon}</div>
+              <div key={a.name} style={{ display:"flex", alignItems:"center", gap:14, padding:"14px 18px", background:"rgba(255,255,255,0.035)", border:"1px solid rgba(255,255,255,0.07)", borderRadius:14 }}>
+                <div style={{ width:42, height:42, borderRadius:11, flexShrink:0, background:"rgba(37,99,235,0.22)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:20 }}>{a.icon}</div>
                 <div>
-                  <div style={{ fontSize: 13, fontWeight: 600, color: "rgba(255,255,255,0.9)" }}>{a.name}</div>
-                  <div style={{ fontSize: 12, color: "rgba(255,255,255,0.36)", marginTop: 2 }}>{a.desc}</div>
+                  <div style={{ fontSize:13, fontWeight:600, color:"rgba(255,255,255,0.9)" }}>{a.name}</div>
+                  <div style={{ fontSize:12, color:"rgba(255,255,255,0.36)", marginTop:2 }}>{a.desc}</div>
                 </div>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="relative z-10" style={{ fontSize: 12, color: "rgba(255,255,255,0.18)" }}>
+        <div className="relative z-10" style={{ fontSize:12, color:"rgba(255,255,255,0.18)" }}>
           © 2026 Dealyze · XPRIZE Hackathon
         </div>
       </div>
 
-      {/* ── RIGHT — form panel ───────────────────────── */}
-      <div
-        className="w-full lg:w-[500px] lg:flex-none flex items-center justify-center overflow-y-auto"
-        style={{ background: "#fff", padding: "48px 28px", minHeight: "100vh" }}
-      >
-        <div style={{ width: "100%", maxWidth: 380 }}>
+      {/* ── RIGHT — form panel ── */}
+      <div className="w-full lg:w-[500px] lg:flex-none flex items-center justify-center overflow-y-auto"
+        style={{ background:"#fff", padding:"48px 28px", minHeight:"100vh" }}>
+        <div style={{ width:"100%", maxWidth:380 }}>
 
           <Link href="/" className="lg:hidden font-display text-xl font-bold"
-            style={{ color: "#0A1628", textDecoration: "none", display: "block", marginBottom: 40 }}>
-            Dealyze
-          </Link>
+            style={{ color:"#0A1628", textDecoration:"none", display:"block", marginBottom:40 }}>Dealyze</Link>
 
-          <h2 style={{ fontSize: 30, fontWeight: 700, color: "#0A1628", letterSpacing: "-0.75px", marginBottom: 6 }}>
-            Bon retour
-          </h2>
-          <p style={{ fontSize: 14, color: "#94A3B8", marginBottom: 36 }}>
-            Connectez-vous à votre espace Dealyze
-          </p>
+          <h2 style={{ fontSize:30, fontWeight:700, color:"#0A1628", letterSpacing:"-0.75px", marginBottom:6 }}>Bon retour</h2>
+          <p style={{ fontSize:14, color:"#94A3B8", marginBottom:36 }}>Connectez-vous à votre espace Dealyze</p>
 
           {/* Google */}
-          <button
-            type="button" onClick={handleGoogle}
-            disabled={gLoading || loading}
+          <button type="button" onClick={handleGoogle} disabled={gLoading || loading}
             className="w-full flex items-center justify-center gap-3"
-            style={{
-              padding: "15px 20px", borderRadius: 12,
-              border: "1.5px solid #E2E8F0", background: "#fff",
-              fontSize: 14, fontWeight: 600, color: "#111827",
-              cursor: (gLoading || loading) ? "default" : "pointer",
-              marginBottom: 22, opacity: (gLoading || loading) ? 0.6 : 1,
-              boxShadow: "0 1px 3px rgba(0,0,0,0.06)",
-              transition: "background 0.12s, box-shadow 0.12s",
-            }}
-            onMouseEnter={(e) => { if (!gLoading && !loading) { e.currentTarget.style.background = "#F9FAFB"; e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,0,0,0.08)"; } }}
-            onMouseLeave={(e) => { e.currentTarget.style.background = "#fff"; e.currentTarget.style.boxShadow = "0 1px 3px rgba(0,0,0,0.06)"; }}
+            style={{ padding:"15px 20px", borderRadius:12, border:"1.5px solid #E2E8F0", background:"#fff", fontSize:14, fontWeight:600, color:"#111827", cursor:(gLoading || loading)?"default":"pointer", marginBottom:22, opacity:(gLoading || loading)?0.6:1, boxShadow:"0 1px 3px rgba(0,0,0,0.06)", transition:"background 0.12s, box-shadow 0.12s" }}
+            onMouseEnter={(e) => { if (!gLoading && !loading) { e.currentTarget.style.background="#F9FAFB"; e.currentTarget.style.boxShadow="0 2px 8px rgba(0,0,0,0.08)"; } }}
+            onMouseLeave={(e) => { e.currentTarget.style.background="#fff"; e.currentTarget.style.boxShadow="0 1px 3px rgba(0,0,0,0.06)"; }}
           >
             {gLoading
               ? <span className="w-[18px] h-[18px] rounded-full border-2 border-gray-200 border-t-gray-500 animate-spin" />
@@ -213,53 +170,41 @@ export default function LoginPage() {
             Continuer avec Google
           </button>
 
-          <div className="flex items-center gap-4" style={{ marginBottom: 22 }}>
-            <div className="flex-1" style={{ height: 1, background: "#F1F5F9" }} />
-            <span style={{ fontSize: 12, color: "#CBD5E1", fontWeight: 500 }}>ou avec email</span>
-            <div className="flex-1" style={{ height: 1, background: "#F1F5F9" }} />
+          <div className="flex items-center gap-4" style={{ marginBottom:22 }}>
+            <div className="flex-1" style={{ height:1, background:"#F1F5F9" }} />
+            <span style={{ fontSize:12, color:"#CBD5E1", fontWeight:500 }}>ou avec email</span>
+            <div className="flex-1" style={{ height:1, background:"#F1F5F9" }} />
           </div>
 
-          <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+          <form onSubmit={handleSubmit} style={{ display:"flex", flexDirection:"column", gap:16 }}>
             <div>
-              <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: "#374151", marginBottom: 6 }}>Email</label>
+              <label style={{ display:"block", fontSize:13, fontWeight:600, color:"#374151", marginBottom:6 }}>Email</label>
               <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)}
                 placeholder="vous@example.com" style={inputBase} onFocus={onFocus} onBlur={onBlur} />
             </div>
             <div>
-              <label style={{ display: "block", fontSize: 13, fontWeight: 600, color: "#374151", marginBottom: 6 }}>Mot de passe</label>
-              <div style={{ position: "relative" }}>
-                <input type={showPw ? "text" : "password"} required value={password}
+              <label style={{ display:"block", fontSize:13, fontWeight:600, color:"#374151", marginBottom:6 }}>Mot de passe</label>
+              <div style={{ position:"relative" }}>
+                <input type={showPw?"text":"password"} required value={password}
                   onChange={(e) => setPassword(e.target.value)} placeholder="••••••••"
-                  style={{ ...inputBase, paddingRight: 44 }} onFocus={onFocus} onBlur={onBlur} />
-                <button type="button" onClick={() => setShowPw(!showPw)} style={{
-                  position: "absolute", right: 14, top: "50%", transform: "translateY(-50%)",
-                  background: "none", border: "none", cursor: "pointer", color: "#9CA3AF", padding: 0, display: "flex",
-                }}>
+                  style={{ ...inputBase, paddingRight:44 }} onFocus={onFocus} onBlur={onBlur} />
+                <button type="button" onClick={() => setShowPw(!showPw)} style={{ position:"absolute", right:14, top:"50%", transform:"translateY(-50%)", background:"none", border:"none", cursor:"pointer", color:"#9CA3AF", padding:0, display:"flex" }}>
                   {showPw ? <EyeOff size={15} /> : <Eye size={15} />}
                 </button>
               </div>
             </div>
 
             {error && (
-              <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "11px 14px", borderRadius: 10, background: "#FEF2F2", color: "#DC2626", fontSize: 13 }}>
-                <AlertCircle size={14} style={{ flexShrink: 0 }} /> {error}
+              <div style={{ display:"flex", alignItems:"center", gap:8, padding:"11px 14px", borderRadius:10, background:"#FEF2F2", color:"#DC2626", fontSize:13 }}>
+                <AlertCircle size={14} style={{ flexShrink:0 }} /> {error}
               </div>
             )}
 
             <button type="submit" disabled={loading || gLoading}
               className="w-full flex items-center justify-center gap-2"
-              style={{
-                padding: "15px 20px", borderRadius: 12,
-                background: "linear-gradient(135deg, #7c3aed 0%, #2563eb 100%)",
-                color: "#fff",
-                border: "none", cursor: (loading || gLoading) ? "default" : "pointer",
-                fontSize: 14, fontWeight: 700,
-                opacity: (loading || gLoading) ? 0.7 : 1,
-                boxShadow: "0 4px 14px rgba(124,58,237,0.35)",
-                transition: "box-shadow 0.15s, opacity 0.15s",
-              }}
-              onMouseEnter={(e) => { if (!loading && !gLoading) e.currentTarget.style.boxShadow = "0 8px 24px rgba(124,58,237,0.55)"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.boxShadow = "0 4px 14px rgba(124,58,237,0.35)"; }}
+              style={{ padding:"15px 20px", borderRadius:12, background:"linear-gradient(135deg, #7c3aed 0%, #2563eb 100%)", color:"#fff", border:"none", cursor:(loading||gLoading)?"default":"pointer", fontSize:14, fontWeight:700, opacity:(loading||gLoading)?0.7:1, boxShadow:"0 4px 14px rgba(124,58,237,0.35)", transition:"box-shadow 0.15s, opacity 0.15s" }}
+              onMouseEnter={(e) => { if (!loading && !gLoading) e.currentTarget.style.boxShadow="0 8px 24px rgba(124,58,237,0.55)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.boxShadow="0 4px 14px rgba(124,58,237,0.35)"; }}
             >
               {loading
                 ? <span className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
@@ -267,11 +212,9 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <p style={{ marginTop: 28, textAlign: "center", fontSize: 13, color: "#94A3B8" }}>
+          <p style={{ marginTop:28, textAlign:"center", fontSize:13, color:"#94A3B8" }}>
             Pas encore de compte ?{" "}
-            <Link href="/register" style={{ color: "#2563EB", fontWeight: 600, textDecoration: "none" }}>
-              Créer un compte gratuit
-            </Link>
+            <Link href="/register" style={{ color:"#2563EB", fontWeight:600, textDecoration:"none" }}>Créer un compte gratuit</Link>
           </p>
         </div>
       </div>
