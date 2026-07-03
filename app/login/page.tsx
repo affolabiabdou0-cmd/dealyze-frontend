@@ -4,8 +4,9 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff, ArrowRight, AlertCircle } from "lucide-react";
+import { useEffect } from "react";
 import { login, saveAuth } from "../lib/auth";
-import { getGoogleIdToken } from "../lib/firebase";
+import { startGoogleRedirect, getGoogleIdTokenFromRedirect } from "../lib/firebase";
 import { api, type TokenResponse } from "../lib/api";
 
 const AGENTS = [
@@ -49,29 +50,33 @@ export default function LoginPage() {
     } finally { setLoading(false); }
   }
 
-  async function handleGoogle() {
-    setError(""); setGLoading(true);
-    try {
-      const idToken = await getGoogleIdToken();
-      const res = await api.post<TokenResponse>("/auth/google", {
-        firebase_token: idToken,
-        profile: "pme",
-      });
-      saveAuth(res.data);
-      router.push("/dashboard");
-    } catch (err: unknown) {
-      console.error("[Dealyze] Google auth error:", err);
-      const code = (err as { code?: string })?.code;
-      if (code === "auth/popup-closed-by-user") { setGLoading(false); return; }
-      setError(
-        code === "auth/popup-blocked"
-          ? "Popup bloqué — autorisez les popups pour ce site."
-          : code === "auth/unauthorized-domain"
-          ? "Domaine non autorisé — réessayez dans 30 secondes."
-          : (err as { response?: { data?: { detail?: string } } })?.response?.data?.detail
-              ?? `Connexion Google échouée. (${code ?? "erreur réseau"})`
-      );
-    } finally { setGLoading(false); }
+  useEffect(() => {
+    async function checkRedirect() {
+      setGLoading(true);
+      try {
+        const idToken = await getGoogleIdTokenFromRedirect();
+        if (!idToken) { setGLoading(false); return; }
+        const res = await api.post<TokenResponse>("/auth/google", {
+          firebase_token: idToken,
+          profile: "pme",
+        });
+        saveAuth(res.data);
+        router.push("/dashboard");
+      } catch (err: unknown) {
+        console.error("[Dealyze] Google redirect error:", err);
+        setError(
+          (err as { response?: { data?: { detail?: string } } })?.response?.data?.detail
+            ?? "Connexion Google échouée. Réessayez."
+        );
+        setGLoading(false);
+      }
+    }
+    checkRedirect();
+  }, [router]);
+
+  function handleGoogle() {
+    setError("");
+    startGoogleRedirect();
   }
 
   const inputBase: React.CSSProperties = {
