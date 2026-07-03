@@ -101,17 +101,22 @@ export default function LoginPage() {
         className="hidden lg:flex flex-col justify-between flex-1 relative overflow-hidden"
         style={{ padding: "52px 64px", background: "linear-gradient(150deg,#060C1A 0%,#0B1830 52%,#0F2552 100%)" }}
       >
-        <div className="absolute inset-0 pointer-events-none" style={{
-          background: "radial-gradient(ellipse 70% 55% at 65% 25%, rgba(37,99,235,0.13) 0%, transparent 70%)",
-        }} />
-        <div className="absolute pointer-events-none" style={{
-          bottom: -130, left: -90, width: 480, height: 480, borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(96,165,250,0.07) 0%, transparent 65%)",
-        }} />
+        <style>{`
+          @keyframes orb1 { 0%,100%{transform:translate(0,0) scale(1);opacity:.12} 50%{transform:translate(40px,-30px) scale(1.15);opacity:.2} }
+          @keyframes orb2 { 0%,100%{transform:translate(0,0) scale(1);opacity:.07} 60%{transform:translate(-30px,40px) scale(1.1);opacity:.14} }
+          @keyframes orb3 { 0%,100%{transform:translate(0,0);opacity:.06} 40%{transform:translate(20px,20px);opacity:.11} }
+          @keyframes gridPulse { 0%,100%{opacity:.04} 50%{opacity:.08} }
+        `}</style>
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div style={{ position:"absolute", top:-100, right:-100, width:500, height:500, borderRadius:"50%", background:"radial-gradient(circle, rgba(124,58,237,0.18) 0%, transparent 65%)", animation:"orb1 8s ease-in-out infinite" }} />
+          <div style={{ position:"absolute", bottom:-120, left:-80, width:450, height:450, borderRadius:"50%", background:"radial-gradient(circle, rgba(37,99,235,0.14) 0%, transparent 65%)", animation:"orb2 11s ease-in-out infinite" }} />
+          <div style={{ position:"absolute", top:"50%", left:"40%", width:300, height:300, borderRadius:"50%", background:"radial-gradient(circle, rgba(96,165,250,0.08) 0%, transparent 65%)", animation:"orb3 7s ease-in-out infinite" }} />
+          <div style={{ position:"absolute", inset:0, backgroundImage:"radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px)", backgroundSize:"32px 32px", animation:"gridPulse 6s ease-in-out infinite" }} />
+        </div>
 
-        <Link href="/" className="relative z-10 font-display text-[26px] font-bold text-white"
-          style={{ letterSpacing: "-0.3px", textDecoration: "none" }}>
-          Dealyze
+        <Link href="/" className="relative z-10 flex items-center gap-2.5" style={{ textDecoration: "none" }}>
+          <div style={{ width:36, height:36, borderRadius:10, background:"linear-gradient(135deg,#7c3aed,#2563eb)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:18, boxShadow:"0 0 20px rgba(124,58,237,0.4)" }}>⚡</div>
+          <span className="font-display font-bold" style={{ fontSize:28, letterSpacing:"-0.5px", background:"linear-gradient(135deg,#c4b5fd,#93c5fd)", WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent", backgroundClip:"text" }}>Dealyze</span>
         </Link>
 
         <div className="relative z-10">
@@ -249,11 +254,12 @@ export default function LoginPage() {
                 border: "none", cursor: (loading || gLoading) ? "default" : "pointer",
                 fontSize: 14, fontWeight: 700,
                 opacity: (loading || gLoading) ? 0.7 : 1,
-                boxShadow: "0 4px 14px rgba(37,99,235,0.3)",
-                transition: "background 0.12s, box-shadow 0.12s",
+                background: "linear-gradient(135deg, #7c3aed 0%, #2563eb 100%)",
+                boxShadow: "0 4px 14px rgba(124,58,237,0.35)",
+                transition: "box-shadow 0.15s, opacity 0.15s",
               }}
-              onMouseEnter={(e) => { if (!loading && !gLoading) { e.currentTarget.style.background = "#1D4ED8"; e.currentTarget.style.boxShadow = "0 6px 20px rgba(37,99,235,0.4)"; } }}
-              onMouseLeave={(e) => { e.currentTarget.style.background = "#2563EB"; e.currentTarget.style.boxShadow = "0 4px 14px rgba(37,99,235,0.3)"; }}
+              onMouseEnter={(e) => { if (!loading && !gLoading) e.currentTarget.style.boxShadow = "0 8px 24px rgba(124,58,237,0.55)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.boxShadow = "0 4px 14px rgba(124,58,237,0.35)"; }}
             >
               {loading
                 ? <span className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />

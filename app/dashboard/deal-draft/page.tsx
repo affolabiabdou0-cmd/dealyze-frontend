@@ -25,196 +25,196 @@ interface DealDraftResult {
   content: DealDraftContent;
 }
 
-const FIELD = "w-full px-4 py-3 rounded-xl border text-sm outline-none transition-all bg-white";
-const FE = {
-  onFocus: (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => (e.target.style.borderColor = "#2563EB"),
-  onBlur: (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => (e.target.style.borderColor = "#E2E8F0"),
+const COLOR = "#7c3aed";
+const GLOW  = "rgba(124,58,237,0.45)";
+
+const inputStyle: React.CSSProperties = {
+  width: "100%", padding: "12px 14px", borderRadius: 10,
+  border: "1px solid #2a2a3a", background: "#0f0f13",
+  color: "#e2e8f0", fontSize: 14, outline: "none",
+  transition: "border-color 0.15s", boxSizing: "border-box",
+};
+const onFocus = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  e.target.style.borderColor = COLOR;
+};
+const onBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  e.target.style.borderColor = "#2a2a3a";
 };
 
-export default function DealDraftPage() {
-  const [form, setForm] = useState({
-    client_name: "",
-    sector: "",
-    need: "",
-    budget: "",
-    timeline: "",
-    language: "fr",
-  });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [result, setResult] = useState<DealDraftResult | null>(null);
-  const [copied, setCopied] = useState(false);
+const Label = ({ children }: { children: React.ReactNode }) => (
+  <label style={{ display: "block", fontSize: 11, fontWeight: 600, letterSpacing: "0.07em", color: "rgba(255,255,255,0.45)", textTransform: "uppercase", marginBottom: 6 }}>
+    {children}
+  </label>
+);
 
-  function set(field: string, val: string) {
-    setForm((p) => ({ ...p, [field]: val }));
-  }
+const Card = ({ children, style }: { children: React.ReactNode; style?: React.CSSProperties }) => (
+  <div style={{ background: "#1a1a24", border: "1px solid #2a2a3a", borderRadius: 16, padding: "24px", ...style }}>
+    {children}
+  </div>
+);
+
+const SECTIONS: { key: keyof DealDraftContent; label: string }[] = [
+  { key: "introduction",        label: "Introduction"          },
+  { key: "description_besoin",  label: "Description du besoin" },
+  { key: "proposition_valeur",  label: "Proposition de valeur" },
+  { key: "calendrier",          label: "Calendrier"            },
+  { key: "budget_details",      label: "Budget"                },
+  { key: "conditions_paiement", label: "Conditions de paiement"},
+  { key: "conclusion",          label: "Conclusion"            },
+];
+
+export default function DealDraftPage() {
+  const [form, setForm] = useState({ client_name: "", sector: "", need: "", budget: "", timeline: "", language: "fr" });
+  const [loading, setLoading] = useState(false);
+  const [error, setError]     = useState("");
+  const [result, setResult]   = useState<DealDraftResult | null>(null);
+  const [copied, setCopied]   = useState(false);
+
+  function set(field: string, val: string) { setForm((p) => ({ ...p, [field]: val })); }
 
   async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setError("");
-    setLoading(true);
+    e.preventDefault(); setError(""); setLoading(true);
     try {
       const res = await api.post<DealDraftResult>("/agents/deal-draft/generate", form);
       setResult(res.data);
     } catch (err: unknown) {
-      const msg = (err as { response?: { data?: { detail?: string } } })?.response?.data?.detail;
-      setError(msg || "Erreur lors de la génération. Réessayez.");
-    } finally {
-      setLoading(false);
-    }
+      setError((err as { response?: { data?: { detail?: string } } })?.response?.data?.detail || "Erreur lors de la génération. Réessayez.");
+    } finally { setLoading(false); }
   }
 
   function copyText() {
     if (!result) return;
-    const c = result.content;
-    const lines = [
-      `DEVIS — ${result.quote_id}`,
-      `Client : ${result.client_name}`,
-      `Généré le : ${new Date(result.generated_at).toLocaleDateString("fr-FR")}`,
-      "",
-    ];
-    const keys: (keyof DealDraftContent)[] = ["introduction", "description_besoin", "proposition_valeur", "calendrier", "budget_details", "conditions_paiement", "conclusion"];
-    const labels: Record<string, string> = {
-      introduction: "Introduction",
-      description_besoin: "Description du besoin",
-      proposition_valeur: "Proposition de valeur",
-      livrables: "Livrables",
-      calendrier: "Calendrier",
-      budget_details: "Budget",
-      conditions_paiement: "Conditions de paiement",
-      conclusion: "Conclusion",
-    };
-    for (const k of keys) {
-      if (c[k]) {
-        lines.push(`${labels[k] ?? k}:`, c[k] as string, "");
-      }
+    const lines = [`DEVIS — ${result.quote_id}`, `Client : ${result.client_name}`, `Généré le : ${new Date(result.generated_at).toLocaleDateString("fr-FR")}`, ""];
+    for (const s of SECTIONS) {
+      const val = result.content[s.key];
+      if (val && typeof val === "string") lines.push(`${s.label}:`, val, "");
     }
-    if (c.livrables?.length) {
-      lines.push("Livrables:", ...(c.livrables as string[]).map((l) => `• ${l}`), "");
+    if (result.content.livrables?.length) {
+      lines.push("Livrables:", ...(result.content.livrables as string[]).map((l) => `• ${l}`), "");
     }
-    navigator.clipboard.writeText(lines.join("\n")).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    });
+    navigator.clipboard.writeText(lines.join("\n")).then(() => { setCopied(true); setTimeout(() => setCopied(false), 2000); });
   }
-
-  const SECTIONS: { key: keyof DealDraftContent; label: string }[] = [
-    { key: "introduction", label: "Introduction" },
-    { key: "description_besoin", label: "Description du besoin" },
-    { key: "proposition_valeur", label: "Proposition de valeur" },
-    { key: "calendrier", label: "Calendrier" },
-    { key: "budget_details", label: "Budget" },
-    { key: "conditions_paiement", label: "Conditions de paiement" },
-    { key: "conclusion", label: "Conclusion" },
-  ];
 
   return (
     <div className="max-w-6xl mx-auto">
-      <div className="mb-6 flex items-center gap-3">
-        <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "#EFF6FF", color: "#2563EB" }}>
-          <FileText size={20} />
+      {/* Header */}
+      <div className="flex items-center gap-3 mb-6">
+        <div style={{ width: 42, height: 42, borderRadius: 12, background: `${COLOR}18`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <span style={{ fontSize: 22 }}>⚡</span>
         </div>
         <div>
-          <h2 className="text-lg font-bold" style={{ color: "#0F2552" }}>Deal Draft</h2>
-          <p className="text-sm text-gray-400">Générez un devis professionnel en quelques secondes</p>
+          <h2 style={{ fontSize: 18, fontWeight: 700, color: "#f1f5f9", marginBottom: 2 }}>Deal Draft</h2>
+          <p style={{ fontSize: 13, color: "#4a4a6a" }}>Générez un devis professionnel en quelques secondes</p>
         </div>
       </div>
 
-      <div className="grid lg:grid-cols-2 gap-6">
+      <div className="grid lg:grid-cols-2 gap-5">
         {/* Form */}
-        <div className="bg-white rounded-2xl border border-gray-100 p-6">
-          <h3 className="font-semibold text-sm mb-5" style={{ color: "#0F2552" }}>Informations du deal</h3>
-          <form onSubmit={handleSubmit} className="space-y-4">
+        <Card>
+          <h3 style={{ fontSize: 13, fontWeight: 600, color: "#94a3b8", marginBottom: 20 }}>Informations du deal</h3>
+          <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             <div>
-              <label className="block text-xs font-medium mb-1.5 text-gray-500">Nom du client *</label>
-              <input type="text" required value={form.client_name} onChange={(e) => set("client_name", e.target.value)} placeholder="Acme Corp" className={FIELD} style={{ borderColor: "#E2E8F0" }} {...FE} />
+              <Label>Nom du client *</Label>
+              <input type="text" required value={form.client_name} onChange={(e) => set("client_name", e.target.value)} placeholder="Acme Corp" style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
             </div>
             <div>
-              <label className="block text-xs font-medium mb-1.5 text-gray-500">Secteur d&apos;activité *</label>
-              <input type="text" required value={form.sector} onChange={(e) => set("sector", e.target.value)} placeholder="Agence web / E-commerce" className={FIELD} style={{ borderColor: "#E2E8F0" }} {...FE} />
+              <Label>Secteur d&apos;activité *</Label>
+              <input type="text" required value={form.sector} onChange={(e) => set("sector", e.target.value)} placeholder="Agence web / E-commerce" style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
             </div>
             <div>
-              <label className="block text-xs font-medium mb-1.5 text-gray-500">Besoin / Prestation *</label>
-              <textarea required value={form.need} onChange={(e) => set("need", e.target.value)} placeholder="Création d'un site e-commerce avec tableau de bord analytique et intégration paiement..." rows={3} className={FIELD + " resize-none"} style={{ borderColor: "#E2E8F0" }} {...FE} />
+              <Label>Besoin / Prestation *</Label>
+              <textarea required value={form.need} onChange={(e) => set("need", e.target.value)} placeholder="Création d'un site e-commerce avec tableau de bord analytique..." rows={3}
+                style={{ ...inputStyle, resize: "none", minHeight: 90 }} onFocus={onFocus} onBlur={onBlur} />
             </div>
-            <div className="grid grid-cols-2 gap-3">
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
               <div>
-                <label className="block text-xs font-medium mb-1.5 text-gray-500">Budget *</label>
-                <input type="text" required value={form.budget} onChange={(e) => set("budget", e.target.value)} placeholder="8 000 €" className={FIELD} style={{ borderColor: "#E2E8F0" }} {...FE} />
+                <Label>Budget *</Label>
+                <input type="text" required value={form.budget} onChange={(e) => set("budget", e.target.value)} placeholder="8 000 €" style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
               </div>
               <div>
-                <label className="block text-xs font-medium mb-1.5 text-gray-500">Délai *</label>
-                <input type="text" required value={form.timeline} onChange={(e) => set("timeline", e.target.value)} placeholder="6 semaines" className={FIELD} style={{ borderColor: "#E2E8F0" }} {...FE} />
+                <Label>Délai *</Label>
+                <input type="text" required value={form.timeline} onChange={(e) => set("timeline", e.target.value)} placeholder="6 semaines" style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
               </div>
             </div>
             <div>
-              <label className="block text-xs font-medium mb-1.5 text-gray-500">Langue</label>
-              <select value={form.language} onChange={(e) => set("language", e.target.value)} className={FIELD} style={{ borderColor: "#E2E8F0" }} {...FE}>
+              <Label>Langue</Label>
+              <select value={form.language} onChange={(e) => set("language", e.target.value)} style={{ ...inputStyle, cursor: "pointer" }} onFocus={onFocus} onBlur={onBlur}>
                 <option value="fr">Français</option>
                 <option value="en">English</option>
               </select>
             </div>
 
             {error && (
-              <div className="flex items-start gap-2 p-3 rounded-xl text-sm" style={{ background: "#FEF2F2", color: "#DC2626" }}>
-                <AlertCircle size={16} className="flex-shrink-0 mt-0.5" />{error}
+              <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "11px 14px", borderRadius: 10, background: "#1f1015", border: "1px solid #ef444433", color: "#f87171", fontSize: 13 }}>
+                <AlertCircle size={14} style={{ flexShrink: 0 }} /> {error}
               </div>
             )}
 
-            <button type="submit" disabled={loading} className="w-full py-3 rounded-xl font-semibold text-white text-sm flex items-center justify-center gap-2 hover:opacity-90 transition-opacity disabled:opacity-60" style={{ background: "#2563EB" }}>
+            <button type="submit" disabled={loading}
+              style={{
+                width: "100%", padding: "14px 20px", borderRadius: 10, border: "none",
+                background: `linear-gradient(135deg, ${COLOR}, #6d28d9)`,
+                color: "#fff", fontSize: 14, fontWeight: 600,
+                display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+                cursor: loading ? "default" : "pointer", opacity: loading ? 0.7 : 1,
+                boxShadow: `0 4px 14px ${GLOW}`, transition: "box-shadow 0.15s",
+              }}
+              onMouseEnter={(e) => { if (!loading) e.currentTarget.style.boxShadow = `0 8px 24px ${GLOW}`; }}
+              onMouseLeave={(e) => { e.currentTarget.style.boxShadow = `0 4px 14px ${GLOW}`; }}
+            >
               {loading
                 ? <><span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Génération…</>
-                : <><Sparkles size={16} /> Générer le devis</>}
+                : <><Sparkles size={15} /> Générer le devis</>}
             </button>
           </form>
-        </div>
+        </Card>
 
         {/* Result */}
-        <div className="bg-white rounded-2xl border border-gray-100 p-6">
+        <Card style={{ minHeight: 400 }}>
           {!result && !loading && (
-            <div className="h-full flex flex-col items-center justify-center text-center py-16">
-              <div className="w-16 h-16 rounded-2xl mb-4 flex items-center justify-center" style={{ background: "#EFF6FF" }}>
-                <FileText size={28} style={{ color: "#2563EB" }} />
-              </div>
-              <p className="text-sm text-gray-400 max-w-xs">Remplissez le formulaire et cliquez sur « Générer » pour obtenir votre devis professionnel instantanément.</p>
+            <div style={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: "40px 20px" }}>
+              <div style={{ width: 64, height: 64, borderRadius: 16, background: `${COLOR}18`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 30, marginBottom: 16 }}>⚡</div>
+              <p style={{ fontSize: 13, color: "#4a4a6a", maxWidth: 240, lineHeight: 1.6 }}>Remplissez le formulaire et cliquez sur Générer pour obtenir votre devis instantanément.</p>
             </div>
           )}
           {loading && (
-            <div className="h-full flex flex-col items-center justify-center py-16">
-              <div className="w-12 h-12 rounded-full animate-spin mb-4" style={{ border: "3px solid #EFF6FF", borderTopColor: "#2563EB" }} />
-              <p className="text-sm text-gray-400">Gemini 2.5 génère votre devis…</p>
+            <div style={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 40 }}>
+              <div className="w-10 h-10 rounded-full animate-spin mb-4" style={{ border: `3px solid ${COLOR}22`, borderTopColor: COLOR }} />
+              <p style={{ fontSize: 13, color: "#4a4a6a" }}>Gemini 2.5 génère votre devis…</p>
             </div>
           )}
           {result && (
-            <div className="space-y-5">
-              <div className="flex items-center justify-between">
+            <div>
+              <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 20 }}>
                 <div>
-                  <div className="font-mono text-xs text-gray-400">{result.quote_id}</div>
-                  <h4 className="font-bold text-base" style={{ color: "#0F2552" }}>{result.client_name}</h4>
+                  <div style={{ fontFamily: "monospace", fontSize: 11, color: "#3a3a5a", marginBottom: 4 }}>{result.quote_id}</div>
+                  <h4 style={{ fontSize: 17, fontWeight: 700, color: "#f1f5f9" }}>{result.client_name}</h4>
                 </div>
-                <button onClick={copyText} className="p-2 rounded-lg border hover:bg-gray-50 transition-all flex items-center gap-1.5 text-xs text-gray-500" style={{ borderColor: "#E2E8F0" }}>
-                  {copied ? <><Check size={14} style={{ color: "#16A34A" }} /> Copié</> : <><Copy size={14} /> Copier</>}
+                <button onClick={copyText} style={{
+                  display: "flex", alignItems: "center", gap: 6, padding: "7px 12px", borderRadius: 8,
+                  border: "1px solid #2a2a3a", background: "none", cursor: "pointer",
+                  color: "#6a6a8a", fontSize: 12,
+                }}>
+                  {copied ? <><Check size={13} style={{ color: "#10b981" }} /> Copié</> : <><Copy size={13} /> Copier</>}
                 </button>
               </div>
-              <div className="space-y-4 max-h-[500px] overflow-y-auto pr-1">
+              <div style={{ display: "flex", flexDirection: "column", gap: 16, maxHeight: 480, overflowY: "auto", paddingRight: 4 }}>
                 {SECTIONS.map((s) => {
                   const val = result.content[s.key];
                   if (!val || typeof val !== "string") return null;
                   return (
                     <div key={s.key}>
-                      <div className="text-xs font-semibold uppercase tracking-wide mb-1.5" style={{ color: "#2563EB" }}>{s.label}</div>
-                      <p className="text-sm text-gray-600 leading-relaxed">{val}</p>
+                      <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: COLOR, marginBottom: 6 }}>{s.label}</div>
+                      <p style={{ fontSize: 13, color: "#94a3b8", lineHeight: 1.7 }}>{val}</p>
                     </div>
                   );
                 })}
                 {Array.isArray(result.content.livrables) && result.content.livrables.length > 0 && (
                   <div>
-                    <div className="text-xs font-semibold uppercase tracking-wide mb-1.5" style={{ color: "#2563EB" }}>Livrables</div>
-                    <ul className="space-y-1">
+                    <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: COLOR, marginBottom: 6 }}>Livrables</div>
+                    <ul style={{ display: "flex", flexDirection: "column", gap: 4 }}>
                       {(result.content.livrables as string[]).map((l, i) => (
-                        <li key={i} className="flex items-start gap-2 text-sm text-gray-600">
-                          <span style={{ color: "#2563EB" }}>•</span>{l}
-                        </li>
+                        <li key={i} style={{ fontSize: 13, color: "#94a3b8", display: "flex", gap: 8 }}><span style={{ color: COLOR }}>•</span>{l}</li>
                       ))}
                     </ul>
                   </div>
@@ -222,7 +222,7 @@ export default function DealDraftPage() {
               </div>
             </div>
           )}
-        </div>
+        </Card>
       </div>
     </div>
   );

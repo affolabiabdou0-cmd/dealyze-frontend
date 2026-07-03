@@ -5,172 +5,191 @@ import { Mail, Copy, Check, AlertCircle, Sparkles, Calendar } from "lucide-react
 import { api } from "../../lib/api";
 
 interface SmartChaseResult {
-  chase_id: string;
-  invoice_id: string;
-  client_name: string;
-  amount_display: string;
-  days_overdue: number;
+  chase_id:         string;
+  invoice_id:       string;
+  client_name:      string;
+  amount_display:   string;
+  days_overdue:     number;
   escalation_level: number;
-  client_profile: string;
-  tone: string;
-  email_subject: string;
-  email_body: string;
+  client_profile:   string;
+  tone:             string;
+  email_subject:    string;
+  email_body:       string;
   next_action_date: string;
-  generated_at: string;
+  generated_at:     string;
 }
 
-const FIELD = "w-full px-4 py-3 rounded-xl border text-sm outline-none transition-all bg-white";
-const FE = {
-  onFocus: (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => (e.target.style.borderColor = "#7C3AED"),
-  onBlur: (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => (e.target.style.borderColor = "#E2E8F0"),
+const COLOR = "#f97316";
+const GLOW  = "rgba(249,115,22,0.45)";
+
+const inputStyle: React.CSSProperties = {
+  width: "100%", padding: "12px 14px", borderRadius: 10,
+  border: "1px solid #2a2a3a", background: "#0f0f13",
+  color: "#e2e8f0", fontSize: 14, outline: "none",
+  transition: "border-color 0.15s", boxSizing: "border-box",
 };
+const onFocus = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
+  (e.target.style.borderColor = COLOR);
+const onBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
+  (e.target.style.borderColor = "#2a2a3a");
+
+const Label = ({ children }: { children: React.ReactNode }) => (
+  <label style={{ display: "block", fontSize: 11, fontWeight: 600, letterSpacing: "0.07em", color: "rgba(255,255,255,0.45)", textTransform: "uppercase", marginBottom: 6 }}>
+    {children}
+  </label>
+);
+const Card = ({ children, style }: { children: React.ReactNode; style?: React.CSSProperties }) => (
+  <div style={{ background: "#1a1a24", border: "1px solid #2a2a3a", borderRadius: 16, padding: "24px", ...style }}>
+    {children}
+  </div>
+);
+
+const ESCALATION_LABELS = ["", "Rappel doux", "Relance ferme", "Mise en demeure"];
 
 export default function SmartChasePage() {
   const [form, setForm] = useState({
-    invoice_id: "",
-    client_name: "",
-    amount: "",
-    currency: "EUR",
-    due_date: "",
-    issue_date: "",
-    description: "",
-    previous_reminders: "0",
-    payment_history: "nouveau_client",
-    company_name: "",
-    chase_style: "professionnel",
-    language: "fr",
+    invoice_id:          "",
+    client_name:         "",
+    amount:              "",
+    currency:            "EUR",
+    due_date:            "",
+    issue_date:          "",
+    description:         "",
+    previous_reminders:  "0",
+    payment_history:     "nouveau_client",
+    company_name:        "",
+    chase_style:         "professionnel",
+    language:            "fr",
   });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [result, setResult] = useState<SmartChaseResult | null>(null);
-  const [copied, setCopied] = useState(false);
+  const [error, setError]     = useState("");
+  const [result, setResult]   = useState<SmartChaseResult | null>(null);
+  const [copied, setCopied]   = useState(false);
 
   function set(f: string, v: string) { setForm((p) => ({ ...p, [f]: v })); }
 
   async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setError("");
-    setLoading(true);
+    e.preventDefault(); setError(""); setLoading(true);
     try {
       const res = await api.post<SmartChaseResult>("/agents/smart-chase/generate", {
         invoice: {
-          invoice_id: form.invoice_id || `FAC-${Date.now()}`,
-          client_name: form.client_name,
-          amount: parseFloat(form.amount) || 0,
-          currency: form.currency,
-          due_date: form.due_date,
-          issue_date: form.issue_date,
-          description: form.description,
+          invoice_id:         form.invoice_id || `FAC-${Date.now()}`,
+          client_name:        form.client_name,
+          amount:             parseFloat(form.amount) || 0,
+          currency:           form.currency,
+          due_date:           form.due_date,
+          issue_date:         form.issue_date,
+          description:        form.description,
           previous_reminders: parseInt(form.previous_reminders) || 0,
-          payment_history: form.payment_history,
+          payment_history:    form.payment_history,
         },
         company_name: form.company_name,
-        chase_style: form.chase_style,
-        language: form.language,
+        chase_style:  form.chase_style,
+        language:     form.language,
       });
       setResult(res.data);
     } catch (err: unknown) {
-      const msg = (err as { response?: { data?: { detail?: string } } })?.response?.data?.detail;
-      setError(msg || "Erreur lors de la génération. Réessayez.");
-    } finally {
-      setLoading(false);
-    }
+      setError((err as { response?: { data?: { detail?: string } } })?.response?.data?.detail || "Erreur lors de la génération. Réessayez.");
+    } finally { setLoading(false); }
   }
 
   function copyEmail() {
     if (!result) return;
-    const text = `Objet : ${result.email_subject}\n\n${result.email_body}`;
-    navigator.clipboard.writeText(text).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+    navigator.clipboard.writeText(`Objet : ${result.email_subject}\n\n${result.email_body}`).then(() => {
+      setCopied(true); setTimeout(() => setCopied(false), 2000);
     });
   }
 
-  const ESCALATION_LABELS = ["", "Rappel doux", "Relance ferme", "Mise en demeure"];
-
   return (
     <div className="max-w-6xl mx-auto">
-      <div className="mb-6 flex items-center gap-3">
-        <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "#F5F3FF", color: "#7C3AED" }}>
-          <Mail size={20} />
+      {/* Header */}
+      <div className="flex items-center gap-3 mb-6">
+        <div style={{ width: 42, height: 42, borderRadius: 12, background: `${COLOR}18`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <span style={{ fontSize: 22 }}>💬</span>
         </div>
         <div>
-          <h2 className="text-lg font-bold" style={{ color: "#0F2552" }}>Smart Chase</h2>
-          <p className="text-sm text-gray-400">Relance de factures impayées — email personnalisé selon le profil client</p>
+          <h2 style={{ fontSize: 18, fontWeight: 700, color: "#f1f5f9", marginBottom: 2 }}>Smart Chase</h2>
+          <p style={{ fontSize: 13, color: "#4a4a6a" }}>Relances intelligentes pour vos factures impayées</p>
         </div>
       </div>
 
-      <div className="grid lg:grid-cols-2 gap-6">
+      <div className="grid lg:grid-cols-2 gap-5">
         {/* Form */}
-        <div className="bg-white rounded-2xl border border-gray-100 p-6">
-          <h3 className="font-semibold text-sm mb-5" style={{ color: "#0F2552" }}>Détails de la facture</h3>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-2 gap-3">
+        <Card>
+          <h3 style={{ fontSize: 13, fontWeight: 600, color: "#94a3b8", marginBottom: 20 }}>Détails de la facture</h3>
+          <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
               <div>
-                <label className="block text-xs font-medium mb-1.5 text-gray-500">Votre entreprise *</label>
-                <input type="text" required value={form.company_name} onChange={(e) => set("company_name", e.target.value)} placeholder="Mon Agence SAS" className={FIELD} style={{ borderColor: "#E2E8F0" }} {...FE} />
+                <Label>Votre entreprise *</Label>
+                <input type="text" required value={form.company_name} onChange={(e) => set("company_name", e.target.value)} placeholder="Mon Agence SAS" style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
               </div>
               <div>
-                <label className="block text-xs font-medium mb-1.5 text-gray-500">Nom du client *</label>
-                <input type="text" required value={form.client_name} onChange={(e) => set("client_name", e.target.value)} placeholder="Acme Corp" className={FIELD} style={{ borderColor: "#E2E8F0" }} {...FE} />
+                <Label>Nom du client *</Label>
+                <input type="text" required value={form.client_name} onChange={(e) => set("client_name", e.target.value)} placeholder="Acme Corp" style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-3">
+
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
               <div>
-                <label className="block text-xs font-medium mb-1.5 text-gray-500">Montant *</label>
-                <input type="number" required value={form.amount} onChange={(e) => set("amount", e.target.value)} placeholder="3 500" className={FIELD} style={{ borderColor: "#E2E8F0" }} {...FE} />
+                <Label>Montant *</Label>
+                <input type="number" required value={form.amount} onChange={(e) => set("amount", e.target.value)} placeholder="3 500" style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
               </div>
               <div>
-                <label className="block text-xs font-medium mb-1.5 text-gray-500">Devise</label>
-                <select value={form.currency} onChange={(e) => set("currency", e.target.value)} className={FIELD} style={{ borderColor: "#E2E8F0" }} {...FE}>
+                <Label>Devise</Label>
+                <select value={form.currency} onChange={(e) => set("currency", e.target.value)} style={{ ...inputStyle, cursor: "pointer" }} onFocus={onFocus} onBlur={onBlur}>
                   {["EUR", "USD", "XOF", "MAD", "GBP"].map((c) => <option key={c}>{c}</option>)}
                 </select>
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-3">
+
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
               <div>
-                <label className="block text-xs font-medium mb-1.5 text-gray-500">Date d&apos;émission *</label>
-                <input type="date" required value={form.issue_date} onChange={(e) => set("issue_date", e.target.value)} className={FIELD} style={{ borderColor: "#E2E8F0" }} {...FE} />
+                <Label>Date d&apos;émission *</Label>
+                <input type="date" required value={form.issue_date} onChange={(e) => set("issue_date", e.target.value)} style={{ ...inputStyle, colorScheme: "dark" }} onFocus={onFocus} onBlur={onBlur} />
               </div>
               <div>
-                <label className="block text-xs font-medium mb-1.5 text-gray-500">Date d&apos;échéance *</label>
-                <input type="date" required value={form.due_date} onChange={(e) => set("due_date", e.target.value)} className={FIELD} style={{ borderColor: "#E2E8F0" }} {...FE} />
+                <Label>Date d&apos;échéance *</Label>
+                <input type="date" required value={form.due_date} onChange={(e) => set("due_date", e.target.value)} style={{ ...inputStyle, colorScheme: "dark" }} onFocus={onFocus} onBlur={onBlur} />
               </div>
             </div>
+
             <div>
-              <label className="block text-xs font-medium mb-1.5 text-gray-500">Description de la prestation</label>
-              <input type="text" value={form.description} onChange={(e) => set("description", e.target.value)} placeholder="Développement site e-commerce Phase 1" className={FIELD} style={{ borderColor: "#E2E8F0" }} {...FE} />
+              <Label>Description de la prestation</Label>
+              <input type="text" value={form.description} onChange={(e) => set("description", e.target.value)} placeholder="Développement site e-commerce Phase 1" style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
             </div>
-            <div className="grid grid-cols-2 gap-3">
+
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
               <div>
-                <label className="block text-xs font-medium mb-1.5 text-gray-500">Relances précédentes</label>
-                <select value={form.previous_reminders} onChange={(e) => set("previous_reminders", e.target.value)} className={FIELD} style={{ borderColor: "#E2E8F0" }} {...FE}>
+                <Label>Relances précédentes</Label>
+                <select value={form.previous_reminders} onChange={(e) => set("previous_reminders", e.target.value)} style={{ ...inputStyle, cursor: "pointer" }} onFocus={onFocus} onBlur={onBlur}>
                   <option value="0">Aucune (1ère relance)</option>
                   <option value="1">1 relance</option>
                   <option value="2">2 relances</option>
-                  <option value="3">3 relances ou plus</option>
+                  <option value="3">3 ou plus</option>
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-medium mb-1.5 text-gray-500">Profil client</label>
-                <select value={form.payment_history} onChange={(e) => set("payment_history", e.target.value)} className={FIELD} style={{ borderColor: "#E2E8F0" }} {...FE}>
+                <Label>Profil client</Label>
+                <select value={form.payment_history} onChange={(e) => set("payment_history", e.target.value)} style={{ ...inputStyle, cursor: "pointer" }} onFocus={onFocus} onBlur={onBlur}>
                   <option value="nouveau_client">Nouveau client</option>
-                  <option value="bon_payeur">Bon payeur habituel</option>
-                  <option value="retardataire">Retardataire habituel</option>
+                  <option value="bon_payeur">Bon payeur</option>
+                  <option value="retardataire">Retardataire</option>
                   <option value="mauvais_payeur">Mauvais payeur</option>
                 </select>
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-3">
+
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
               <div>
-                <label className="block text-xs font-medium mb-1.5 text-gray-500">Style de relance</label>
-                <select value={form.chase_style} onChange={(e) => set("chase_style", e.target.value)} className={FIELD} style={{ borderColor: "#E2E8F0" }} {...FE}>
+                <Label>Style de relance</Label>
+                <select value={form.chase_style} onChange={(e) => set("chase_style", e.target.value)} style={{ ...inputStyle, cursor: "pointer" }} onFocus={onFocus} onBlur={onBlur}>
                   {["professionnel", "amical", "ferme", "juridique"].map((s) => <option key={s}>{s}</option>)}
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-medium mb-1.5 text-gray-500">Langue</label>
-                <select value={form.language} onChange={(e) => set("language", e.target.value)} className={FIELD} style={{ borderColor: "#E2E8F0" }} {...FE}>
+                <Label>Langue</Label>
+                <select value={form.language} onChange={(e) => set("language", e.target.value)} style={{ ...inputStyle, cursor: "pointer" }} onFocus={onFocus} onBlur={onBlur}>
                   <option value="fr">Français</option>
                   <option value="en">English</option>
                 </select>
@@ -178,76 +197,92 @@ export default function SmartChasePage() {
             </div>
 
             {error && (
-              <div className="flex items-start gap-2 p-3 rounded-xl text-sm" style={{ background: "#FEF2F2", color: "#DC2626" }}>
-                <AlertCircle size={16} className="flex-shrink-0 mt-0.5" />{error}
+              <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "11px 14px", borderRadius: 10, background: "#1f1015", border: "1px solid #ef444433", color: "#f87171", fontSize: 13 }}>
+                <AlertCircle size={14} style={{ flexShrink: 0 }} /> {error}
               </div>
             )}
-            <button type="submit" disabled={loading} className="w-full py-3 rounded-xl font-semibold text-white text-sm flex items-center justify-center gap-2 hover:opacity-90 transition-opacity disabled:opacity-60" style={{ background: "#7C3AED" }}>
+
+            <button type="submit" disabled={loading}
+              style={{
+                width: "100%", padding: "14px 20px", borderRadius: 10, border: "none",
+                background: `linear-gradient(135deg, ${COLOR}, #ea580c)`,
+                color: "#fff", fontSize: 14, fontWeight: 600,
+                display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+                cursor: loading ? "default" : "pointer", opacity: loading ? 0.7 : 1,
+                boxShadow: `0 4px 14px ${GLOW}`, transition: "box-shadow 0.15s",
+              }}
+              onMouseEnter={(e) => { if (!loading) e.currentTarget.style.boxShadow = `0 8px 24px ${GLOW}`; }}
+              onMouseLeave={(e) => { e.currentTarget.style.boxShadow = `0 4px 14px ${GLOW}`; }}
+            >
               {loading
                 ? <><span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Génération…</>
-                : <><Sparkles size={16} /> Générer la relance</>}
+                : <><Sparkles size={15} /> Générer la relance</>}
             </button>
           </form>
-        </div>
+        </Card>
 
         {/* Result */}
-        <div className="space-y-4">
+        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
           {!result && !loading && (
-            <div className="bg-white rounded-2xl border border-gray-100 p-6 flex flex-col items-center justify-center py-16 text-center">
-              <div className="w-16 h-16 rounded-2xl mb-4 flex items-center justify-center" style={{ background: "#F5F3FF" }}>
-                <Mail size={28} style={{ color: "#7C3AED" }} />
-              </div>
-              <p className="text-sm text-gray-400 max-w-xs">Entrez les détails de la facture impayée pour générer une relance personnalisée et professionnelle.</p>
-            </div>
+            <Card style={{ minHeight: 400, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center" }}>
+              <div style={{ width: 64, height: 64, borderRadius: 16, background: `${COLOR}18`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 30, marginBottom: 16 }}>💬</div>
+              <p style={{ fontSize: 13, color: "#4a4a6a", maxWidth: 240, lineHeight: 1.6 }}>Entrez les détails de la facture impayée pour générer une relance personnalisée et professionnelle.</p>
+            </Card>
           )}
           {loading && (
-            <div className="bg-white rounded-2xl border border-gray-100 p-6 flex flex-col items-center justify-center py-16">
-              <div className="w-12 h-12 rounded-full animate-spin mb-4" style={{ border: "3px solid #F5F3FF", borderTopColor: "#7C3AED" }} />
-              <p className="text-sm text-gray-400">Gemini génère votre relance…</p>
-            </div>
+            <Card style={{ minHeight: 400, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+              <div className="w-10 h-10 rounded-full animate-spin mb-4" style={{ border: `3px solid ${COLOR}22`, borderTopColor: COLOR }} />
+              <p style={{ fontSize: 13, color: "#4a4a6a" }}>Gemini 2.5 rédige votre relance…</p>
+            </Card>
           )}
           {result && (
-            <div className="space-y-4">
-              {/* Meta */}
-              <div className="bg-white rounded-2xl border border-gray-100 p-5">
-                <div className="flex items-center justify-between mb-4">
+            <>
+              {/* Meta card */}
+              <Card>
+                <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 12 }}>
                   <div>
-                    <div className="font-mono text-xs text-gray-400">{result.chase_id}</div>
-                    <h4 className="font-bold" style={{ color: "#0F2552" }}>{result.client_name}</h4>
-                    <p className="text-sm text-gray-400">{result.amount_display}</p>
+                    <div style={{ fontFamily: "monospace", fontSize: 11, color: "#3a3a5a", marginBottom: 4 }}>{result.chase_id}</div>
+                    <h4 style={{ fontSize: 16, fontWeight: 700, color: "#f1f5f9" }}>{result.client_name}</h4>
+                    <p style={{ fontSize: 13, color: "#4a4a6a" }}>{result.amount_display}</p>
                   </div>
-                  <div className="text-right space-y-1">
-                    <div className="text-xs px-2 py-1 rounded-full font-semibold" style={{ background: "#F5F3FF", color: "#7C3AED" }}>
+                  <div style={{ textAlign: "right" }}>
+                    <span style={{ display: "inline-block", fontSize: 11, fontWeight: 600, padding: "4px 10px", borderRadius: 6, background: `${COLOR}18`, color: COLOR, marginBottom: 4 }}>
                       {ESCALATION_LABELS[result.escalation_level] ?? `Niveau ${result.escalation_level}`}
-                    </div>
-                    <div className="text-xs text-gray-400">{result.days_overdue} jours de retard</div>
+                    </span>
+                    <div style={{ fontSize: 11, color: "#4a4a6a" }}>{result.days_overdue} jours de retard</div>
                   </div>
                 </div>
                 {result.next_action_date && (
-                  <div className="flex items-center gap-2 text-xs text-gray-400 p-2 rounded-lg" style={{ background: "#FFFBEB" }}>
-                    <Calendar size={13} style={{ color: "#D97706" }} />
-                    <span>Prochaine action : <strong style={{ color: "#D97706" }}>{result.next_action_date}</strong></span>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 14px", borderRadius: 8, background: "#0f0f13", border: "1px solid #2a2a3a" }}>
+                    <Calendar size={13} style={{ color: COLOR, flexShrink: 0 }} />
+                    <span style={{ fontSize: 12, color: "#6a6a8a" }}>Prochaine action : <strong style={{ color: "#94a3b8" }}>{result.next_action_date}</strong></span>
                   </div>
                 )}
-              </div>
+              </Card>
 
-              {/* Email */}
-              <div className="bg-white rounded-2xl border border-gray-100 p-5">
-                <div className="flex items-center justify-between mb-4">
-                  <h4 className="font-semibold text-sm" style={{ color: "#0F2552" }}>Email de relance</h4>
-                  <button onClick={copyEmail} className="p-1.5 rounded-lg border hover:bg-gray-50 flex items-center gap-1.5 text-xs text-gray-500" style={{ borderColor: "#E2E8F0" }}>
-                    {copied ? <><Check size={13} style={{ color: "#16A34A" }} /> Copié</> : <><Copy size={13} /> Copier</>}
+              {/* Email card */}
+              <Card>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                    <Mail size={14} style={{ color: COLOR }} />
+                    <span style={{ fontSize: 13, fontWeight: 600, color: "#94a3b8" }}>Email de relance</span>
+                  </div>
+                  <button onClick={copyEmail} style={{
+                    display: "flex", alignItems: "center", gap: 6, padding: "6px 12px", borderRadius: 7,
+                    border: "1px solid #2a2a3a", background: "none", cursor: "pointer", color: "#6a6a8a", fontSize: 11,
+                  }}>
+                    {copied ? <><Check size={11} style={{ color: "#10b981" }} /> Copié</> : <><Copy size={11} /> Copier</>}
                   </button>
                 </div>
-                <div className="mb-3 p-3 rounded-xl" style={{ background: "#F4F6F9" }}>
-                  <div className="text-xs text-gray-400 mb-0.5">Objet</div>
-                  <div className="text-sm font-medium" style={{ color: "#0F2552" }}>{result.email_subject}</div>
+                <div style={{ marginBottom: 12, padding: "10px 14px", borderRadius: 8, background: "#0f0f13", border: "1px solid #2a2a3a" }}>
+                  <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: COLOR, marginBottom: 4 }}>Objet</div>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: "#e2e8f0" }}>{result.email_subject}</div>
                 </div>
-                <div className="text-sm text-gray-600 leading-relaxed whitespace-pre-line" style={{ maxHeight: "380px", overflowY: "auto" }}>
+                <div style={{ fontSize: 13, color: "#94a3b8", lineHeight: 1.75, whiteSpace: "pre-wrap", maxHeight: 300, overflowY: "auto", padding: "14px 16px", background: "#0f0f13", borderRadius: 8, border: "1px solid #2a2a3a" }}>
                   {result.email_body}
                 </div>
-              </div>
-            </div>
+              </Card>
+            </>
           )}
         </div>
       </div>
