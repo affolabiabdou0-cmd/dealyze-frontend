@@ -56,8 +56,8 @@ function dayBarColor(pct: number) {
 }
 
 const CARD: React.CSSProperties = {
-  background: "#ffffff", border: "1px solid #e2e8f0", borderRadius: 16,
-  padding: "28px", boxShadow: "0 1px 4px rgba(0,0,0,0.06)",
+  background: "#ffffff", border: "1px solid #e2e8f0", borderRadius: 14,
+  padding: "18px 20px", boxShadow: "0 1px 4px rgba(0,0,0,0.06)",
 };
 
 export default function BillingPage() {
@@ -93,67 +93,66 @@ export default function BillingPage() {
   }
 
   return (
-    <div className="w-full space-y-8">
+    <div className="w-full space-y-4">
 
       {/* ── Plan actuel ── */}
       <div style={CARD}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20 }}>
-          <CreditCard size={18} style={{ color: planColor }} strokeWidth={1.5} />
-          <h3 style={{ fontSize: 15, fontWeight: 700, color: "#0f172a" }}>Plan actuel</h3>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
+          <CreditCard size={15} style={{ color: planColor }} strokeWidth={1.5} />
+          <h3 style={{ fontSize: 14, fontWeight: 700, color: "#0f172a" }}>Plan actuel</h3>
         </div>
 
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 16, marginBottom: 24 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-            <div style={{ width: 52, height: 52, borderRadius: 14, background: `${planColor}18`, display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <Zap size={24} style={{ color: planColor }} strokeWidth={1.5} />
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12, marginBottom: 14 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <div style={{ width: 40, height: 40, borderRadius: 11, background: `${planColor}18`, display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <Zap size={18} style={{ color: planColor }} strokeWidth={1.5} />
             </div>
             <div>
-              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
-                <span style={{ fontSize: 18, fontWeight: 700, color: "#0f172a" }}>{PLAN_LABEL[currentPlan]}</span>
+              <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 3 }}>
+                <span style={{ fontSize: 16, fontWeight: 700, color: "#0f172a" }}>{PLAN_LABEL[currentPlan]}</span>
                 {currentPlan === "free_trial" && (
-                  <span style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 11, fontWeight: 600, padding: "3px 8px", borderRadius: 6, background: "#fffbeb", color: "#f59e0b", border: "1px solid #fde68a" }}>
-                    <span style={{ display: "inline-block", width: 6, height: 6, borderRadius: "50%", background: "#f59e0b" }} />
+                  <span style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 10.5, fontWeight: 600, padding: "2px 7px", borderRadius: 5, background: "#fffbeb", color: "#f59e0b", border: "1px solid #fde68a" }}>
+                    <span style={{ display: "inline-block", width: 5, height: 5, borderRadius: "50%", background: "#f59e0b" }} />
                     Essai en cours
                   </span>
                 )}
               </div>
-              <div style={{ fontSize: 13, color: "#94a3b8" }}>
+              <div style={{ fontSize: 12, color: "#94a3b8" }}>
                 {currentPlan === "free_trial" ? "5 utilisations gratuites par agent incluses" : "Abonnement mensuel actif"}
               </div>
             </div>
           </div>
-
-          <div style={{ display: "flex", alignItems: "center", gap: 8, background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 10, padding: "8px 14px" }}>
-            <Clock size={14} style={{ color: dayColor }} strokeWidth={1.5} />
-            <span style={{ fontSize: 13, fontWeight: 600, color: dayColor }}>{planDays.remaining} jours restants</span>
+          <div style={{ display: "flex", alignItems: "center", gap: 6, background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 9, padding: "6px 12px" }}>
+            <Clock size={12} style={{ color: dayColor }} strokeWidth={1.5} />
+            <span style={{ fontSize: 12, fontWeight: 600, color: dayColor }}>{planDays.remaining} jours restants</span>
           </div>
         </div>
 
         {/* Days bar */}
-        <div style={{ marginBottom: 24 }}>
-          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
-            <span style={{ fontSize: 11, color: "#94a3b8" }}>Durée de la période</span>
-            <span style={{ fontSize: 11, fontFamily: "monospace", color: "#64748b" }}>{planDays.remaining}/{planDays.total} j</span>
+        <div style={{ marginBottom: 14 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 5 }}>
+            <span style={{ fontSize: 10.5, color: "#94a3b8" }}>Durée de la période</span>
+            <span style={{ fontSize: 10.5, fontFamily: "monospace", color: "#64748b" }}>{planDays.remaining}/{planDays.total} j</span>
           </div>
-          <div style={{ height: 6, borderRadius: 4, background: "#f1f5f9", overflow: "hidden" }}>
+          <div style={{ height: 5, borderRadius: 4, background: "#f1f5f9", overflow: "hidden" }}>
             <div style={{ height: "100%", width: `${dayPct}%`, borderRadius: 4, background: `linear-gradient(90deg, ${dayColor}, ${dayColor}99)`, transition: "width 1s" }} />
           </div>
         </div>
 
         {/* Usage per agent */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 12 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 8 }}>
           {AGENT_META.map(({ key, label, icon: Icon, color }) => {
             const q = quota?.quotas?.[key as keyof QuotaResponse["quotas"]];
             const unlimited = q?.limite === "illimité";
             const pct = !q ? 0 : unlimited ? 10 : Math.min(100, (q.utilisé / (q.limite as number)) * 100);
             return (
-              <div key={key} style={{ background: "#f8fafc", borderRadius: 10, padding: "14px 16px", border: "1px solid #e2e8f0" }}>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                    <Icon size={13} style={{ color }} strokeWidth={1.5} />
-                    <span style={{ fontSize: 12, color: "#64748b", fontWeight: 500 }}>{label}</span>
+              <div key={key} style={{ background: "#f8fafc", borderRadius: 9, padding: "10px 12px", border: "1px solid #e2e8f0" }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                    <Icon size={12} style={{ color }} strokeWidth={1.5} />
+                    <span style={{ fontSize: 11.5, color: "#64748b", fontWeight: 500 }}>{label}</span>
                   </div>
-                  <span style={{ fontSize: 11, fontFamily: "monospace", color: "#94a3b8" }}>
+                  <span style={{ fontSize: 10.5, fontFamily: "monospace", color: "#94a3b8" }}>
                     {q ? `${q.utilisé} / ${unlimited ? "∞" : q.limite}` : "—"}
                   </span>
                 </div>
@@ -168,10 +167,10 @@ export default function BillingPage() {
 
       {/* ── Plans ── */}
       <div>
-        <h3 style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", color: "#94a3b8", textTransform: "uppercase", marginBottom: 16 }}>
+        <h3 style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: "0.1em", color: "#94a3b8", textTransform: "uppercase", marginBottom: 10 }}>
           Passer à un plan supérieur
         </h3>
-        <div className="grid md:grid-cols-3 gap-5">
+        <div className="grid md:grid-cols-3 gap-4">
           {PLANS.map((plan) => {
             const isCurrent = currentPlan === plan.id;
             return (
@@ -179,10 +178,10 @@ export default function BillingPage() {
                 style={{
                   background: "#ffffff",
                   border: `1.5px solid ${plan.border}`,
-                  borderRadius: 16,
+                  borderRadius: 14,
                   display: "flex", flexDirection: "column",
-                  transform: plan.highlight ? "translateY(-4px)" : "none",
-                  boxShadow: plan.highlight ? `0 8px 32px ${plan.glow}` : "0 1px 4px rgba(0,0,0,0.06)",
+                  transform: plan.highlight ? "translateY(-3px)" : "none",
+                  boxShadow: plan.highlight ? `0 6px 24px ${plan.glow}` : "0 1px 4px rgba(0,0,0,0.06)",
                   transition: "box-shadow 0.2s, transform 0.2s",
                 }}
                 onMouseEnter={(e) => {
@@ -192,27 +191,27 @@ export default function BillingPage() {
                   if (!plan.highlight) { (e.currentTarget as HTMLElement).style.boxShadow = "0 1px 4px rgba(0,0,0,0.06)"; }
                 }}
               >
-                <div style={{ padding: "24px 24px 0" }}>
+                <div style={{ padding: "16px 18px 0" }}>
                   {plan.highlight && (
-                    <div style={{ display: "inline-flex", alignItems: "center", gap: 5, padding: "4px 10px", borderRadius: 6, background: "#7c3aed", color: "#fff", fontSize: 11, fontWeight: 700, marginBottom: 14 }}>
-                      <Star size={10} fill="#fff" /> Recommandé
+                    <div style={{ display: "inline-flex", alignItems: "center", gap: 4, padding: "3px 8px", borderRadius: 5, background: "#7c3aed", color: "#fff", fontSize: 10, fontWeight: 700, marginBottom: 10 }}>
+                      <Star size={9} fill="#fff" /> Recommandé
                     </div>
                   )}
                   {plan.id === "enterprise" && (
-                    <div style={{ display: "inline-flex", alignItems: "center", gap: 5, padding: "4px 10px", borderRadius: 6, background: "#fffbeb", color: "#f59e0b", border: "1px solid #fde68a", fontSize: 11, fontWeight: 700, marginBottom: 14 }}>
+                    <div style={{ display: "inline-flex", alignItems: "center", gap: 4, padding: "3px 8px", borderRadius: 5, background: "#fffbeb", color: "#f59e0b", border: "1px solid #fde68a", fontSize: 10, fontWeight: 700, marginBottom: 10 }}>
                       ✦ Enterprise
                     </div>
                   )}
-                  <h4 style={{ fontSize: 16, fontWeight: 700, color: "#0f172a", marginBottom: 4 }}>{plan.name}</h4>
-                  <p style={{ fontSize: 12, color: "#94a3b8", marginBottom: 16 }}>{plan.desc}</p>
-                  <div style={{ display: "flex", alignItems: "flex-end", gap: 4, marginBottom: 20 }}>
-                    <span style={{ fontSize: 38, fontWeight: 800, fontFamily: "monospace", color: "#0f172a", lineHeight: 1 }}>{plan.currency}{plan.price}</span>
-                    <span style={{ fontSize: 12, color: "#94a3b8", marginBottom: 6 }}>/mois</span>
+                  <h4 style={{ fontSize: 14.5, fontWeight: 700, color: "#0f172a", marginBottom: 3 }}>{plan.name}</h4>
+                  <p style={{ fontSize: 11.5, color: "#94a3b8", marginBottom: 10 }}>{plan.desc}</p>
+                  <div style={{ display: "flex", alignItems: "flex-end", gap: 3, marginBottom: 12 }}>
+                    <span style={{ fontSize: 28, fontWeight: 800, fontFamily: "monospace", color: "#0f172a", lineHeight: 1 }}>{plan.currency}{plan.price}</span>
+                    <span style={{ fontSize: 11, color: "#94a3b8", marginBottom: 4 }}>/mois</span>
                   </div>
-                  <ul style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 20 }}>
+                  <ul style={{ display: "flex", flexDirection: "column", gap: 5, marginBottom: 12 }}>
                     {plan.features.map((f) => (
-                      <li key={f} style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, color: "#64748b" }}>
-                        <Check size={13}
+                      <li key={f} style={{ display: "flex", alignItems: "center", gap: 7, fontSize: 12, color: "#64748b" }}>
+                        <Check size={11}
                           style={{ color: plan.highlight ? "#7c3aed" : plan.id === "enterprise" ? "#f59e0b" : "#94a3b8", flexShrink: 0 }}
                           strokeWidth={2.5} />
                         {f}
@@ -220,20 +219,20 @@ export default function BillingPage() {
                     ))}
                   </ul>
                 </div>
-                <div style={{ padding: "0 24px 24px", marginTop: "auto" }}>
+                <div style={{ padding: "0 18px 16px", marginTop: "auto" }}>
                   {isCurrent ? (
-                    <div style={{ padding: "11px", borderRadius: 10, textAlign: "center", fontSize: 13, fontWeight: 600, color: "#94a3b8", background: "#f8fafc", border: "1px solid #e2e8f0" }}>
+                    <div style={{ padding: "9px", borderRadius: 9, textAlign: "center", fontSize: 12, fontWeight: 600, color: "#94a3b8", background: "#f8fafc", border: "1px solid #e2e8f0" }}>
                       Plan actuel
                     </div>
                   ) : (
                     <button onClick={() => handleUpgrade(plan.id)} disabled={loadingPlan === plan.id}
                       style={{
-                        width: "100%", padding: "12px", borderRadius: 10,
+                        width: "100%", padding: "10px", borderRadius: 9,
                         border: plan.highlight ? "none" : "1px solid #e2e8f0",
                         background: plan.highlight ? "linear-gradient(135deg, #7c3aed, #6d28d9)" : "#f8fafc",
                         color: plan.highlight ? "#fff" : "#0f172a",
-                        fontSize: 13, fontWeight: 600, cursor: "pointer",
-                        display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+                        fontSize: 12.5, fontWeight: 600, cursor: "pointer",
+                        display: "flex", alignItems: "center", justifyContent: "center", gap: 7,
                         boxShadow: plan.highlight ? "0 4px 14px rgba(124,58,237,0.35)" : "none",
                         transition: "opacity 0.15s, background 0.15s",
                         opacity: loadingPlan === plan.id ? 0.7 : 1,
@@ -247,7 +246,7 @@ export default function BillingPage() {
                     >
                       {loadingPlan === plan.id
                         ? <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                        : <>Passer au {plan.name} <ArrowRight size={14} strokeWidth={1.5} /></>}
+                        : <>Passer au {plan.name} <ArrowRight size={13} strokeWidth={1.5} /></>}
                     </button>
                   )}
                 </div>
@@ -259,28 +258,30 @@ export default function BillingPage() {
 
       {/* ── Historique paiements ── */}
       <div style={CARD}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20 }}>
-          <Receipt size={16} style={{ color: "#94a3b8" }} strokeWidth={1.5} />
-          <h3 style={{ fontSize: 15, fontWeight: 700, color: "#0f172a" }}>Historique des paiements</h3>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
+          <Receipt size={14} style={{ color: "#94a3b8" }} strokeWidth={1.5} />
+          <h3 style={{ fontSize: 14, fontWeight: 700, color: "#0f172a" }}>Historique des paiements</h3>
         </div>
         {/* Table header */}
-        <div style={{ display: "grid", gridTemplateColumns: "1.2fr 2fr 1fr 1fr 0.8fr", gap: 12, padding: "0 16px 12px", borderBottom: "1px solid #f1f5f9" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1.2fr 2fr 1fr 1fr 0.8fr", gap: 10, padding: "0 12px 10px", borderBottom: "1px solid #f1f5f9" }}>
           {["Date", "Description", "Montant", "Statut", "Facture"].map((h) => (
-            <span key={h} style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.07em", color: "#94a3b8", textTransform: "uppercase" }}>{h}</span>
+            <span key={h} style={{ fontSize: 9.5, fontWeight: 700, letterSpacing: "0.07em", color: "#94a3b8", textTransform: "uppercase" }}>{h}</span>
           ))}
         </div>
         {/* Empty state */}
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "48px 20px", textAlign: "center" }}>
-          <div style={{ width: 48, height: 48, borderRadius: 12, background: "#f8fafc", border: "1px solid #e2e8f0", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 12 }}>
-            <Receipt size={22} style={{ color: "#cbd5e1" }} strokeWidth={1.5} />
+        <div style={{ display: "flex", alignItems: "center", gap: 14, padding: "18px 12px" }}>
+          <div style={{ width: 36, height: 36, borderRadius: 10, background: "#f8fafc", border: "1px solid #e2e8f0", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+            <Receipt size={16} style={{ color: "#cbd5e1" }} strokeWidth={1.5} />
           </div>
-          <p style={{ fontSize: 14, color: "#64748b" }}>Aucun paiement pour le moment</p>
-          <p style={{ fontSize: 12, color: "#94a3b8", marginTop: 4 }}>Vos factures apparaîtront ici après votre premier paiement</p>
+          <div>
+            <p style={{ fontSize: 13, color: "#64748b", fontWeight: 500 }}>Aucun paiement pour le moment</p>
+            <p style={{ fontSize: 11.5, color: "#94a3b8", marginTop: 2 }}>Vos factures apparaîtront ici après votre premier paiement</p>
+          </div>
         </div>
       </div>
 
       {/* ── Sécurité paiement ── */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", flexWrap: "wrap", gap: 20, padding: "14px 24px", borderRadius: 12, background: "#fff", border: "1px solid #e2e8f0", boxShadow: "0 1px 3px rgba(0,0,0,0.04)" }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", flexWrap: "wrap", gap: 16, padding: "10px 20px", borderRadius: 11, background: "#fff", border: "1px solid #e2e8f0", boxShadow: "0 1px 3px rgba(0,0,0,0.04)" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
           <div style={{ width: 22, height: 22, borderRadius: 5, background: "#f97316", display: "flex", alignItems: "center", justifyContent: "center" }}>
             <span style={{ fontSize: 9, fontWeight: 900, color: "#fff" }}>LS</span>
