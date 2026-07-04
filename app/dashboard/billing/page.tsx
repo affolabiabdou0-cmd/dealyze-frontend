@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { CreditCard, Check, ArrowRight, Zap, Star, FileText, Mail, BarChart3, Shield, Clock, Receipt } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { CreditCard, Check, ArrowRight, Zap, Star, FileText, Mail, BarChart3, Shield, Clock, Receipt, CheckCircle, XCircle } from "lucide-react";
 import { getUser } from "../../lib/auth";
 import { api } from "../../lib/api";
 
@@ -59,13 +60,25 @@ const CARD: React.CSSProperties = {
 
 export default function BillingPage() {
   const user        = getUser();
+  const router      = useRouter();
   const currentPlan = user?.plan ?? "free_trial";
   const [quota, setQuota]             = useState<QuotaResponse | null>(null);
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
+  const [toast, setToast]             = useState<{ type: "success" | "error"; msg: string } | null>(null);
+
+  function showToast(type: "success" | "error", msg: string) {
+    setToast({ type, msg });
+    setTimeout(() => setToast(null), 4500);
+  }
 
   useEffect(() => {
     api.get<QuotaResponse>("/auth/quota").then((r) => setQuota(r.data)).catch(() => null);
-  }, []);
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("payment") === "simulated") {
+      showToast("success", `Plan ${params.get("plan") ?? ""} activé avec succès !`);
+      router.replace("/dashboard/billing");
+    }
+  }, [router]);
 
   const planDays = PLAN_DAYS[currentPlan] ?? PLAN_DAYS.free_trial;
   const dayPct   = Math.round((planDays.remaining / planDays.total) * 100);
@@ -82,15 +95,42 @@ export default function BillingPage() {
   async function handleUpgrade(planId: string) {
     setLoadingPlan(planId);
     try {
-      const res = await api.post<{ checkout_url: string }>("/billing/checkout", { plan: planId });
-      window.location.href = res.data.checkout_url;
-    } catch {
-      alert("Erreur lors de la création du paiement. Contactez le support.");
+      const res = await api.post<{ checkout_url: string; mode?: string }>("/billing/checkout", { plan: planId });
+      const url = res.data.checkout_url;
+      if (res.data.mode === "simulation" || url.startsWith("/")) {
+        router.push(url);
+      } else {
+        window.location.href = url;
+      }
+    } catch (err: unknown) {
+      const detail = (err as { response?: { data?: { detail?: string } } })?.response?.data?.detail;
+      showToast("error", detail ?? "Erreur de paiement. Vérifiez la configuration ou contactez le support.");
     } finally { setLoadingPlan(null); }
   }
 
   return (
     <div style={{ display: "flex", flexDirection: "column", flex: 1, gap: 14 }}>
+
+      {/* ── Toast ── */}
+      {toast && (
+        <div style={{
+          position: "fixed", top: 24, right: 24, zIndex: 9999,
+          display: "flex", alignItems: "center", gap: 10,
+          padding: "14px 20px", borderRadius: 12,
+          background: toast.type === "success" ? "#f0fdf4" : "#fef2f2",
+          border: `1px solid ${toast.type === "success" ? "#86efac" : "#fecaca"}`,
+          boxShadow: "0 8px 32px rgba(0,0,0,0.12)",
+          maxWidth: 380, animation: "slideIn 0.25s ease",
+        }}>
+          <style>{`@keyframes slideIn{from{transform:translateX(60px);opacity:0}to{transform:none;opacity:1}}`}</style>
+          {toast.type === "success"
+            ? <CheckCircle size={18} style={{ color: "#16a34a", flexShrink: 0 }} />
+            : <XCircle size={18} style={{ color: "#dc2626", flexShrink: 0 }} />}
+          <span style={{ fontSize: 13.5, fontWeight: 500, color: toast.type === "success" ? "#15803d" : "#b91c1c" }}>
+            {toast.msg}
+          </span>
+        </div>
+      )}
 
       {/* ── Plan actuel ── */}
       <div style={CARD}>
