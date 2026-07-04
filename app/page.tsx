@@ -30,8 +30,8 @@ function Navbar() {
       }}
     >
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-16">
-        <a href="#" style={{ fontFamily:"Georgia, 'Times New Roman', serif", fontSize:20, letterSpacing:"3px", color: scrolled ? "#0d2461" : "rgba(255,255,255,0.95)", textDecoration:"none" }}>
-          VY<span style={{ color: scrolled ? "#1a45d6" : "#60a5fa" }}>X</span>EN
+        <a href="#" style={{ textDecoration:"none" }}>
+          <img src="/vyxen-logo.png" alt="VYXEN" style={{ height:36, width:"auto", filter: scrolled ? "none" : "brightness(0) invert(1)" }} />
         </a>
         <div className="hidden md:flex items-center gap-8">
           {["Fonctionnalités", "Tarifs"].map((item) => (
@@ -406,7 +406,7 @@ function Footer() {
     <footer className="py-10 border-t border-gray-100">
       <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
         <div>
-          <div style={{ fontFamily:"Georgia, 'Times New Roman', serif", fontSize:18, letterSpacing:"3px", color:"#0d2461" }}>VY<span style={{ color:"#1a45d6" }}>X</span>EN</div>
+          <img src="/vyxen-logo.png" alt="VYXEN" style={{ height:32, width:"auto" }} />
           <p className="text-xs text-gray-400 mt-1">Turn every deal into done.</p>
         </div>
         <div className="text-xs text-gray-400">Powered by Gemini 2.5 · Firebase · Supabase</div>

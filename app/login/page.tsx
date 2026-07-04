@@ -112,9 +112,10 @@ export default function LoginPage() {
           <div style={{ position:"absolute", inset:0, backgroundImage:"radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px)", backgroundSize:"32px 32px", animation:"gridPulse 6s ease-in-out infinite" }} />
         </div>
 
-        <Link href="/" className="relative z-10 flex items-center gap-2.5" style={{ textDecoration: "none" }}>
-          <div style={{ width:36, height:36, borderRadius:10, background:"linear-gradient(135deg,#7c3aed,#2563eb)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:18, boxShadow:"0 0 20px rgba(124,58,237,0.4)" }}>⚡</div>
-          <span style={{ fontFamily:"var(--font-cormorant), Georgia, serif", fontSize:30, fontWeight:300, letterSpacing:"6px", color:"rgba(255,255,255,0.95)" }}>VY<span style={{ color:"#60a5fa" }}>X</span>EN</span>
+        <Link href="/" className="relative z-10" style={{ textDecoration: "none" }}>
+          <div style={{ background:"rgba(255,255,255,0.97)", borderRadius:10, padding:"7px 16px", display:"inline-flex", alignItems:"center", boxShadow:"0 4px 20px rgba(0,0,0,0.25)" }}>
+            <img src="/vyxen-logo.png" alt="VYXEN" style={{ height:40, width:"auto", display:"block" }} />
+          </div>
         </Link>
 
         <div className="relative z-10">
@@ -152,7 +153,9 @@ export default function LoginPage() {
         <div style={{ width:"100%", maxWidth:380 }}>
 
           <Link href="/" className="lg:hidden font-display text-xl font-bold"
-            style={{ color:"#0A1628", textDecoration:"none", display:"block", marginBottom:40, fontFamily:"Georgia, serif", letterSpacing:"3px", fontSize:18 }}>VY<span style={{ color:"#1a45d6" }}>X</span>EN</Link>
+            style={{ textDecoration:"none", display:"block", marginBottom:32 }}>
+            <img src="/vyxen-logo.png" alt="VYXEN" style={{ height:36, width:"auto" }} />
+          </Link>
 
           <h2 style={{ fontSize:30, fontWeight:700, color:"#0A1628", letterSpacing:"-0.75px", marginBottom:6 }}>Bon retour</h2>
           <p style={{ fontSize:14, color:"#94A3B8", marginBottom:36 }}>Connectez-vous à votre espace VYXEN</p>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
@@ -101,14 +102,12 @@ function Sidebar({ user, onClose }: { user: User | null; onClose?: () => void })
     <aside className="flex flex-col h-full" style={{ background: "#0b1526" }}>
 
       {/* Logo */}
-      <div className="flex items-center justify-between px-5 py-5">
-        <Link href="/dashboard" className="flex items-center gap-0" style={{ textDecoration: "none" }}>
-          <div>
-            <span style={{ fontFamily: "var(--font-cormorant), Georgia, serif", fontSize: 30, fontWeight: 300, letterSpacing: "6px", color: "rgba(255,255,255,0.95)", display: "block", lineHeight: 1 }}>
-              VY<span style={{ color: "#60a5fa" }}>X</span>EN
-            </span>
-            <span style={{ fontSize: 8.5, color: "rgba(255,255,255,0.2)", letterSpacing: "0.18em", fontWeight: 700, textTransform: "uppercase", marginTop: 3, display: "block" }}>AI PLATFORM</span>
+      <div className="flex items-center justify-between px-4 py-4">
+        <Link href="/dashboard" style={{ textDecoration: "none" }}>
+          <div style={{ background: "rgba(255,255,255,0.97)", borderRadius: 10, padding: "7px 14px", display: "inline-flex", alignItems: "center", boxShadow: "0 2px 12px rgba(0,0,0,0.2)" }}>
+            <Image src="/vyxen-logo.png" alt="VYXEN" width={108} height={43} style={{ objectFit: "contain", display: "block" }} priority />
           </div>
+          <div style={{ marginTop: 5, fontSize: 8, color: "rgba(255,255,255,0.18)", letterSpacing: "0.18em", fontWeight: 700, textTransform: "uppercase", paddingLeft: 2 }}>AI PLATFORM</div>
         </Link>
         {onClose && (
           <button onClick={onClose} style={{ color: "rgba(255,255,255,0.35)", background: "none", border: "none", cursor: "pointer", padding: 4 }}>
