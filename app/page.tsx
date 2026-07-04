@@ -409,7 +409,7 @@ function Pricing() {
         </div>
 
         <div style={{ marginTop: 22, paddingTop: 18, borderTop: "0.5px solid rgba(255,255,255,0.05)", display: "flex", flexWrap: "wrap", gap: 20, justifyContent: "center" }}>
-          {["Paiement SSL sécurisé", "Via Lemon Squeezy", "Annulation à tout moment", "VISA · Mastercard · Toutes devises"].map((t) => (
+          {["Paiement SSL sécurisé", "Via Paddle", "Annulation à tout moment", "VISA · Mastercard · Mobile Money"].map((t) => (
             <span key={t} style={{ fontSize: 11.5, color: "#334155" }}>· {t}</span>
           ))}
         </div>
@@ -491,23 +491,31 @@ function Footer() {
           <div style={{ display: "flex", gap: 48, flexWrap: "wrap" }}>
             <div>
               <div style={{ fontSize: 10, color: "#334155", letterSpacing: "1.5px", textTransform: "uppercase", fontWeight: 600, marginBottom: 12 }}>Produit</div>
-              {["Agents IA", "Tarifs", "Se connecter", "Essai gratuit"].map((l) => (
-                <div key={l} style={{ fontSize: 13, color: "#1e293b", marginBottom: 8 }}>{l}</div>
+              {[["Agents IA", "#agents"], ["Tarifs", "#tarifs"], ["Se connecter", "/login"], ["Essai gratuit", "/register"]].map(([l, href]) => (
+                <div key={l} style={{ marginBottom: 8 }}>
+                  <Link href={href} style={{ fontSize: 13, color: "#1e293b", textDecoration: "none" }}>{l}</Link>
+                </div>
               ))}
             </div>
             <div>
-              <div style={{ fontSize: 10, color: "#334155", letterSpacing: "1.5px", textTransform: "uppercase", fontWeight: 600, marginBottom: 12 }}>Technologie</div>
-              {["Gemini 2.5 Flash", "Firebase Auth", "Supabase", "XPRIZE Hackathon"].map((l) => (
-                <div key={l} style={{ fontSize: 13, color: "#1e293b", marginBottom: 8 }}>{l}</div>
+              <div style={{ fontSize: 10, color: "#334155", letterSpacing: "1.5px", textTransform: "uppercase", fontWeight: 600, marginBottom: 12 }}>Légal</div>
+              {[["Conditions d'utilisation", "/terms"], ["Politique de confidentialité", "/privacy"], ["Politique de remboursement", "/refund"]].map(([l, href]) => (
+                <div key={l} style={{ marginBottom: 8 }}>
+                  <Link href={href} style={{ fontSize: 13, color: "#1e293b", textDecoration: "none" }}>{l}</Link>
+                </div>
               ))}
             </div>
           </div>
         </div>
 
         <div style={{ height: "0.5px", background: "rgba(255,255,255,0.05)", margin: "0 0 16px" }} />
-        <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 8 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 8, alignItems: "center" }}>
           <span style={{ fontSize: 11, color: "#1e293b" }}>© 2026 VYXEN · Turn every deal into done.</span>
-          <span style={{ fontSize: 11, color: "#1e293b" }}>Propulsé par Gemini 2.5 Flash · XPRIZE AI Hackathon 2026</span>
+          <div style={{ display: "flex", gap: 16 }}>
+            <Link href="/terms"  style={{ fontSize: 11, color: "#1e293b", textDecoration: "none" }}>CGU</Link>
+            <Link href="/privacy" style={{ fontSize: 11, color: "#1e293b", textDecoration: "none" }}>Confidentialité</Link>
+            <Link href="/refund"  style={{ fontSize: 11, color: "#1e293b", textDecoration: "none" }}>Remboursement</Link>
+          </div>
         </div>
       </div>
     </footer>
