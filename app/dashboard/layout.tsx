@@ -14,7 +14,7 @@ import { getActivity, markNotifSeen, countUnread, relativeTime, ACTIVITY_META } 
 import type { ActivityItem } from "../lib/activity";
 
 const NAV_OVERVIEW = [
-  { href: "/dashboard", label: "Tableau de bord", sub: "Vue d'ensemble de votre activité", icon: LayoutDashboard },
+  { href: "/dashboard", label: "Tableau de bord", sub: "Vue d'ensemble de votre activité", icon: LayoutDashboard, color: "#7c3aed" },
 ];
 const NAV_MODULES = [
   { href: "/dashboard/deal-draft",  label: "Deal Draft",  sub: "Propositions commerciales IA", icon: FileText,  color: "#a78bfa", iconBg: "rgba(167,139,250,0.16)" },
@@ -23,8 +23,8 @@ const NAV_MODULES = [
   { href: "/dashboard/deep-due",    label: "Deep Due",    sub: "Due diligence automatisée",     icon: Shield,    color: "#34d399", iconBg: "rgba(52,211,153,0.16)"  },
 ];
 const NAV_ACCOUNT = [
-  { href: "/dashboard/settings", label: "Paramètres", sub: "Compte et préférences", icon: Settings  },
-  { href: "/dashboard/billing",  label: "Facturation", sub: "Plans et abonnements", icon: CreditCard },
+  { href: "/dashboard/settings", label: "Paramètres", sub: "Compte et préférences", icon: Settings,    color: "#64748b" },
+  { href: "/dashboard/billing",  label: "Facturation", sub: "Plans et abonnements", icon: CreditCard,  color: "#7c3aed" },
 ];
 const ALL_NAV = [...NAV_OVERVIEW, ...NAV_MODULES, ...NAV_ACCOUNT];
 
@@ -381,9 +381,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <button className="lg:hidden" onClick={() => setSidebarOpen(true)} style={{ color: "#64748b", background: "none", border: "none", cursor: "pointer" }}>
               <Menu size={20} />
             </button>
-            <div>
-              <h1 style={{ fontSize: 16, fontWeight: 700, color: "#0f172a", letterSpacing: "-0.3px", lineHeight: 1.2 }}>{pageTitle}</h1>
-              <p style={{ fontSize: 11.5, color: "#94a3b8", marginTop: 1 }}>{pageSub}</p>
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <div style={{ width: 3, height: 36, borderRadius: 2, background: currentPage?.color ?? "#7c3aed", flexShrink: 0 }} />
+              <div>
+                <h1 style={{ fontSize: 20, fontWeight: 800, color: "#0f172a", letterSpacing: "-0.5px", lineHeight: 1.15 }}>{pageTitle}</h1>
+                <p style={{ fontSize: 12.5, color: "#64748b", marginTop: 2 }}>{pageSub}</p>
+              </div>
             </div>
           </div>
           <div className="flex items-center gap-3">

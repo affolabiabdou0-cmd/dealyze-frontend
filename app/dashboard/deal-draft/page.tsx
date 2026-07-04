@@ -175,13 +175,13 @@ ul li::before{content:"✓";color:#7c3aed;font-weight:700;flex-shrink:0;margin-t
       <style>{ANIM_STYLE}</style>
 
       {/* Page header */}
-      <div className="flex items-center gap-3 mb-6">
-        <div style={{ width: 44, height: 44, borderRadius: 12, background: "#ede9fe", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-          <FileText size={22} style={{ color: COLOR }} strokeWidth={1.75} />
+      <div className="flex items-center gap-4 mb-6">
+        <div style={{ width: 52, height: 52, borderRadius: 14, background: "#ede9fe", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, boxShadow: "0 4px 16px rgba(167,139,250,0.28)" }}>
+          <FileText size={26} style={{ color: COLOR }} strokeWidth={1.75} />
         </div>
         <div>
-          <h2 style={{ fontSize: 18, fontWeight: 700, color: "#0f172a", marginBottom: 2, letterSpacing: "-0.3px" }}>Deal Draft</h2>
-          <p style={{ fontSize: 13, color: "#94a3b8" }}>Générez une proposition commerciale professionnelle sur-mesure en moins de 30 secondes</p>
+          <h2 style={{ fontSize: 24, fontWeight: 800, color: "#0f172a", marginBottom: 3, letterSpacing: "-0.5px" }}>Deal Draft</h2>
+          <p style={{ fontSize: 13.5, color: "#64748b" }}>Générez une proposition commerciale professionnelle sur-mesure en moins de 30 secondes</p>
         </div>
       </div>
 

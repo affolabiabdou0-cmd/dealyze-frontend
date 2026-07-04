@@ -36,9 +36,16 @@ function Navbar() {
               ? "linear-gradient(135deg, #8b5cf6, #22d3ee)"
               : "linear-gradient(135deg, #c4b5fd, #67e8f9)",
             WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
-            fontSize: 38, fontWeight: 800, letterSpacing: "7px", display: "inline-block",
+            fontSize: 38, fontWeight: 800, letterSpacing: "7px", display: "inline-flex", alignItems: "center",
           }}>
-            VY<span style={{ fontSize: "1.12em", fontWeight: 900 }}>X</span>EN
+            VY<span style={{
+              fontSize: "1.7em", fontWeight: 900, display: "inline-block", lineHeight: 0.85,
+              background: scrolled
+                ? "linear-gradient(180deg, #7ffeff 0%, #22d3ee 55%, #0ea5e9 100%)"
+                : "linear-gradient(180deg, #ffffff 0%, #67e8f9 55%, #22d3ee 100%)",
+              WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
+              letterSpacing: 0,
+            }}>X</span>EN
           </span>
         </a>
         <div className="hidden md:flex items-center gap-8">
@@ -417,9 +424,14 @@ function Footer() {
           <span style={{
             background: "linear-gradient(135deg, #8b5cf6, #22d3ee)",
             WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
-            fontSize: 22, fontWeight: 800, letterSpacing: "4px", display: "inline-block",
+            fontSize: 22, fontWeight: 800, letterSpacing: "4px", display: "inline-flex", alignItems: "center",
           }}>
-            VY<span style={{ fontSize: "1.12em", fontWeight: 900 }}>X</span>EN
+            VY<span style={{
+              fontSize: "1.65em", fontWeight: 900, display: "inline-block", lineHeight: 0.85,
+              background: "linear-gradient(180deg, #7ffeff 0%, #22d3ee 55%, #0ea5e9 100%)",
+              WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
+              letterSpacing: 0,
+            }}>X</span>EN
           </span>
           <p className="text-xs text-gray-400 mt-1">Turn every deal into done.</p>
         </div>

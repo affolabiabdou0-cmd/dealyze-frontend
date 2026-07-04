@@ -164,13 +164,13 @@ ${result.next_action_date ? `<div class="next-box"><span style="font-size:18px">
     <div className="w-full">
       <style>{ANIM_STYLE}</style>
 
-      <div className="flex items-center gap-3 mb-6">
-        <div style={{ width: 44, height: 44, borderRadius: 12, background: "#fff7ed", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-          <Mail size={22} style={{ color: COLOR }} strokeWidth={1.75} />
+      <div className="flex items-center gap-4 mb-6">
+        <div style={{ width: 52, height: 52, borderRadius: 14, background: "#fff7ed", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, boxShadow: "0 4px 16px rgba(251,146,60,0.24)" }}>
+          <Mail size={26} style={{ color: COLOR }} strokeWidth={1.75} />
         </div>
         <div>
-          <h2 style={{ fontSize: 18, fontWeight: 700, color: "#0f172a", marginBottom: 2, letterSpacing: "-0.3px" }}>Smart Chase</h2>
-          <p style={{ fontSize: 13, color: "#94a3b8" }}>Transformez vos impayés en paiements avec des relances IA calibrées au profil de chaque client</p>
+          <h2 style={{ fontSize: 24, fontWeight: 800, color: "#0f172a", marginBottom: 3, letterSpacing: "-0.5px" }}>Smart Chase</h2>
+          <p style={{ fontSize: 13.5, color: "#64748b" }}>Transformez vos impayés en paiements avec des relances IA calibrées au profil de chaque client</p>
         </div>
       </div>
 

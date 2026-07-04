@@ -202,13 +202,13 @@ h1{font-size:26px;font-weight:800;color:#1a1a2e;letter-spacing:-0.5px;margin-bot
     <div className="w-full">
       <style>{ANIM_STYLE}</style>
 
-      <div className="flex items-center gap-3 mb-6">
-        <div style={{ width: 44, height: 44, borderRadius: 12, background: "#ecfeff", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-          <BarChart3 size={22} style={{ color: COLOR }} strokeWidth={1.75} />
+      <div className="flex items-center gap-4 mb-6">
+        <div style={{ width: 52, height: 52, borderRadius: 14, background: "#ecfeff", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, boxShadow: "0 4px 16px rgba(34,211,238,0.22)" }}>
+          <BarChart3 size={26} style={{ color: COLOR }} strokeWidth={1.75} />
         </div>
         <div>
-          <h2 style={{ fontSize: 18, fontWeight: 700, color: "#0f172a", marginBottom: 2, letterSpacing: "-0.3px" }}>Pitch Radar</h2>
-          <p style={{ fontSize: 13, color: "#94a3b8" }}>Notation IA multicritère d'un pitch deck · Score VC · Forces & alertes · Recommandation investisseur</p>
+          <h2 style={{ fontSize: 24, fontWeight: 800, color: "#0f172a", marginBottom: 3, letterSpacing: "-0.5px" }}>Pitch Radar</h2>
+          <p style={{ fontSize: 13.5, color: "#64748b" }}>Notation IA multicritère d'un pitch deck · Score VC · Forces & alertes · Recommandation investisseur</p>
         </div>
       </div>
 

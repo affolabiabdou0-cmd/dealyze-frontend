@@ -116,9 +116,14 @@ export default function LoginPage() {
           <span style={{
             background: "linear-gradient(135deg, #8b5cf6, #22d3ee)",
             WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
-            fontSize: 54, fontWeight: 800, letterSpacing: "8px", display: "inline-block",
+            fontSize: 54, fontWeight: 800, letterSpacing: "8px", display: "inline-flex", alignItems: "center",
           }}>
-            VY<span style={{ fontSize: "1.12em", fontWeight: 900 }}>X</span>EN
+            VY<span style={{
+              fontSize: "1.75em", fontWeight: 900, display: "inline-block", lineHeight: 0.85,
+              background: "linear-gradient(180deg, #7ffeff 0%, #22d3ee 55%, #0ea5e9 100%)",
+              WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
+              letterSpacing: 0,
+            }}>X</span>EN
           </span>
         </Link>
 
@@ -160,9 +165,14 @@ export default function LoginPage() {
             <span style={{
               background: "linear-gradient(135deg, #8b5cf6, #22d3ee)",
               WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
-              fontSize: 28, fontWeight: 800, letterSpacing: "5px", display: "inline-block",
+              fontSize: 28, fontWeight: 800, letterSpacing: "5px", display: "inline-flex", alignItems: "center",
             }}>
-              VY<span style={{ fontSize: "1.12em", fontWeight: 900 }}>X</span>EN
+              VY<span style={{
+                fontSize: "1.5em", fontWeight: 900, display: "inline-block", lineHeight: 0.85,
+                background: "linear-gradient(180deg, #7ffeff 0%, #22d3ee 55%, #0ea5e9 100%)",
+                WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
+                letterSpacing: 0,
+              }}>X</span>EN
             </span>
           </Link>
 
