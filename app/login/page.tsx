@@ -114,7 +114,7 @@ export default function LoginPage() {
 
         <Link href="/" className="relative z-10 flex items-center gap-2.5" style={{ textDecoration: "none" }}>
           <div style={{ width:36, height:36, borderRadius:10, background:"linear-gradient(135deg,#7c3aed,#2563eb)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:18, boxShadow:"0 0 20px rgba(124,58,237,0.4)" }}>⚡</div>
-          <span style={{ fontFamily:"Georgia, 'Times New Roman', serif", fontSize:22, letterSpacing:"3px", color:"rgba(255,255,255,0.95)" }}>VY<span style={{ color:"#60a5fa" }}>X</span>EN</span>
+          <span style={{ fontFamily:"var(--font-cormorant), Georgia, serif", fontSize:30, fontWeight:300, letterSpacing:"6px", color:"rgba(255,255,255,0.95)" }}>VY<span style={{ color:"#60a5fa" }}>X</span>EN</span>
         </Link>
 
         <div className="relative z-10">

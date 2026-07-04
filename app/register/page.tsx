@@ -110,7 +110,7 @@ export default function RegisterPage() {
         <div className="absolute inset-0 pointer-events-none" style={{ background:"radial-gradient(ellipse 70% 55% at 65% 25%, rgba(37,99,235,0.13) 0%, transparent 70%)" }} />
 
         <Link href="/" className="relative z-10"
-          style={{ textDecoration:"none", fontFamily:"Georgia, 'Times New Roman', serif", fontSize:22, letterSpacing:"3px", color:"rgba(255,255,255,0.95)" }}>VY<span style={{ color:"#60a5fa" }}>X</span>EN</Link>
+          style={{ textDecoration:"none", fontFamily:"var(--font-cormorant), Georgia, serif", fontSize:30, fontWeight:300, letterSpacing:"6px", color:"rgba(255,255,255,0.95)" }}>VY<span style={{ color:"#60a5fa" }}>X</span>EN</Link>
 
         <div className="relative z-10">
           <div className="inline-flex items-center gap-2" style={{ background:"rgba(37,99,235,0.14)", border:"1px solid rgba(37,99,235,0.28)", borderRadius:100, padding:"5px 14px", marginBottom:28 }}>

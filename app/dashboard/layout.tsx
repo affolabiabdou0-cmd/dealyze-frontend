@@ -104,10 +104,10 @@ function Sidebar({ user, onClose }: { user: User | null; onClose?: () => void })
       <div className="flex items-center justify-between px-5 py-5">
         <Link href="/dashboard" className="flex items-center gap-0" style={{ textDecoration: "none" }}>
           <div>
-            <span style={{ fontFamily: "Georgia, 'Times New Roman', serif", fontSize: 20, fontWeight: 400, letterSpacing: "3px", color: "rgba(255,255,255,0.95)", display: "block", lineHeight: 1 }}>
+            <span style={{ fontFamily: "var(--font-cormorant), Georgia, serif", fontSize: 30, fontWeight: 300, letterSpacing: "6px", color: "rgba(255,255,255,0.95)", display: "block", lineHeight: 1 }}>
               VY<span style={{ color: "#60a5fa" }}>X</span>EN
             </span>
-            <span style={{ fontSize: 9, color: "rgba(255,255,255,0.22)", letterSpacing: "0.14em", fontWeight: 700, textTransform: "uppercase" }}>AI PLATFORM</span>
+            <span style={{ fontSize: 8.5, color: "rgba(255,255,255,0.2)", letterSpacing: "0.18em", fontWeight: 700, textTransform: "uppercase", marginTop: 3, display: "block" }}>AI PLATFORM</span>
           </div>
         </Link>
         {onClose && (
@@ -405,7 +405,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </div>
         </header>
 
-        <main className="flex-1 p-5">{children}</main>
+        <main className="flex-1 p-5" style={{ display: "flex", flexDirection: "column" }}>{children}</main>
 
         <footer className="px-7 py-3 flex items-center justify-center" style={{ borderTop: "1px solid #e9eef5", background: "rgba(255,255,255,0.8)" }}>
           <span style={{ fontSize: 11, color: "#94a3b8" }}>VYXEN · Gemini 2.5 Flash · XPRIZE AI Hackathon 2026</span>
