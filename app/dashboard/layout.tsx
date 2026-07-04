@@ -337,12 +337,52 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const [actionOpen,  setActionOpen]  = useState(false);
   const [unread,      setUnread]      = useState(0);
 
+  // Session timeout: re-authenticate after 4h of inactivity
+  const INACTIVITY_MS = 4 * 60 * 60 * 1000;
+  const ACTIVITY_KEY  = "dealyze_last_activity";
+
   useEffect(() => {
     const u = getUser();
     if (!u) { router.replace("/login"); return; }
     setUser(u);
     setUnread(countUnread());
-  }, [router]);
+
+    // Initialise last-activity on first mount
+    if (!localStorage.getItem(ACTIVITY_KEY)) {
+      localStorage.setItem(ACTIVITY_KEY, String(Date.now()));
+    }
+
+    function checkInactivity() {
+      const last = Number(localStorage.getItem(ACTIVITY_KEY) ?? 0);
+      if (Date.now() - last > INACTIVITY_MS) {
+        clearAuth();
+        router.replace("/login?reason=timeout");
+      }
+    }
+
+    function refreshActivity() {
+      localStorage.setItem(ACTIVITY_KEY, String(Date.now()));
+    }
+
+    // Check when tab becomes visible again
+    function handleVisibility() {
+      if (document.visibilityState === "visible") checkInactivity();
+    }
+
+    // Reset timer on any user interaction
+    const events = ["mousemove", "keydown", "click", "touchstart", "scroll"] as const;
+    events.forEach((ev) => window.addEventListener(ev, refreshActivity, { passive: true }));
+    document.addEventListener("visibilitychange", handleVisibility);
+
+    // Periodic check every 5 min
+    const interval = setInterval(checkInactivity, 5 * 60 * 1000);
+
+    return () => {
+      events.forEach((ev) => window.removeEventListener(ev, refreshActivity));
+      document.removeEventListener("visibilitychange", handleVisibility);
+      clearInterval(interval);
+    };
+  }, [router]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const currentPage = ALL_NAV.find((n) => n.href === pathname);
   const pageTitle   = currentPage?.label ?? "Dashboard";
