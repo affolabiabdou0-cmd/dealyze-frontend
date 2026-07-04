@@ -58,6 +58,15 @@ const CARD: React.CSSProperties = {
   padding: "16px 20px", boxShadow: "0 1px 4px rgba(0,0,0,0.06)",
 };
 
+declare global {
+  interface Window {
+    Paddle?: {
+      Initialize: (opts: { token: string; eventCallback?: (e: unknown) => void }) => void;
+      Checkout: { open: (opts: unknown) => void };
+    };
+  }
+}
+
 export default function BillingPage() {
   const user        = getUser();
   const router      = useRouter();
@@ -71,10 +80,34 @@ export default function BillingPage() {
     setTimeout(() => setToast(null), 4500);
   }
 
+  // Charge Paddle.js une seule fois
+  useEffect(() => {
+    if (document.getElementById("paddle-js")) return;
+    const script = document.createElement("script");
+    script.id  = "paddle-js";
+    script.src = "https://cdn.paddle.com/paddle/v2/paddle.js";
+    script.onload = () => {
+      const token = process.env.NEXT_PUBLIC_PADDLE_TOKEN;
+      if (token && window.Paddle) {
+        window.Paddle.Initialize({
+          token,
+          eventCallback: (e: unknown) => {
+            const ev = e as { name?: string };
+            if (ev?.name === "checkout.completed") {
+              showToast("success", "Paiement réussi ! Votre plan est en cours d'activation.");
+              setTimeout(() => router.replace("/dashboard/billing"), 3000);
+            }
+          },
+        });
+      }
+    };
+    document.head.appendChild(script);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   useEffect(() => {
     api.get<QuotaResponse>("/auth/quota").then((r) => setQuota(r.data)).catch(() => null);
     const params = new URLSearchParams(window.location.search);
-    if (params.get("payment") === "simulated") {
+    if (params.get("payment") === "simulated" || params.get("payment") === "success") {
       showToast("success", `Plan ${params.get("plan") ?? ""} activé avec succès !`);
       router.replace("/dashboard/billing");
     }
@@ -95,16 +128,34 @@ export default function BillingPage() {
   async function handleUpgrade(planId: string) {
     setLoadingPlan(planId);
     try {
-      const res = await api.post<{ checkout_url: string; mode?: string }>("/billing/checkout", { plan: planId });
-      const url = res.data.checkout_url;
-      if (res.data.mode === "simulation" || url.startsWith("/")) {
-        router.push(url);
+      const res = await api.post<{
+        mode: string; checkout_url?: string; price_id?: string; user_id?: string; user_email?: string;
+      }>("/billing/checkout", { plan: planId });
+
+      // Simulation
+      if (res.data.mode === "simulation" && res.data.checkout_url) {
+        router.push(res.data.checkout_url);
+        return;
+      }
+
+      // Production — ouvre Paddle overlay
+      if (res.data.price_id && window.Paddle) {
+        window.Paddle.Checkout.open({
+          items: [{ priceId: res.data.price_id, quantity: 1 }],
+          customer: { email: res.data.user_email ?? user?.email ?? "" },
+          customData: { user_id: res.data.user_id ?? user?.id ?? "" },
+          settings: {
+            successUrl: `${window.location.origin}/dashboard?payment=success&plan=${planId}`,
+            displayMode: "overlay",
+            locale: "fr",
+          },
+        });
       } else {
-        window.location.href = url;
+        showToast("error", "Paddle non initialisé. Rechargez la page.");
       }
     } catch (err: unknown) {
       const detail = (err as { response?: { data?: { detail?: string } } })?.response?.data?.detail;
-      showToast("error", detail ?? "Erreur de paiement. Vérifiez la configuration ou contactez le support.");
+      showToast("error", detail ?? "Erreur de paiement. Contactez le support.");
     } finally { setLoadingPlan(null); }
   }
 
