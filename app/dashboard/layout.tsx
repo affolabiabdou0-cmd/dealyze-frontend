@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
@@ -104,12 +103,17 @@ function Sidebar({ user, onClose }: { user: User | null; onClose?: () => void })
       {/* Logo */}
       <div className="flex items-center justify-between px-5 py-5">
         <Link href="/dashboard" style={{ textDecoration: "none", display: "block" }}>
-          <Image
-            src="/vyxen-logo.png" alt="VYXEN" width={158} height={63}
-            style={{ objectFit: "contain", display: "block", filter: "brightness(0) invert(1)", opacity: 0.92 }}
-            priority
-          />
-          <div style={{ marginTop: 4, fontSize: 8, color: "rgba(255,255,255,0.2)", letterSpacing: "0.2em", fontWeight: 700, textTransform: "uppercase" }}>AI PLATFORM</div>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+            <Zap size={16} style={{ color: "#8b5cf6", flexShrink: 0 }} strokeWidth={2.5} />
+            <span style={{
+              background: "linear-gradient(135deg, #8b5cf6, #22d3ee)",
+              WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
+              fontSize: 22, fontWeight: 800, letterSpacing: "4px", display: "inline-block",
+            }}>
+              VY<span style={{ fontSize: "1.12em", fontWeight: 900 }}>X</span>EN
+            </span>
+          </div>
+          <div style={{ fontSize: 8, color: "rgba(255,255,255,0.18)", letterSpacing: "0.2em", fontWeight: 700, textTransform: "uppercase", paddingLeft: 24 }}>AI PLATFORM</div>
         </Link>
         {onClose && (
           <button onClick={onClose} style={{ color: "rgba(255,255,255,0.35)", background: "none", border: "none", cursor: "pointer", padding: 4 }}>

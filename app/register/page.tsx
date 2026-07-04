@@ -110,7 +110,13 @@ export default function RegisterPage() {
         <div className="absolute inset-0 pointer-events-none" style={{ background:"radial-gradient(ellipse 70% 55% at 65% 25%, rgba(37,99,235,0.13) 0%, transparent 70%)" }} />
 
         <Link href="/" className="relative z-10" style={{ textDecoration:"none", display:"block" }}>
-          <img src="/vyxen-logo.png" alt="VYXEN" style={{ height:52, width:"auto", display:"block", filter:"brightness(0) invert(1)", opacity:0.92 }} />
+          <span style={{
+            background: "linear-gradient(135deg, #8b5cf6, #22d3ee)",
+            WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
+            fontSize: 36, fontWeight: 800, letterSpacing: "6px", display: "inline-block",
+          }}>
+            VY<span style={{ fontSize: "1.12em", fontWeight: 900 }}>X</span>EN
+          </span>
         </Link>
 
         <div className="relative z-10">
@@ -154,7 +160,13 @@ export default function RegisterPage() {
 
           <Link href="/" className="lg:hidden font-display text-xl font-bold"
             style={{ textDecoration:"none", display:"block", marginBottom:28 }}>
-            <img src="/vyxen-logo.png" alt="VYXEN" style={{ height:40, width:"auto" }} />
+            <span style={{
+              background: "linear-gradient(135deg, #8b5cf6, #22d3ee)",
+              WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
+              fontSize: 28, fontWeight: 800, letterSpacing: "5px", display: "inline-block",
+            }}>
+              VY<span style={{ fontSize: "1.12em", fontWeight: 900 }}>X</span>EN
+            </span>
           </Link>
 
           <h2 style={{ fontSize:28, fontWeight:700, color:"#0A1628", letterSpacing:"-0.75px", marginBottom:4 }}>Créer votre compte</h2>

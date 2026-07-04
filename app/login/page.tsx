@@ -113,7 +113,13 @@ export default function LoginPage() {
         </div>
 
         <Link href="/" className="relative z-10" style={{ textDecoration: "none", display: "block" }}>
-          <img src="/vyxen-logo.png" alt="VYXEN" style={{ height:52, width:"auto", display:"block", filter:"brightness(0) invert(1)", opacity:0.92 }} />
+          <span style={{
+            background: "linear-gradient(135deg, #8b5cf6, #22d3ee)",
+            WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
+            fontSize: 36, fontWeight: 800, letterSpacing: "6px", display: "inline-block",
+          }}>
+            VY<span style={{ fontSize: "1.12em", fontWeight: 900 }}>X</span>EN
+          </span>
         </Link>
 
         <div className="relative z-10">
@@ -150,9 +156,14 @@ export default function LoginPage() {
         style={{ background:"#fff", padding:"48px 28px", minHeight:"100vh" }}>
         <div style={{ width:"100%", maxWidth:380 }}>
 
-          <Link href="/" className="lg:hidden font-display text-xl font-bold"
-            style={{ textDecoration:"none", display:"block", marginBottom:32 }}>
-            <img src="/vyxen-logo.png" alt="VYXEN" style={{ height:40, width:"auto" }} />
+          <Link href="/" className="lg:hidden" style={{ textDecoration:"none", display:"block", marginBottom:28 }}>
+            <span style={{
+              background: "linear-gradient(135deg, #8b5cf6, #22d3ee)",
+              WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
+              fontSize: 28, fontWeight: 800, letterSpacing: "5px", display: "inline-block",
+            }}>
+              VY<span style={{ fontSize: "1.12em", fontWeight: 900 }}>X</span>EN
+            </span>
           </Link>
 
           <h2 style={{ fontSize:30, fontWeight:700, color:"#0A1628", letterSpacing:"-0.75px", marginBottom:6 }}>Bon retour</h2>

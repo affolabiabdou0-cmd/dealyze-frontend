@@ -31,7 +31,15 @@ function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-16">
         <a href="#" style={{ textDecoration:"none" }}>
-          <img src="/vyxen-logo.png" alt="VYXEN" style={{ height:44, width:"auto", filter: scrolled ? "none" : "brightness(0) invert(1)" }} />
+          <span style={{
+            background: scrolled
+              ? "linear-gradient(135deg, #8b5cf6, #22d3ee)"
+              : "linear-gradient(135deg, #c4b5fd, #67e8f9)",
+            WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
+            fontSize: 26, fontWeight: 800, letterSpacing: "5px", display: "inline-block",
+          }}>
+            VY<span style={{ fontSize: "1.12em", fontWeight: 900 }}>X</span>EN
+          </span>
         </a>
         <div className="hidden md:flex items-center gap-8">
           {["Fonctionnalités", "Tarifs"].map((item) => (
@@ -406,7 +414,13 @@ function Footer() {
     <footer className="py-10 border-t border-gray-100">
       <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
         <div>
-          <img src="/vyxen-logo.png" alt="VYXEN" style={{ height:32, width:"auto" }} />
+          <span style={{
+            background: "linear-gradient(135deg, #8b5cf6, #22d3ee)",
+            WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
+            fontSize: 22, fontWeight: 800, letterSpacing: "4px", display: "inline-block",
+          }}>
+            VY<span style={{ fontSize: "1.12em", fontWeight: 900 }}>X</span>EN
+          </span>
           <p className="text-xs text-gray-400 mt-1">Turn every deal into done.</p>
         </div>
         <div className="text-xs text-gray-400">Powered by Gemini 2.5 · Firebase · Supabase</div>
