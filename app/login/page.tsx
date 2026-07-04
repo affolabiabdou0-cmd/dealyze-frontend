@@ -3,16 +3,16 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Eye, EyeOff, ArrowRight, AlertCircle } from "lucide-react";
+import { Eye, EyeOff, ArrowRight, AlertCircle, FileText, Mail, BarChart3, Shield } from "lucide-react";
 import { login, saveAuth } from "../lib/auth";
 import { signInWithGoogle } from "../lib/firebase";
 import { api, type TokenResponse } from "../lib/api";
 
 const AGENTS = [
-  { icon: "⚡", name: "Deal Draft",  desc: "Propositions commerciales en 10s" },
-  { icon: "💬", name: "Smart Chase", desc: "Relances impayés automatisées"     },
-  { icon: "🎯", name: "Pitch Radar", desc: "Scoring pitch investisseurs"        },
-  { icon: "🔍", name: "Deep Due",    desc: "Due diligence en 1 clic"           },
+  { icon: FileText, name: "Deal Draft",  desc: "Propositions commerciales en 10s", color: "#a78bfa", bg: "rgba(167,139,250,0.18)" },
+  { icon: Mail,     name: "Smart Chase", desc: "Relances impayés automatisées",     color: "#fb923c", bg: "rgba(251,146,60,0.18)"  },
+  { icon: BarChart3,name: "Pitch Radar", desc: "Scoring pitch investisseurs",        color: "#22d3ee", bg: "rgba(34,211,238,0.18)"  },
+  { icon: Shield,   name: "Deep Due",    desc: "Due diligence en 1 clic",           color: "#34d399", bg: "rgba(52,211,153,0.18)"  },
 ];
 
 function GIcon() {
@@ -139,12 +139,14 @@ export default function LoginPage() {
             4 agents IA spécialisés pour automatiser chaque étape de vos deals — de la proposition commerciale au due diligence.
           </p>
           <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
-            {AGENTS.map((a) => (
-              <div key={a.name} style={{ display:"flex", alignItems:"center", gap:14, padding:"14px 18px", background:"rgba(255,255,255,0.035)", border:"1px solid rgba(255,255,255,0.07)", borderRadius:14 }}>
-                <div style={{ width:42, height:42, borderRadius:11, flexShrink:0, background:"rgba(37,99,235,0.22)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:20 }}>{a.icon}</div>
+            {AGENTS.map(({ icon: Icon, name, desc, color, bg }) => (
+              <div key={name} style={{ display:"flex", alignItems:"center", gap:14, padding:"13px 18px", background:"rgba(255,255,255,0.03)", border:"0.5px solid rgba(255,255,255,0.08)", borderRadius:14 }}>
+                <div style={{ width:42, height:42, borderRadius:11, flexShrink:0, background: bg, display:"flex", alignItems:"center", justifyContent:"center" }}>
+                  <Icon size={20} style={{ color }} strokeWidth={1.75} />
+                </div>
                 <div>
-                  <div style={{ fontSize:13, fontWeight:600, color:"rgba(255,255,255,0.9)" }}>{a.name}</div>
-                  <div style={{ fontSize:12, color:"rgba(255,255,255,0.36)", marginTop:2 }}>{a.desc}</div>
+                  <div style={{ fontSize:13, fontWeight:600, color:"rgba(255,255,255,0.9)" }}>{name}</div>
+                  <div style={{ fontSize:12, color:"rgba(255,255,255,0.35)", marginTop:2 }}>{desc}</div>
                 </div>
               </div>
             ))}
