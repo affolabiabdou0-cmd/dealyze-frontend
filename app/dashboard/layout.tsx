@@ -102,12 +102,14 @@ function Sidebar({ user, onClose }: { user: User | null; onClose?: () => void })
     <aside className="flex flex-col h-full" style={{ background: "#0b1526" }}>
 
       {/* Logo */}
-      <div className="flex items-center justify-between px-4 py-4">
-        <Link href="/dashboard" style={{ textDecoration: "none" }}>
-          <div style={{ background: "rgba(255,255,255,0.97)", borderRadius: 10, padding: "7px 14px", display: "inline-flex", alignItems: "center", boxShadow: "0 2px 12px rgba(0,0,0,0.2)" }}>
-            <Image src="/vyxen-logo.png" alt="VYXEN" width={108} height={43} style={{ objectFit: "contain", display: "block" }} priority />
-          </div>
-          <div style={{ marginTop: 5, fontSize: 8, color: "rgba(255,255,255,0.18)", letterSpacing: "0.18em", fontWeight: 700, textTransform: "uppercase", paddingLeft: 2 }}>AI PLATFORM</div>
+      <div className="flex items-center justify-between px-5 py-5">
+        <Link href="/dashboard" style={{ textDecoration: "none", display: "block" }}>
+          <Image
+            src="/vyxen-logo.png" alt="VYXEN" width={158} height={63}
+            style={{ objectFit: "contain", display: "block", filter: "brightness(0) invert(1)", opacity: 0.92 }}
+            priority
+          />
+          <div style={{ marginTop: 4, fontSize: 8, color: "rgba(255,255,255,0.2)", letterSpacing: "0.2em", fontWeight: 700, textTransform: "uppercase" }}>AI PLATFORM</div>
         </Link>
         {onClose && (
           <button onClick={onClose} style={{ color: "rgba(255,255,255,0.35)", background: "none", border: "none", cursor: "pointer", padding: 4 }}>

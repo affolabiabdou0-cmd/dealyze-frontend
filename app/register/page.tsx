@@ -109,10 +109,8 @@ export default function RegisterPage() {
         style={{ padding:"52px 64px", background:"linear-gradient(150deg,#060C1A 0%,#0B1830 52%,#0F2552 100%)" }}>
         <div className="absolute inset-0 pointer-events-none" style={{ background:"radial-gradient(ellipse 70% 55% at 65% 25%, rgba(37,99,235,0.13) 0%, transparent 70%)" }} />
 
-        <Link href="/" className="relative z-10" style={{ textDecoration:"none" }}>
-          <div style={{ background:"rgba(255,255,255,0.97)", borderRadius:10, padding:"7px 16px", display:"inline-flex", alignItems:"center", boxShadow:"0 4px 20px rgba(0,0,0,0.25)" }}>
-            <img src="/vyxen-logo.png" alt="VYXEN" style={{ height:40, width:"auto", display:"block" }} />
-          </div>
+        <Link href="/" className="relative z-10" style={{ textDecoration:"none", display:"block" }}>
+          <img src="/vyxen-logo.png" alt="VYXEN" style={{ height:52, width:"auto", display:"block", filter:"brightness(0) invert(1)", opacity:0.92 }} />
         </Link>
 
         <div className="relative z-10">
@@ -156,7 +154,7 @@ export default function RegisterPage() {
 
           <Link href="/" className="lg:hidden font-display text-xl font-bold"
             style={{ textDecoration:"none", display:"block", marginBottom:28 }}>
-            <img src="/vyxen-logo.png" alt="VYXEN" style={{ height:36, width:"auto" }} />
+            <img src="/vyxen-logo.png" alt="VYXEN" style={{ height:40, width:"auto" }} />
           </Link>
 
           <h2 style={{ fontSize:28, fontWeight:700, color:"#0A1628", letterSpacing:"-0.75px", marginBottom:4 }}>Créer votre compte</h2>
