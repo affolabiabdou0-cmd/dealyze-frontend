@@ -36,7 +36,7 @@ function Navbar() {
               ? "linear-gradient(135deg, #8b5cf6, #22d3ee)"
               : "linear-gradient(135deg, #c4b5fd, #67e8f9)",
             WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
-            fontSize: 26, fontWeight: 800, letterSpacing: "5px", display: "inline-block",
+            fontSize: 38, fontWeight: 800, letterSpacing: "7px", display: "inline-block",
           }}>
             VY<span style={{ fontSize: "1.12em", fontWeight: 900 }}>X</span>EN
           </span>

@@ -101,19 +101,19 @@ function Sidebar({ user, onClose }: { user: User | null; onClose?: () => void })
     <aside className="flex flex-col h-full" style={{ background: "#0b1526" }}>
 
       {/* Logo */}
-      <div className="flex items-center justify-between px-5 py-5">
+      <div className="flex items-center justify-between px-5 py-6">
         <Link href="/dashboard" style={{ textDecoration: "none", display: "block" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
-            <Zap size={16} style={{ color: "#8b5cf6", flexShrink: 0 }} strokeWidth={2.5} />
+          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 5 }}>
+            <Zap size={18} style={{ color: "#8b5cf6", flexShrink: 0 }} strokeWidth={2.5} />
             <span style={{
               background: "linear-gradient(135deg, #8b5cf6, #22d3ee)",
               WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
-              fontSize: 22, fontWeight: 800, letterSpacing: "4px", display: "inline-block",
+              fontSize: 30, fontWeight: 800, letterSpacing: "5px", display: "inline-block", lineHeight: 1,
             }}>
               VY<span style={{ fontSize: "1.12em", fontWeight: 900 }}>X</span>EN
             </span>
           </div>
-          <div style={{ fontSize: 8, color: "rgba(255,255,255,0.18)", letterSpacing: "0.2em", fontWeight: 700, textTransform: "uppercase", paddingLeft: 24 }}>AI PLATFORM</div>
+          <div style={{ fontSize: 8.5, color: "rgba(255,255,255,0.18)", letterSpacing: "0.22em", fontWeight: 700, textTransform: "uppercase", paddingLeft: 28 }}>AI PLATFORM</div>
         </Link>
         {onClose && (
           <button onClick={onClose} style={{ color: "rgba(255,255,255,0.35)", background: "none", border: "none", cursor: "pointer", padding: 4 }}>

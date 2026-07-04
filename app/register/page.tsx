@@ -113,7 +113,7 @@ export default function RegisterPage() {
           <span style={{
             background: "linear-gradient(135deg, #8b5cf6, #22d3ee)",
             WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
-            fontSize: 36, fontWeight: 800, letterSpacing: "6px", display: "inline-block",
+            fontSize: 54, fontWeight: 800, letterSpacing: "8px", display: "inline-block",
           }}>
             VY<span style={{ fontSize: "1.12em", fontWeight: 900 }}>X</span>EN
           </span>
