@@ -377,9 +377,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     // Periodic check every 5 min
     const interval = setInterval(checkInactivity, 5 * 60 * 1000);
 
+    // Force refresh on browser back/forward so stale cached pages re-render
+    function handlePopState() { router.refresh(); }
+    window.addEventListener("popstate", handlePopState);
+
     return () => {
       events.forEach((ev) => window.removeEventListener(ev, refreshActivity));
       document.removeEventListener("visibilitychange", handleVisibility);
+      window.removeEventListener("popstate", handlePopState);
       clearInterval(interval);
     };
   }, [router]); // eslint-disable-line react-hooks/exhaustive-deps
