@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import { api } from "../lib/api";
 import { getUser } from "../lib/auth";
-import { getActivity, countUnread, relativeTime, ACTIVITY_META } from "../lib/activity";
+import { getActivity, relativeTime, ACTIVITY_META } from "../lib/activity";
 import type { ActivityItem } from "../lib/activity";
 import PageHeader from "../components/PageHeader";
 
@@ -122,7 +122,6 @@ export default function DashboardPage() {
   const firstName = user?.full_name?.split(" ")[0] ?? "—";
   const planKey   = quota?.plan ?? user?.plan ?? "free_trial";
   const planLabel = PLAN_LABELS[planKey] ?? planKey;
-  const unread    = countUnread();
 
   return (
     <>
@@ -136,7 +135,7 @@ export default function DashboardPage() {
           greetingName={firstName}
           agentStatus="vos 4 agents sont opérationnels"
           plan={planKey}
-          notificationCount={unread}
+          showNewAction
         />
 
         {/* ══════════════════════════════════════

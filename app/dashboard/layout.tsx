@@ -381,10 +381,18 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     function handlePopState() { router.refresh(); }
     window.addEventListener("popstate", handlePopState);
 
+    // Custom events dispatched by PageHeader (desktop)
+    function handleOpenNotif() { setNotifOpen(true); markNotifSeen(); setUnread(0); }
+    function handleNewAction() { setActionOpen(true); }
+    window.addEventListener("vyxen:open-notif", handleOpenNotif);
+    window.addEventListener("vyxen:new-action", handleNewAction);
+
     return () => {
       events.forEach((ev) => window.removeEventListener(ev, refreshActivity));
       document.removeEventListener("visibilitychange", handleVisibility);
       window.removeEventListener("popstate", handlePopState);
+      window.removeEventListener("vyxen:open-notif", handleOpenNotif);
+      window.removeEventListener("vyxen:new-action", handleNewAction);
       clearInterval(interval);
     };
   }, [router]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -419,43 +427,23 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       {/* Main */}
       <div className="flex-1 flex flex-col min-h-screen min-w-0">
 
-        {/* Header */}
-        <header className="sticky top-0 z-40 flex items-center justify-between px-7 py-4"
-          style={{ background: "rgba(255,255,255,0.92)", borderBottom: "1px solid #e9eef5", backdropFilter: "blur(12px)", boxShadow: "0 1px 4px rgba(0,0,0,0.04)" }}>
-          <div className="flex items-center gap-4">
-            <button className="lg:hidden" onClick={() => setSidebarOpen(true)} style={{ color: "#64748b", background: "none", border: "none", cursor: "pointer" }}>
-              <Menu size={20} />
-            </button>
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <div style={{ width: 3, height: 36, borderRadius: 2, background: currentPage?.color ?? "#7c3aed", flexShrink: 0 }} />
-              <div>
-                <h1 style={{ fontSize: 20, fontWeight: 800, color: "#0f172a", letterSpacing: "-0.5px", lineHeight: 1.15 }}>{pageTitle}</h1>
-                <p style={{ fontSize: 12.5, color: "#64748b", marginTop: 2 }}>{pageSub}</p>
-              </div>
-            </div>
-          </div>
-          <div className="flex items-center gap-3">
-            <button onClick={() => { setNotifOpen(true); setUnread(0); }}
-              style={{ position: "relative", width: 40, height: 40, borderRadius: 11, border: "1.5px solid #e2e8f0", background: "#fff", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", transition: "all 0.15s" }}
-              onMouseEnter={(e) => { e.currentTarget.style.borderColor = "#7c3aed"; e.currentTarget.style.background = "#faf5ff"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.borderColor = "#e2e8f0"; e.currentTarget.style.background = "#fff"; }}
-            >
-              <Bell size={16} style={{ color: "#64748b" }} />
-              {unread > 0 && (
-                <span style={{ position: "absolute", top: -5, right: -5, minWidth: 17, height: 17, borderRadius: 9, paddingInline: 4, background: "#ef4444", color: "#fff", fontSize: 9, fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center", border: "2px solid #f1f5f9" }}>
-                  {unread > 9 ? "9+" : unread}
-                </span>
-              )}
-            </button>
-            <button onClick={() => setActionOpen(true)}
-              className="hidden sm:flex items-center gap-2"
-              style={{ padding: "9px 20px", background: "linear-gradient(135deg, #7c3aed, #6d28d9)", color: "#fff", borderRadius: 11, fontSize: 13.5, fontWeight: 700, border: "none", cursor: "pointer", letterSpacing: "-0.01em", boxShadow: "0 4px 16px rgba(124,58,237,0.38)", transition: "all 0.15s" }}
-              onMouseEnter={(e) => { e.currentTarget.style.boxShadow = "0 6px 22px rgba(124,58,237,0.52)"; e.currentTarget.style.transform = "translateY(-1px)"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.boxShadow = "0 4px 16px rgba(124,58,237,0.38)"; e.currentTarget.style.transform = "none"; }}
-            >
-              <Plus size={15} strokeWidth={2.5} /> Nouvelle action
-            </button>
-          </div>
+        {/* Mobile-only top bar — desktop uses PageHeader inside each page */}
+        <header className="lg:hidden sticky top-0 z-40 flex items-center justify-between px-4 py-3"
+          style={{ background: "rgba(15,5,36,0.96)", borderBottom: "1px solid rgba(124,58,237,0.25)", backdropFilter: "blur(14px)" }}>
+          <button onClick={() => setSidebarOpen(true)}
+            style={{ width: 36, height: 36, borderRadius: 10, background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.14)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: "#a78bfa" }}>
+            <Menu size={18} />
+          </button>
+          <span style={{ fontSize: 15, fontWeight: 800, color: "#fff", letterSpacing: "-0.3px" }}>{pageTitle}</span>
+          <button onClick={() => { setNotifOpen(true); markNotifSeen(); setUnread(0); }}
+            style={{ position: "relative", width: 36, height: 36, borderRadius: 10, background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.14)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+            <Bell size={16} style={{ color: "#fff" }} strokeWidth={1.75} />
+            {unread > 0 && (
+              <span style={{ position: "absolute", top: -4, right: -4, minWidth: 16, height: 16, borderRadius: 8, paddingInline: 3, background: "#ef4444", color: "#fff", fontSize: 9, fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center", border: "2px solid #0f0524" }}>
+                {unread > 9 ? "9+" : unread}
+              </span>
+            )}
+          </button>
         </header>
 
         <main className="flex-1 p-5" style={{ display: "flex", flexDirection: "column" }}>{children}</main>
