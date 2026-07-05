@@ -199,7 +199,7 @@ function PitchRadarResult() {
           </div>
         ))}
       </div>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+      <div className="grid grid-cols-1 sm:grid-cols-2" style={{ gap: 10 }}>
         <div style={{ padding: "10px 12px", borderRadius: 9, background: "rgba(16,185,129,0.07)", border: "1px solid rgba(16,185,129,0.18)" }}>
           <div style={{ fontSize: 9.5, color: "#10b981", fontWeight: 700, letterSpacing: "0.5px", marginBottom: 7 }}>POINTS FORTS</div>
           {["Marché B2B IA en croissance", "Fondateur 8 ans SaaS", "ARR 47k$ en pré-seed"].map((p) => (
@@ -255,7 +255,7 @@ function DemoModal({ onClose }: { onClose: () => void }) {
             </button>
           </div>
           {/* Tabs */}
-          <div style={{ display: "flex", gap: 6, position: "relative", zIndex: 1 }}>
+          <div style={{ display: "flex", gap: 6, position: "relative", zIndex: 1, flexWrap: "wrap" }}>
             {DEMO_TABS.map(({ id, label, icon: Icon }) => (
               <button key={id} onClick={() => switchTab(id)}
                 style={{ display: "flex", alignItems: "center", gap: 6, padding: "8px 16px", borderRadius: "8px 8px 0 0", background: tab === id ? "#0d0d1a" : "rgba(255,255,255,0.07)", border: tab === id ? "none" : "1px solid rgba(255,255,255,0.1)", borderBottom: "none", color: tab === id ? "#fff" : "rgba(255,255,255,0.45)", fontSize: 12.5, fontWeight: tab === id ? 700 : 400, cursor: "pointer", transition: "all 0.15s" }}>
@@ -320,7 +320,7 @@ function Hero() {
       <div style={{ position: "absolute", inset: 0, backgroundImage: "radial-gradient(rgba(255,255,255,0.028) 1px, transparent 1px)", backgroundSize: "32px 32px", pointerEvents: "none" }} />
 
       {/* Contenu centré */}
-      <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", textAlign: "center", padding: "100px 32px 48px", position: "relative", zIndex: 1 }}>
+      <div className="px-4 md:px-8" style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", textAlign: "center", paddingTop: 100, paddingBottom: 48, position: "relative", zIndex: 1 }}>
 
         {/* Badge */}
         <div style={{ display: "inline-flex", alignItems: "center", gap: 8, border: "0.5px solid rgba(139,92,246,0.35)", borderRadius: 20, padding: "5px 16px", marginBottom: 38, background: "rgba(139,92,246,0.07)" }}>
@@ -377,11 +377,10 @@ function Hero() {
 
       {/* Stats row — plancher du hero */}
       <div style={{ position: "relative", zIndex: 1, borderTop: "0.5px solid rgba(255,255,255,0.06)", background: "rgba(255,255,255,0.025)" }}>
-        <div style={{ maxWidth: 900, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(4, 1fr)" }}>
+        <div className="grid grid-cols-2 md:grid-cols-4" style={{ maxWidth: 900, margin: "0 auto" }}>
           {STATS.map(({ n, l, icon: Icon }, i) => (
-            <div key={l} style={{
+            <div key={l} className="stat-item" style={{
               padding: "24px 16px", textAlign: "center",
-              borderRight: i < 3 ? "0.5px solid rgba(255,255,255,0.05)" : "none",
             }}>
               <Icon size={13} style={{ color: "#5b21b6", marginBottom: 6, display: "block", margin: "0 auto 8px" }} strokeWidth={1.75} />
               <div style={{ fontSize: 22, fontWeight: 600, color: "#a78bfa", letterSpacing: "-0.5px" }}>{n}</div>
@@ -428,7 +427,7 @@ const AGENTS_DATA = [
 
 function AgentsSection() {
   return (
-    <section id="agents" style={{ background: "#06060f", padding: "90px 32px", borderTop: "0.5px solid rgba(255,255,255,0.04)" }}>
+    <section id="agents" className="px-4 md:px-8" style={{ background: "#06060f", paddingTop: 90, paddingBottom: 90, borderTop: "0.5px solid rgba(255,255,255,0.04)" }}>
       <div style={{ maxWidth: 1040, margin: "0 auto" }}>
 
         {/* Header */}
@@ -443,7 +442,7 @@ function AgentsSection() {
         </div>
 
         {/* Grid 2×2 */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 14 }}>
+        <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 14 }}>
           {AGENTS_DATA.map(({ icon: Icon, name, color, iconBg, tag, headline, desc, for: target }) => (
             <div key={name} style={{
               background: "#0c0c1a", border: "0.5px solid rgba(255,255,255,0.07)",
@@ -496,7 +495,7 @@ const STEPS = [
 
 function HowItWorks() {
   return (
-    <section style={{ background: "#08080f", padding: "90px 32px", borderTop: "0.5px solid rgba(255,255,255,0.04)" }}>
+    <section className="px-4 md:px-8" style={{ background: "#08080f", paddingTop: 90, paddingBottom: 90, borderTop: "0.5px solid rgba(255,255,255,0.04)" }}>
       <div style={{ maxWidth: 1040, margin: "0 auto" }}>
 
         <div style={{ textAlign: "center", marginBottom: 52 }}>
@@ -507,7 +506,7 @@ function HowItWorks() {
           <p style={{ fontSize: 15, color: "#475569", maxWidth: 400, margin: "0 auto", lineHeight: 1.75 }}>Pas de configuration complexe. <span translate="no" className="notranslate">VYXEN</span> est prêt en quelques minutes.</p>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 14 }}>
+        <div className="grid grid-cols-1 md:grid-cols-3" style={{ gap: 14 }}>
           {STEPS.map(({ n, title, desc, icon: Icon }) => (
             <div key={n} style={{ background: "#0c0c1a", border: "0.5px solid rgba(255,255,255,0.07)", borderRadius: 16, padding: "28px 24px" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 18 }}>
@@ -574,7 +573,7 @@ const PLANS = [
 
 function Pricing() {
   return (
-    <section id="tarifs" style={{ background: "#06060f", padding: "90px 32px", borderTop: "0.5px solid rgba(255,255,255,0.04)" }}>
+    <section id="tarifs" className="px-4 md:px-8" style={{ background: "#06060f", paddingTop: 90, paddingBottom: 90, borderTop: "0.5px solid rgba(255,255,255,0.04)" }}>
       <div style={{ maxWidth: 1040, margin: "0 auto" }}>
 
         <div style={{ textAlign: "center", marginBottom: 52 }}>
@@ -585,7 +584,7 @@ function Pricing() {
           <p style={{ fontSize: 15, color: "#475569" }}>Essai gratuit inclus — sans carte bancaire. Annulez à tout moment.</p>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 14, alignItems: "start" }}>
+        <div className="grid grid-cols-1 md:grid-cols-3" style={{ gap: 14, alignItems: "start" }}>
           {PLANS.map((plan) => (
             <div key={plan.name} style={{
               background: plan.bg,
@@ -656,7 +655,7 @@ function Pricing() {
 // ─── CTA FINAL ────────────────────────────────────────────────────────────────
 function CTAFinal() {
   return (
-    <section style={{ background: "#08080f", padding: "100px 32px", borderTop: "0.5px solid rgba(255,255,255,0.04)", position: "relative", overflow: "hidden" }}>
+    <section className="px-4 md:px-8" style={{ background: "#08080f", paddingTop: 100, paddingBottom: 100, borderTop: "0.5px solid rgba(255,255,255,0.04)", position: "relative", overflow: "hidden" }}>
       <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: 700, height: 400, borderRadius: "50%", background: "radial-gradient(ellipse, rgba(91,33,182,0.09) 0%, transparent 70%)", pointerEvents: "none" }} />
       <div style={{ maxWidth: 640, margin: "0 auto", textAlign: "center", position: "relative", zIndex: 1 }}>
         <h2 style={{ fontSize: "clamp(28px, 4vw, 48px)", fontWeight: 600, color: "#f1f5f9", letterSpacing: "-1px", marginBottom: 16, lineHeight: 1.12 }}>
@@ -696,9 +695,9 @@ function CTAFinal() {
 // ─── FOOTER ──────────────────────────────────────────────────────────────────
 function Footer() {
   return (
-    <footer id="apropos" style={{
+    <footer id="apropos" className="px-4 md:px-8" style={{
       background: "#06060f", borderTop: "0.5px solid rgba(255,255,255,0.06)",
-      padding: "32px 32px 24px",
+      paddingTop: 32, paddingBottom: 24,
     }}>
       <div style={{ maxWidth: 1040, margin: "0 auto" }}>
         <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", flexWrap: "wrap", gap: 24, marginBottom: 24 }}>
@@ -768,6 +767,11 @@ function Footer() {
 export default function HomePage() {
   return (
     <>
+      <style>{`
+        .stat-item { border-right: 0.5px solid rgba(255,255,255,0.05); }
+        .stat-item:last-child { border-right: none; }
+        @media (max-width: 640px) { .stat-item:nth-child(even) { border-right: none; } }
+      `}</style>
       <Navbar />
       <Hero />
       <AgentsSection />
