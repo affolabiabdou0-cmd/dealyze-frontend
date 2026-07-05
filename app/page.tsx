@@ -667,7 +667,7 @@ function CTAFinal() {
         </h2>
         <p style={{ fontSize: 15, color: "rgba(255,255,255,0.32)", marginBottom: 36, lineHeight: 1.85, maxWidth: 520, margin: "0 auto 36px" }}>
           PME : concluez vos deals 10× plus vite. Investisseurs : analysez chaque opportunité sans perdre en rigueur.
-          <br /><span translate="no" className="notranslate">VYXEN</span> s&apos;adapte à votre profil.
+          <br /><span translate="no" className="notranslate">VYXEN</span>{" "}s&apos;adapte à votre profil.
         </p>
         <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
           <Link href="/register" style={{
