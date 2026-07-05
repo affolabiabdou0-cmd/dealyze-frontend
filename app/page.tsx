@@ -746,7 +746,7 @@ function Footer() {
         <div style={{ height: "0.5px", background: "rgba(255,255,255,0.05)", margin: "0 0 16px" }} />
         <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 8, alignItems: "center" }}>
           <span style={{ display: "inline-flex", alignItems: "baseline", gap: 6, flexWrap: "wrap" }}>
-            <span style={{ fontSize: 11, color: "#1e293b" }}>© 2026 <span translate="no" className="notranslate">VYXEN</span> · Turn every deal into done.</span>
+            <span style={{ fontSize: 11, color: "#1e293b" }}>© 2026 <span translate="no" className="notranslate">VYXEN</span> · Tous droits réservés.</span>
             <span style={{ fontSize: 11, color: "#1e293b" }}>·</span>
             <span translate="no" className="notranslate" style={{ position: "relative", display: "inline-block" }}>
               <span style={{ fontSize: 11, fontWeight: 500, color: "#c8c8d0" }}>f4ntom_kox</span>
