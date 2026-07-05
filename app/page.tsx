@@ -746,12 +746,13 @@ function Footer() {
         <div style={{ height: "0.5px", background: "rgba(255,255,255,0.06)", margin: "0 0 16px" }} />
         <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 8, alignItems: "center" }}>
           <span style={{ display: "inline-flex", alignItems: "baseline", gap: 6, flexWrap: "wrap" }}>
+            <span style={{ fontSize: 11, color: "#475569" }}>© 2026 <span translate="no" className="notranslate">VYXEN</span> · Tous droits réservés.</span>
+            <span style={{ fontSize: 11, color: "#475569" }}>·</span>
             <span translate="no" className="notranslate" style={{ position: "relative", display: "inline-block" }}>
               <span style={{ fontSize: 11, fontWeight: 500, color: "#c8c8d0" }}>f4ntom_kox</span>
               <span style={{ position: "absolute", bottom: -1, left: 0, right: 0, height: 1, background: "linear-gradient(90deg, #7c3aed, transparent)", display: "block" }} />
             </span>
-            <span style={{ fontSize: 11, color: "#475569" }}>·</span>
-            <span style={{ fontSize: 11, color: "#475569" }}>© 2026 <span translate="no" className="notranslate">VYXEN</span> · Tous droits réservés.</span>
+            <span style={{ fontSize: 11, color: "#475569" }}>· Droits d&apos;auteur réservés.</span>
           </span>
           <div style={{ display: "flex", gap: 16 }}>
             <Link href="/terms"   style={{ fontSize: 11, color: "#475569", textDecoration: "none" }}>CGU</Link>
