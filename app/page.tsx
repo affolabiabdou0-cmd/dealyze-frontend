@@ -449,6 +449,18 @@ function Pricing() {
             <span key={t} style={{ fontSize: 11.5, color: "#334155" }}>· {t}</span>
           ))}
         </div>
+
+        <div style={{ marginTop: 13, textAlign: "center" }}>
+          <span style={{ fontSize: 11.5, color: "#334155" }}>Développé par </span>
+          <span style={{ position: "relative", display: "inline-block" }}>
+            <span style={{ fontSize: 11.5, fontWeight: 500, color: "#c8c8d0" }}>f4ntom_kox</span>
+            <span style={{
+              position: "absolute", bottom: -2, left: 0, right: 0, height: 1,
+              background: "linear-gradient(90deg, #7c3aed, transparent)",
+              display: "block",
+            }} />
+          </span>
+        </div>
       </div>
     </section>
   );
