@@ -5,7 +5,7 @@ import Link from "next/link";
 import {
   FileText, Mail, BarChart3, Shield,
   Check, ArrowRight, Menu, X as CloseIcon, ChevronDown,
-  Zap, Clock, Users,
+  Zap, Clock, Users, Play,
 } from "lucide-react";
 
 // ─── NAVBAR ───────────────────────────────────────────────────────────────────
@@ -104,6 +104,197 @@ function Navbar() {
   );
 }
 
+// ─── DEMO MODAL ──────────────────────────────────────────────────────────────
+type DemoTab = "deal_draft" | "smart_chase" | "pitch_radar";
+
+const DEMO_TABS: { id: DemoTab; label: string; icon: React.ElementType }[] = [
+  { id: "deal_draft",  label: "Deal Draft",  icon: FileText  },
+  { id: "smart_chase", label: "Smart Chase", icon: Mail      },
+  { id: "pitch_radar", label: "Pitch Radar", icon: BarChart3 },
+];
+
+function DealDraftResult() {
+  return (
+    <div style={{ fontSize: 12.5, lineHeight: 1.8, color: "#c8d3e0" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 18, padding: "10px 14px", background: "rgba(124,58,237,0.1)", borderRadius: 10, border: "1px solid rgba(124,58,237,0.2)" }}>
+        <FileText size={13} style={{ color: "#a78bfa", flexShrink: 0 }} strokeWidth={1.75} />
+        <span style={{ fontSize: 11, color: "#a78bfa", fontWeight: 600, letterSpacing: "0.5px" }}>DEAL DRAFT · Réf. DD-2026-0847 · Généré en 24 secondes</span>
+      </div>
+      {([
+        ["CLIENT", "TechVision SAS · M. Karim Diallo, Directeur Général"],
+        ["SERVICE", "Développement plateforme e-commerce B2B sur-mesure\n• Catalogue multi-fournisseurs · Tunnel de commande optimisé\n• Dashboard analytique temps réel"],
+        ["INVESTISSEMENT", "28 000 € HT\nRépartition : 40 % démarrage · 40 % livraison · 20 % recette"],
+        ["PLANNING", "Démarrage : 21 juil. 2026  ·  Livraison v1 : 5 sept. 2026  ·  Recette : 21 sept. 2026"],
+        ["ARGUMENTS CLÉS", "✦ Spécialisés e-commerce B2B depuis 2019  ·  47 plateformes livrées\n✦ Équipe dédiée : PM + Tech Lead + Designer UX  ·  Délais garantis contractuellement"],
+        ["VALIDITÉ", "30 jours à compter de la date d'émission. Retourner ce document contresigné pour démarrer."],
+      ] as [string, string][]).map(([key, val]) => (
+        <div key={key} style={{ marginBottom: 13 }}>
+          <div style={{ color: "#7c3aed", fontSize: 9.5, fontWeight: 700, letterSpacing: "1.5px", textTransform: "uppercase", marginBottom: 3 }}>{key}</div>
+          <div style={{ color: "#d0dae8", whiteSpace: "pre-line" }}>{val}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function SmartChaseResult() {
+  return (
+    <div style={{ fontSize: 13, lineHeight: 1.75, color: "#c8d3e0" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 18, padding: "10px 14px", background: "rgba(249,115,22,0.09)", borderRadius: 10, border: "1px solid rgba(249,115,22,0.2)" }}>
+        <Mail size={13} style={{ color: "#fb923c", flexShrink: 0 }} strokeWidth={1.75} />
+        <span style={{ fontSize: 11, color: "#fb923c", fontWeight: 600, letterSpacing: "0.5px" }}>SMART CHASE · Profil : Bon payeur historique · Généré en 18 secondes</span>
+      </div>
+      {([ ["De", "vous@entreprise.com"], ["À", "k.diallo@techvision.fr"], ["Objet", "Rappel — Facture FAC-2026-0312 · 28 000 € · Échéance dépassée"] ] as [string, string][]).map(([k, v]) => (
+        <div key={k} style={{ display: "flex", gap: 12, marginBottom: 6, paddingBottom: 6, borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+          <span style={{ color: "#475569", minWidth: 48, fontWeight: 600, fontSize: 11, flexShrink: 0 }}>{k}</span>
+          <span style={{ color: "#94a3b8", fontSize: 12 }}>{v}</span>
+        </div>
+      ))}
+      <div style={{ marginTop: 16, color: "#d0dae8", whiteSpace: "pre-line", fontSize: 12.5 }}>{`Monsieur Diallo,
+
+Je me permets de revenir vers vous concernant notre facture FAC-2026-0312 émise le 15 juin pour un montant de 28 000 € HT, arrivée à échéance le 15 juillet 2026.
+
+Au vu de l'excellente relation que nous entretenons, je reste convaincu qu'il s'agit d'un simple oubli de traitement. Pourriez-vous me confirmer la date de virement prévue, ou me faire part de toute difficulté afin que nous trouvions ensemble la meilleure solution ?
+
+Sans retour sous 72 heures, je serai contraint de transmettre le dossier à notre service recouvrement.
+
+Bien cordialement,`}</div>
+    </div>
+  );
+}
+
+function PitchRadarResult() {
+  const scores = [
+    { label: "Marché adressable", s: 8.2 },
+    { label: "Équipe fondatrice",  s: 7.1 },
+    { label: "Différenciation",   s: 8.0 },
+    { label: "Modèle économique", s: 6.5 },
+    { label: "Traction",          s: 5.8 },
+    { label: "Scalabilité",       s: 7.8 },
+  ];
+  return (
+    <div style={{ fontSize: 13, color: "#c8d3e0" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 18, padding: "10px 14px", background: "rgba(6,182,212,0.09)", borderRadius: 10, border: "1px solid rgba(6,182,212,0.2)" }}>
+        <BarChart3 size={13} style={{ color: "#22d3ee", flexShrink: 0 }} strokeWidth={1.75} />
+        <span style={{ fontSize: 11, color: "#22d3ee", fontWeight: 600, letterSpacing: "0.5px" }}>PITCH RADAR · TechVision AI · Généré en 31 secondes</span>
+      </div>
+      <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 18 }}>
+        <div style={{ width: 68, height: 68, borderRadius: "50%", background: "rgba(6,182,212,0.1)", border: "2px solid #06b6d4", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+          <span style={{ fontSize: 22, fontWeight: 800, color: "#22d3ee", lineHeight: 1 }}>7.4</span>
+          <span style={{ fontSize: 9, color: "rgba(255,255,255,0.3)" }}>/10</span>
+        </div>
+        <div>
+          <div style={{ fontSize: 13.5, fontWeight: 700, color: "#e2e8f0", marginBottom: 3 }}>Score global VC</div>
+          <div style={{ fontSize: 12, color: "#64748b", lineHeight: 1.5 }}>Pitch solide avec marges de progression sur la traction et le moat technologique.</div>
+        </div>
+      </div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 16 }}>
+        {scores.map(({ label, s }) => (
+          <div key={label} style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <span style={{ fontSize: 11, color: "#64748b", minWidth: 148, flexShrink: 0 }}>{label}</span>
+            <div style={{ flex: 1, height: 5, borderRadius: 4, background: "rgba(255,255,255,0.06)", overflow: "hidden" }}>
+              <div style={{ height: "100%", width: `${s * 10}%`, borderRadius: 4, background: "linear-gradient(90deg, #0891b2, #22d3ee)" }} />
+            </div>
+            <span style={{ fontSize: 11, color: "#22d3ee", fontWeight: 700, minWidth: 28, textAlign: "right" }}>{s}</span>
+          </div>
+        ))}
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+        <div style={{ padding: "10px 12px", borderRadius: 9, background: "rgba(16,185,129,0.07)", border: "1px solid rgba(16,185,129,0.18)" }}>
+          <div style={{ fontSize: 9.5, color: "#10b981", fontWeight: 700, letterSpacing: "0.5px", marginBottom: 7 }}>POINTS FORTS</div>
+          {["Marché B2B IA en croissance", "Fondateur 8 ans SaaS", "ARR 47k$ en pré-seed"].map((p) => (
+            <div key={p} style={{ fontSize: 11, color: "#6ee7b7", marginBottom: 3 }}>+ {p}</div>
+          ))}
+        </div>
+        <div style={{ padding: "10px 12px", borderRadius: 9, background: "rgba(239,68,68,0.07)", border: "1px solid rgba(239,68,68,0.16)" }}>
+          <div style={{ fontSize: 9.5, color: "#ef4444", fontWeight: 700, letterSpacing: "0.5px", marginBottom: 7 }}>ALERTES</div>
+          {["Moat technique à définir", "Concurrence bien financée", "Traction encore limitée"].map((p) => (
+            <div key={p} style={{ fontSize: 11, color: "#fca5a5", marginBottom: 3 }}>⚠ {p}</div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function DemoModal({ onClose }: { onClose: () => void }) {
+  const [tab, setTab] = useState<DemoTab>("deal_draft");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 950);
+    return () => clearTimeout(t);
+  }, []);
+
+  function switchTab(next: DemoTab) {
+    if (next === tab) return;
+    setLoading(true);
+    setTimeout(() => { setTab(next); setLoading(false); }, 750);
+  }
+
+  return (
+    <div style={{ position: "fixed", inset: 0, zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center", padding: "16px" }}
+      onClick={onClose}>
+      <div style={{ position: "absolute", inset: 0, background: "rgba(6,6,15,0.88)", backdropFilter: "blur(14px)" }} />
+      <div style={{ position: "relative", width: "100%", maxWidth: 740, borderRadius: 22, overflow: "hidden", boxShadow: "0 40px 100px rgba(91,31,200,0.38), 0 8px 32px rgba(0,0,0,0.55)", maxHeight: "90vh", display: "flex", flexDirection: "column" }}
+        onClick={(e) => e.stopPropagation()}>
+
+        {/* Header gradient */}
+        <div style={{ background: "linear-gradient(135deg, #1e0547 0%, #3b0d8c 35%, #5b1fc8 68%, #7c3aed 100%)", padding: "22px 28px 0", position: "relative", overflow: "hidden", flexShrink: 0 }}>
+          <div style={{ position: "absolute", top: -50, right: -30, width: 200, height: 200, borderRadius: "50%", background: "rgba(139,92,246,0.35)", filter: "blur(65px)", pointerEvents: "none" }} />
+          <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", position: "relative", zIndex: 1, marginBottom: 18 }}>
+            <div>
+              <div style={{ fontSize: 10, letterSpacing: "2px", color: "rgba(255,255,255,0.4)", textTransform: "uppercase", fontWeight: 600, marginBottom: 5 }}>Démonstration live</div>
+              <h3 style={{ fontSize: 20, fontWeight: 800, color: "#fff", letterSpacing: "-0.5px", marginBottom: 3 }}>VYXEN en action</h3>
+              <p style={{ fontSize: 12.5, color: "rgba(255,255,255,0.55)" }}>Résultats réels générés par Gemini 2.5 Flash · Moins de 30 secondes</p>
+            </div>
+            <button onClick={onClose} style={{ width: 34, height: 34, borderRadius: "50%", background: "rgba(255,255,255,0.14)", backdropFilter: "blur(8px)", border: "1px solid rgba(255,255,255,0.22)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0, transition: "background 0.15s" }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.26)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.14)"; }}>
+              <CloseIcon size={14} style={{ color: "#fff" }} />
+            </button>
+          </div>
+          {/* Tabs */}
+          <div style={{ display: "flex", gap: 6, position: "relative", zIndex: 1 }}>
+            {DEMO_TABS.map(({ id, label, icon: Icon }) => (
+              <button key={id} onClick={() => switchTab(id)}
+                style={{ display: "flex", alignItems: "center", gap: 6, padding: "8px 16px", borderRadius: "8px 8px 0 0", background: tab === id ? "#0d0d1a" : "rgba(255,255,255,0.07)", border: tab === id ? "none" : "1px solid rgba(255,255,255,0.1)", borderBottom: "none", color: tab === id ? "#fff" : "rgba(255,255,255,0.45)", fontSize: 12.5, fontWeight: tab === id ? 700 : 400, cursor: "pointer", transition: "all 0.15s" }}>
+                <Icon size={13} strokeWidth={1.75} />
+                {label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Content */}
+        <div style={{ background: "#0d0d1a", flex: 1, overflowY: "auto", padding: "22px 28px", minHeight: 340 }}>
+          {loading ? (
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: 320, gap: 16 }}>
+              <style>{`@keyframes vxbounce{0%,80%,100%{transform:translateY(0);opacity:0.35}40%{transform:translateY(-10px);opacity:1}}`}</style>
+              <div style={{ display: "flex", gap: 8 }}>
+                {[0, 1, 2].map((i) => (
+                  <div key={i} style={{ width: 8, height: 8, borderRadius: "50%", background: "#7c3aed", animation: `vxbounce 1.2s ease-in-out ${i * 0.2}s infinite` }} />
+                ))}
+              </div>
+              <p style={{ fontSize: 13, color: "rgba(255,255,255,0.3)", letterSpacing: "0.3px" }}>Gemini 2.5 Flash génère le résultat…</p>
+            </div>
+          ) : tab === "deal_draft" ? <DealDraftResult />
+            : tab === "smart_chase" ? <SmartChaseResult />
+            : <PitchRadarResult />}
+        </div>
+
+        {/* Footer */}
+        <div style={{ background: "#090910", borderTop: "1px solid rgba(255,255,255,0.06)", padding: "14px 28px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, flexWrap: "wrap", flexShrink: 0 }}>
+          <p style={{ fontSize: 12, color: "rgba(255,255,255,0.3)" }}>Essai gratuit 14 jours · Sans carte bancaire</p>
+          <Link href="/register" onClick={onClose} style={{ display: "inline-flex", alignItems: "center", gap: 7, background: "linear-gradient(135deg, #5b21b6, #7c3aed)", color: "#fff", padding: "10px 22px", borderRadius: 10, fontSize: 13, fontWeight: 700, textDecoration: "none", boxShadow: "0 4px 18px rgba(91,31,200,0.38)" }}>
+            Essayer gratuitement <ArrowRight size={14} />
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ─── HERO ─────────────────────────────────────────────────────────────────────
 const STATS = [
   { n: "2 min",  l: "Devis généré",   icon: Zap   },
@@ -113,11 +304,14 @@ const STATS = [
 ];
 
 function Hero() {
+  const [demoOpen, setDemoOpen] = useState(false);
   return (
     <section style={{
       minHeight: "100vh", display: "flex", flexDirection: "column",
       background: "#06060f", position: "relative", overflow: "hidden",
     }}>
+      {demoOpen && <DemoModal onClose={() => setDemoOpen(false)} />}
+
       {/* Glows décoratifs */}
       <div style={{ position: "absolute", top: "15%", left: "50%", transform: "translateX(-50%)", width: 900, height: 700, borderRadius: "50%", background: "radial-gradient(ellipse, rgba(124,58,237,0.11) 0%, transparent 65%)", pointerEvents: "none" }} />
       <div style={{ position: "absolute", bottom: 0, right: "8%", width: 600, height: 500, borderRadius: "50%", background: "radial-gradient(ellipse, rgba(34,211,238,0.06) 0%, transparent 68%)", pointerEvents: "none" }} />
@@ -161,14 +355,18 @@ function Hero() {
           }}>
             Essai gratuit 14 jours <ArrowRight size={16} />
           </Link>
-          <a href="#agents" style={{
+          <button onClick={() => setDemoOpen(true)} style={{
             display: "inline-flex", alignItems: "center", gap: 8,
-            background: "rgba(255,255,255,0.04)", color: "rgba(255,255,255,0.52)", padding: "13px 30px", borderRadius: 12,
-            fontSize: 14.5, fontWeight: 500, textDecoration: "none",
-            border: "0.5px solid rgba(255,255,255,0.12)",
-          }}>
-            Voir une démo <ChevronDown size={16} />
-          </a>
+            background: "rgba(255,255,255,0.04)", color: "rgba(255,255,255,0.6)", padding: "13px 30px", borderRadius: 12,
+            fontSize: 14.5, fontWeight: 500, border: "0.5px solid rgba(255,255,255,0.14)",
+            cursor: "pointer", transition: "all 0.15s",
+          }}
+            onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.08)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.25)"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.04)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.14)"; }}
+          >
+            <Play size={15} strokeWidth={2} />
+            Voir une démo
+          </button>
         </div>
 
         {/* Note */}
