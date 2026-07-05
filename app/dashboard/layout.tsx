@@ -105,7 +105,7 @@ function Sidebar({ user, onClose }: { user: User | null; onClose?: () => void })
         <Link href="/dashboard" style={{ textDecoration: "none", display: "block" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 5 }}>
             <Zap size={18} style={{ color: "#8b5cf6", flexShrink: 0 }} strokeWidth={2.5} />
-            <span style={{
+            <span translate="no" className="notranslate" style={{
               background: "linear-gradient(135deg, #8b5cf6, #22d3ee)",
               WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
               fontSize: 30, fontWeight: 800, letterSpacing: "5px", display: "inline-block", lineHeight: 1,
@@ -523,7 +523,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <main className="flex-1 p-5" style={{ display: "flex", flexDirection: "column" }}>{children}</main>
 
         <footer className="px-7 py-3 flex items-center justify-center" style={{ borderTop: "1px solid #e9eef5", background: "rgba(255,255,255,0.8)" }}>
-          <span style={{ fontSize: 11, color: "#94a3b8" }}>VYXEN · Gemini 2.5 Flash · XPRIZE AI Hackathon 2026</span>
+          <span style={{ fontSize: 11, color: "#94a3b8" }}><span translate="no" className="notranslate">VYXEN</span> · Gemini 2.5 Flash · XPRIZE AI Hackathon 2026</span>
         </footer>
       </div>
     </div>

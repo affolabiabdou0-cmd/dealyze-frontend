@@ -31,7 +31,7 @@ function Navbar() {
 
         {/* ── GAUCHE : Logo ── */}
         <a href="#" style={{ textDecoration: "none", flexShrink: 0 }}>
-          <span style={{
+          <span translate="no" className="notranslate" style={{
             background: "linear-gradient(135deg, #c4b5fd, #67e8f9)",
             WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
             fontSize: 28, fontWeight: 800, letterSpacing: "6px", display: "inline-flex", alignItems: "center",
@@ -245,7 +245,7 @@ function DemoModal({ onClose }: { onClose: () => void }) {
           <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", position: "relative", zIndex: 1, marginBottom: 18 }}>
             <div>
               <div style={{ fontSize: 10, letterSpacing: "2px", color: "rgba(255,255,255,0.4)", textTransform: "uppercase", fontWeight: 600, marginBottom: 5 }}>Démonstration live</div>
-              <h3 style={{ fontSize: 20, fontWeight: 800, color: "#fff", letterSpacing: "-0.5px", marginBottom: 3 }}>VYXEN en action</h3>
+              <h3 style={{ fontSize: 20, fontWeight: 800, color: "#fff", letterSpacing: "-0.5px", marginBottom: 3 }}><span translate="no" className="notranslate">VYXEN</span> en action</h3>
               <p style={{ fontSize: 12.5, color: "rgba(255,255,255,0.55)" }}>Résultats réels générés par Gemini 2.5 Flash · Moins de 30 secondes</p>
             </div>
             <button onClick={onClose} style={{ width: 34, height: 34, borderRadius: "50%", background: "rgba(255,255,255,0.14)", backdropFilter: "blur(8px)", border: "1px solid rgba(255,255,255,0.22)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", flexShrink: 0, transition: "background 0.15s" }}
@@ -504,7 +504,7 @@ function HowItWorks() {
             Comment ça marche
           </div>
           <h2 style={{ fontSize: "clamp(24px, 3.5vw, 38px)", fontWeight: 600, color: "#f1f5f9", marginBottom: 12, letterSpacing: "-0.8px" }}>Opérationnel en 3 étapes.</h2>
-          <p style={{ fontSize: 15, color: "#475569", maxWidth: 400, margin: "0 auto", lineHeight: 1.75 }}>Pas de configuration complexe. VYXEN est prêt en quelques minutes.</p>
+          <p style={{ fontSize: 15, color: "#475569", maxWidth: 400, margin: "0 auto", lineHeight: 1.75 }}>Pas de configuration complexe. <span translate="no" className="notranslate">VYXEN</span> est prêt en quelques minutes.</p>
         </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 14 }}>
@@ -667,7 +667,7 @@ function CTAFinal() {
         </h2>
         <p style={{ fontSize: 15, color: "rgba(255,255,255,0.32)", marginBottom: 36, lineHeight: 1.85, maxWidth: 520, margin: "0 auto 36px" }}>
           PME : concluez vos deals 10× plus vite. Investisseurs : analysez chaque opportunité sans perdre en rigueur.
-          <br />VYXEN s&apos;adapte à votre profil.
+          <br /><span translate="no" className="notranslate">VYXEN</span> s&apos;adapte à votre profil.
         </p>
         <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
           <Link href="/register" style={{
@@ -705,7 +705,7 @@ function Footer() {
 
           {/* Logo + about */}
           <div>
-            <span style={{
+            <span translate="no" className="notranslate" style={{
               background: "linear-gradient(135deg, #c4b5fd, #67e8f9)",
               WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
               fontSize: 18, fontWeight: 800, letterSpacing: "4px", display: "inline-flex", alignItems: "center", marginBottom: 10,
@@ -746,10 +746,9 @@ function Footer() {
         <div style={{ height: "0.5px", background: "rgba(255,255,255,0.05)", margin: "0 0 16px" }} />
         <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 8, alignItems: "center" }}>
           <span style={{ display: "inline-flex", alignItems: "baseline", gap: 6, flexWrap: "wrap" }}>
-            <span style={{ fontSize: 11, color: "#1e293b" }}>© 2026 VYXEN · Turn every deal into done.</span>
+            <span style={{ fontSize: 11, color: "#1e293b" }}>© 2026 <span translate="no" className="notranslate">VYXEN</span> · Turn every deal into done.</span>
             <span style={{ fontSize: 11, color: "#1e293b" }}>·</span>
-            <span style={{ fontSize: 11, color: "#1e293b" }}>Développé par</span>
-            <span style={{ position: "relative", display: "inline-block" }}>
+            <span translate="no" className="notranslate" style={{ position: "relative", display: "inline-block" }}>
               <span style={{ fontSize: 11, fontWeight: 500, color: "#c8c8d0" }}>f4ntom_kox</span>
               <span style={{ position: "absolute", bottom: -1, left: 0, right: 0, height: 1, background: "linear-gradient(90deg, #7c3aed, transparent)", display: "block" }} />
             </span>
