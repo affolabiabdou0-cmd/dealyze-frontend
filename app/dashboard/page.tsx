@@ -10,8 +10,9 @@ import {
 } from "lucide-react";
 import { api } from "../lib/api";
 import { getUser } from "../lib/auth";
-import { getActivity, relativeTime, ACTIVITY_META } from "../lib/activity";
+import { getActivity, countUnread, relativeTime, ACTIVITY_META } from "../lib/activity";
 import type { ActivityItem } from "../lib/activity";
+import PageHeader from "../components/PageHeader";
 
 interface AgentQuota { utilisé: number; limite: number | "illimité"; restant: number | "illimité"; }
 interface QuotaResponse {
@@ -121,9 +122,7 @@ export default function DashboardPage() {
   const firstName = user?.full_name?.split(" ")[0] ?? "—";
   const planKey   = quota?.plan ?? user?.plan ?? "free_trial";
   const planLabel = PLAN_LABELS[planKey] ?? planKey;
-
-  const today = new Date().toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
-  const todayCapital = today.charAt(0).toUpperCase() + today.slice(1);
+  const unread    = countUnread();
 
   return (
     <>
@@ -131,46 +130,14 @@ export default function DashboardPage() {
 
       <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
 
-        {/* ══════════════════════════════════════
-            WELCOME BANNER
-        ══════════════════════════════════════ */}
-        <div style={{
-          background: "linear-gradient(135deg, #0b1526 0%, #0f2040 50%, #0b1a35 100%)",
-          borderRadius: 16, padding: "16px 24px",
-          position: "relative", overflow: "hidden",
-          boxShadow: "0 4px 20px rgba(11,21,38,0.16), 0 1px 0 rgba(255,255,255,0.06) inset",
-        }}>
-          {/* Decorative orbs */}
-          <div style={{ position: "absolute", top: -30, right: 40, width: 160, height: 160, borderRadius: "50%", background: "radial-gradient(circle, rgba(124,58,237,0.15) 0%, transparent 70%)" }} />
-          <div style={{ position: "absolute", top: 10, right: 20, width: 60, height: 60, borderRadius: "50%", background: "rgba(167,139,250,0.08)", border: "1px solid rgba(167,139,250,0.12)" }} />
-
-          <div style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>
-            <div>
-              <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6 }}>
-                <Calendar size={11} style={{ color: "rgba(255,255,255,0.35)" }} strokeWidth={1.75} />
-                <span style={{ fontSize: 11, color: "rgba(255,255,255,0.35)", letterSpacing: "0.02em" }}>{todayCapital}</span>
-              </div>
-              <h2 style={{ fontSize: 22, fontWeight: 800, color: "#fff", letterSpacing: "-0.5px", lineHeight: 1.2, marginBottom: 0 }}>
-                Bonjour,{" "}
-                <span style={{ background: "linear-gradient(135deg, #a78bfa, #60a5fa)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-                  {firstName}
-                </span>{" "}
-                <span style={{ fontSize: 14, fontWeight: 400, color: "rgba(255,255,255,0.38)" }}>— vos 4 agents sont opérationnels.</span>
-              </h2>
-            </div>
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <div style={{ padding: "6px 14px", background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 10, display: "flex", alignItems: "center", gap: 7 }}>
-                <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#10b981" }} />
-                <span style={{ fontSize: 11.5, color: "rgba(255,255,255,0.5)" }}>Plan</span>
-                <span style={{ fontSize: 11.5, color: "#a78bfa", fontWeight: 700 }}>{planLabel}</span>
-              </div>
-              <div style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 10.5, color: "rgba(255,255,255,0.22)" }}>
-                <Sparkles size={9} strokeWidth={1.5} />
-                Gemini 2.5 Flash
-              </div>
-            </div>
-          </div>
-        </div>
+        <PageHeader
+          title="Tableau de bord"
+          subtitle="Vue d'ensemble de votre activité"
+          greetingName={firstName}
+          agentStatus="vos 4 agents sont opérationnels"
+          plan={planKey}
+          notificationCount={unread}
+        />
 
         {/* ══════════════════════════════════════
             STAT CARDS

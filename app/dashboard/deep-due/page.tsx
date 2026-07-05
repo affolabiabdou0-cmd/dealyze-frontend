@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Shield, Copy, Check, AlertCircle, Sparkles, Download, User, Building2, AlertTriangle, CheckCircle2, XCircle, FileSearch } from "lucide-react";
 import { api } from "../../lib/api";
 import { addActivity } from "../../lib/activity";
+import PageHeader from "../../components/PageHeader";
 
 interface RiskItem { level: string; description: string; }
 interface FounderProfile { resume: string; experience: string; reputation: string; signaux_positifs: string[]; signaux_negatifs: string[]; }
@@ -189,15 +190,12 @@ ${result.risques_identifies?.length ? `<div class="section-title">Risques identi
     <div className="w-full">
       <style>{ANIM_STYLE}</style>
 
-      <div className="flex items-center gap-4 mb-6">
-        <div style={{ width: 52, height: 52, borderRadius: 14, background: "#f0fdf4", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, boxShadow: "0 4px 16px rgba(52,211,153,0.24)" }}>
-          <Shield size={26} style={{ color: COLOR }} strokeWidth={1.75} />
-        </div>
-        <div>
-          <h2 style={{ fontSize: 24, fontWeight: 800, color: "#0f172a", marginBottom: 3, letterSpacing: "-0.5px" }}>Deep Due</h2>
-          <p style={{ fontSize: 13.5, color: "#64748b" }}>Due diligence IA complète — profil fondateur, analyse concurrentielle et cartographie des risques</p>
-        </div>
-      </div>
+      <PageHeader
+        title="Deep Due"
+        subtitle="Due diligence IA complète — profil fondateur, analyse concurrentielle et cartographie des risques"
+        accentColor={COLOR}
+        icon={<Shield size={22} style={{ color: COLOR }} strokeWidth={1.75} />}
+      />
 
       <div className={result ? "block" : "grid lg:grid-cols-2 gap-6"}>
         {/* FORM */}

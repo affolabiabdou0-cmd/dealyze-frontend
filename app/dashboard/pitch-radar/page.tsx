@@ -4,6 +4,7 @@ import { useState } from "react";
 import { BarChart3, Copy, Check, AlertCircle, Sparkles, Upload, Download, TrendingUp, AlertTriangle, HelpCircle, Star } from "lucide-react";
 import { api } from "../../lib/api";
 import { addActivity } from "../../lib/activity";
+import PageHeader from "../../components/PageHeader";
 
 interface CriterionScore { key: string; label: string; score: number; weight: number; note: string; }
 interface PitchRadarResult {
@@ -202,15 +203,12 @@ h1{font-size:26px;font-weight:800;color:#1a1a2e;letter-spacing:-0.5px;margin-bot
     <div className="w-full">
       <style>{ANIM_STYLE}</style>
 
-      <div className="flex items-center gap-4 mb-6">
-        <div style={{ width: 52, height: 52, borderRadius: 14, background: "#ecfeff", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, boxShadow: "0 4px 16px rgba(34,211,238,0.22)" }}>
-          <BarChart3 size={26} style={{ color: COLOR }} strokeWidth={1.75} />
-        </div>
-        <div>
-          <h2 style={{ fontSize: 24, fontWeight: 800, color: "#0f172a", marginBottom: 3, letterSpacing: "-0.5px" }}>Pitch Radar</h2>
-          <p style={{ fontSize: 13.5, color: "#64748b" }}>Notation IA multicritère d'un pitch deck · Score VC · Forces & alertes · Recommandation investisseur</p>
-        </div>
-      </div>
+      <PageHeader
+        title="Pitch Radar"
+        subtitle="Notation IA multicritère d'un pitch deck · Score VC · Forces & alertes · Recommandation investisseur"
+        accentColor={COLOR}
+        icon={<BarChart3 size={22} style={{ color: COLOR }} strokeWidth={1.75} />}
+      />
 
       <div className={result ? "block" : "grid lg:grid-cols-2 gap-6"}>
         {/* FORM */}

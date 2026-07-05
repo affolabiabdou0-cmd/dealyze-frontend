@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { CreditCard, Check, ArrowRight, Zap, Star, FileText, Mail, BarChart3, Shield, Clock, Receipt, CheckCircle, XCircle } from "lucide-react";
 import { getUser } from "../../lib/auth";
 import { api } from "../../lib/api";
+import PageHeader from "../../components/PageHeader";
 
 const PLANS = [
   {
@@ -161,6 +162,14 @@ export default function BillingPage() {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", flex: 1, gap: 14 }}>
+
+      <PageHeader
+        title="Facturation"
+        subtitle="Gérez votre abonnement et suivez l'utilisation de vos agents IA"
+        accentColor="#7c3aed"
+        icon={<CreditCard size={22} style={{ color: "#7c3aed" }} strokeWidth={1.75} />}
+        plan={currentPlan}
+      />
 
       {/* ── Toast ── */}
       {toast && (

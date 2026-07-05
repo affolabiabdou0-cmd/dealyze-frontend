@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Mail, Copy, Check, AlertCircle, Sparkles, Calendar, Download, Building2, Wallet, Clock, AlertTriangle, TrendingUp, User } from "lucide-react";
 import { api } from "../../lib/api";
 import { addActivity } from "../../lib/activity";
+import PageHeader from "../../components/PageHeader";
 
 interface SmartChaseResult {
   chase_id: string; invoice_id: string; client_name: string; amount_display: string;
@@ -164,15 +165,12 @@ ${result.next_action_date ? `<div class="next-box"><span style="font-size:18px">
     <div className="w-full">
       <style>{ANIM_STYLE}</style>
 
-      <div className="flex items-center gap-4 mb-6">
-        <div style={{ width: 52, height: 52, borderRadius: 14, background: "#fff7ed", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, boxShadow: "0 4px 16px rgba(251,146,60,0.24)" }}>
-          <Mail size={26} style={{ color: COLOR }} strokeWidth={1.75} />
-        </div>
-        <div>
-          <h2 style={{ fontSize: 24, fontWeight: 800, color: "#0f172a", marginBottom: 3, letterSpacing: "-0.5px" }}>Smart Chase</h2>
-          <p style={{ fontSize: 13.5, color: "#64748b" }}>Transformez vos impayés en paiements avec des relances IA calibrées au profil de chaque client</p>
-        </div>
-      </div>
+      <PageHeader
+        title="Smart Chase"
+        subtitle="Transformez vos impayés en paiements avec des relances IA calibrées au profil de chaque client"
+        accentColor={COLOR}
+        icon={<Mail size={22} style={{ color: COLOR }} strokeWidth={1.75} />}
+      />
 
       <div className={result ? "block" : "grid lg:grid-cols-2 gap-6"}>
         {/* FORM */}

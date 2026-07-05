@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { User, Lock, Info, AlertTriangle, Check, AlertCircle, Copy, CheckCircle, Eye, EyeOff } from "lucide-react";
+import { User, Lock, Info, AlertTriangle, Check, AlertCircle, Copy, CheckCircle, Eye, EyeOff, Settings } from "lucide-react";
 import { getUser, clearAuth } from "../../lib/auth";
 import { api } from "../../lib/api";
 import { useRouter } from "next/navigation";
+import PageHeader from "../../components/PageHeader";
 
 const SECTIONS = [
   { id: "profil",   label: "Profil",        icon: User         },
@@ -121,6 +122,12 @@ export default function SettingsPage() {
 
   return (
     <div className="w-full">
+      <PageHeader
+        title="Paramètres"
+        subtitle="Gérez votre profil, sécurité et préférences de compte"
+        accentColor="#7c3aed"
+        icon={<Settings size={22} style={{ color: "#7c3aed" }} strokeWidth={1.75} />}
+      />
       <div className="grid lg:grid-cols-[200px_1fr] gap-6">
 
         {/* Left nav */}
