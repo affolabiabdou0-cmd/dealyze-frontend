@@ -331,19 +331,46 @@ function HowItWorks() {
 // ─── PRICING ─────────────────────────────────────────────────────────────────
 const PLANS = [
   {
-    name: "Starter", price: "47", desc: "Pour les PME qui démarrent", featured: false, cta: "Commencer",
+    name: "Starter", price: "47", cta: "Commencer",
     target: "PME · Services B2B",
+    desc: "Pour les PME qui démarrent",
     features: ["17 Deal Draft / mois", "17 Smart Chase / mois", "5 Pitch Radar / mois", "Deep Due non inclus", "Support email"],
+    featured: false,
+    accent:      "#5b8fa8",
+    accentLight: "#8dbcd4",
+    barGrad:     "linear-gradient(90deg, #4a7b96, #7ab8cc)",
+    descColor:   "#4e7d94",
+    glow:        "rgba(91,143,168,0.07)",
+    borderColor: "rgba(91,143,168,0.28)",
+    bg:          "#0b0e14",
   },
   {
-    name: "Growth", price: "147", desc: "Pour les équipes qui concluent chaque semaine", featured: true, cta: "Passer au Growth",
+    name: "Growth", price: "147", cta: "Passer au Growth",
     target: "PME & Investisseurs",
+    desc: "Pour les équipes qui concluent chaque semaine",
     features: ["Deal Draft illimité", "Smart Chase illimité", "Pitch Radar illimité", "5 Deep Due / mois", "Support prioritaire"],
+    featured: true,
+    accent:      "#7c3aed",
+    accentLight: "#a78bfa",
+    barGrad:     "linear-gradient(90deg, #4c1d95, #7c3aed)",
+    descColor:   "#9b82e0",
+    glow:        "rgba(124,58,237,0.20)",
+    borderColor: "rgba(91,33,182,0.55)",
+    bg:          "#100d1e",
   },
   {
-    name: "Enterprise", price: "477", desc: "Pour les fonds et cabinets en volume", featured: false, cta: "Contacter",
+    name: "Enterprise", price: "477", cta: "Contacter",
     target: "Fonds & Cabinets",
+    desc: "Pour les fonds et cabinets en volume",
     features: ["Tout illimité", "Deep Due illimité", "Accès API complet", "Onboarding dédié", "SLA 99.9%"],
+    featured: false,
+    accent:      "#b87c20",
+    accentLight: "#d4a040",
+    barGrad:     "linear-gradient(90deg, #8a5c12, #c9921a)",
+    descColor:   "#896030",
+    glow:        "rgba(184,124,32,0.08)",
+    borderColor: "rgba(184,124,32,0.35)",
+    bg:          "#0d0b08",
   },
 ];
 
@@ -363,47 +390,56 @@ function Pricing() {
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 14, alignItems: "start" }}>
           {PLANS.map((plan) => (
             <div key={plan.name} style={{
-              background: plan.featured ? "#100d1e" : "#0c0c1a",
-              border: `0.5px solid ${plan.featured ? "rgba(91,33,182,0.6)" : "rgba(255,255,255,0.07)"}`,
-              borderRadius: 16, padding: "24px 22px", display: "flex", flexDirection: "column",
-              boxShadow: plan.featured ? "0 0 50px rgba(91,33,182,0.16)" : "none",
+              background: plan.bg,
+              border: `0.5px solid ${plan.borderColor}`,
+              borderRadius: 16,
+              display: "flex", flexDirection: "column",
+              overflow: "hidden",
+              boxShadow: plan.featured
+                ? `0 0 60px ${plan.glow}, 0 4px 24px rgba(0,0,0,0.3)`
+                : `0 0 30px ${plan.glow}, 0 2px 12px rgba(0,0,0,0.2)`,
             }}>
-              {plan.featured && (
-                <div style={{ display: "inline-block", fontSize: 9.5, padding: "3px 10px", borderRadius: 5, background: "rgba(167,139,250,0.15)", color: "#a78bfa", marginBottom: 12, letterSpacing: "1px", fontWeight: 700, alignSelf: "flex-start" }}>RECOMMANDÉ</div>
-              )}
+              {/* Barre de couleur en haut */}
+              <div style={{ height: 3, background: plan.barGrad, flexShrink: 0 }} />
 
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 4 }}>
-                <div style={{ fontSize: 16, fontWeight: 700, color: "#e2e8f0" }}>{plan.name}</div>
-                <div style={{ fontSize: 10, color: "#334155", background: "rgba(255,255,255,0.04)", border: "0.5px solid rgba(255,255,255,0.07)", padding: "2px 8px", borderRadius: 4 }}>{plan.target}</div>
+              <div style={{ padding: "22px 22px 24px", display: "flex", flexDirection: "column", flex: 1 }}>
+                {plan.featured && (
+                  <div style={{ display: "inline-block", fontSize: 9.5, padding: "3px 10px", borderRadius: 5, background: `${plan.accent}20`, color: plan.accentLight, marginBottom: 12, letterSpacing: "1px", fontWeight: 700, alignSelf: "flex-start", border: `0.5px solid ${plan.accent}40` }}>RECOMMANDÉ</div>
+                )}
+
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 5 }}>
+                  <div style={{ fontSize: 16, fontWeight: 700, color: "#e2e8f0" }}>{plan.name}</div>
+                  <div style={{ fontSize: 10, color: plan.accent, background: `${plan.accent}14`, border: `0.5px solid ${plan.accent}30`, padding: "2px 8px", borderRadius: 4, fontWeight: 600 }}>{plan.target}</div>
+                </div>
+                <div style={{ fontSize: 12, color: plan.descColor, marginBottom: 16, lineHeight: 1.5 }}>{plan.desc}</div>
+
+                <div style={{ marginBottom: 4 }}>
+                  <span style={{ fontSize: 36, fontWeight: 700, color: plan.accentLight, letterSpacing: "-1px" }}>${plan.price}</span>
+                  <span style={{ fontSize: 12, color: "#475569", fontWeight: 400 }}> /mois</span>
+                </div>
+
+                <div style={{ height: "0.5px", background: `${plan.accent}22`, margin: "14px 0" }} />
+
+                <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 2 }}>
+                  {plan.features.map((f) => (
+                    <div key={f} style={{ display: "flex", alignItems: "center", gap: 9, fontSize: 12.5, color: "#94a3b8", padding: "4px 0" }}>
+                      <Check size={12} style={{ color: plan.accent, flexShrink: 0 }} />
+                      {f}
+                    </div>
+                  ))}
+                </div>
+
+                <Link href="/register" style={{
+                  display: "block", marginTop: 20, padding: "10px 0", borderRadius: 10,
+                  fontSize: 13, fontWeight: 600, textAlign: "center", textDecoration: "none",
+                  background: plan.featured ? `linear-gradient(135deg, ${plan.accent}, ${plan.accent}cc)` : "transparent",
+                  border: plan.featured ? "none" : `0.5px solid ${plan.accent}60`,
+                  color: plan.featured ? "#fff" : plan.accentLight,
+                  boxShadow: plan.featured ? `0 4px 20px ${plan.glow}` : "none",
+                }}>
+                  {plan.cta} →
+                </Link>
               </div>
-              <div style={{ fontSize: 12, color: "#475569", marginBottom: 16 }}>{plan.desc}</div>
-
-              <div style={{ marginBottom: 4 }}>
-                <span style={{ fontSize: 34, fontWeight: 700, color: plan.featured ? "#a78bfa" : "#f1f5f9", letterSpacing: "-1px" }}>${plan.price}</span>
-                <span style={{ fontSize: 12, color: "#475569", fontWeight: 400 }}> /mois</span>
-              </div>
-
-              <div style={{ height: "0.5px", background: "rgba(255,255,255,0.06)", margin: "14px 0" }} />
-
-              <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 2 }}>
-                {plan.features.map((f) => (
-                  <div key={f} style={{ display: "flex", alignItems: "center", gap: 9, fontSize: 12.5, color: "#94a3b8", padding: "4px 0" }}>
-                    <Check size={12} style={{ color: plan.featured ? "#7c3aed" : "#334155", flexShrink: 0 }} />
-                    {f}
-                  </div>
-                ))}
-              </div>
-
-              <Link href="/register" style={{
-                display: "block", marginTop: 20, padding: "10px 0", borderRadius: 10,
-                fontSize: 13, fontWeight: 600, textAlign: "center", textDecoration: "none",
-                background: plan.featured ? "linear-gradient(135deg, #5b21b6, #6d28d9)" : "transparent",
-                border: plan.featured ? "none" : "0.5px solid rgba(255,255,255,0.12)",
-                color: plan.featured ? "#ede9fe" : "rgba(255,255,255,0.4)",
-                boxShadow: plan.featured ? "0 4px 20px rgba(91,33,182,0.32)" : "none",
-              }}>
-                {plan.cta} →
-              </Link>
             </div>
           ))}
         </div>

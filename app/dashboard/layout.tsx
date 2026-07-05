@@ -201,29 +201,62 @@ function Sidebar({ user, onClose }: { user: User | null; onClose?: () => void })
 }
 
 /* ── Notification panel ── */
+const NOTIF_ICONS: Record<string, React.ElementType> = {
+  deal_draft: FileText, smart_chase: Mail, pitch_radar: BarChart3, deep_due: Shield,
+};
+
 function NotifPanel({ user, onClose }: { user: User | null; onClose: () => void }) {
   const activities = getActivity().slice(0, 8);
   const planKey    = user?.plan ?? "free_trial";
   const planInfo   = PLAN_INFO[planKey] ?? PLAN_INFO.free_trial;
   useEffect(() => { markNotifSeen(); }, []);
+
   return (
     <div className="fixed inset-0 z-50" onClick={onClose}>
-      <div className="absolute right-0 top-0 h-full flex flex-col shadow-2xl"
-        style={{ width: 360, background: "#fff", borderLeft: "1px solid #e2e8f0" }}
+      <div className="absolute right-0 top-0 h-full flex flex-col"
+        style={{
+          width: 360,
+          background: "#fff",
+          borderRadius: "20px 0 0 20px",
+          boxShadow: "-20px 0 80px rgba(91,31,200,0.28), -4px 0 20px rgba(91,31,200,0.14), -1px 0 4px rgba(0,0,0,0.08)",
+          overflow: "hidden",
+        }}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between px-6 py-5" style={{ borderBottom: "1px solid #f1f5f9" }}>
-          <div>
-            <h3 style={{ fontSize: 16, fontWeight: 700, color: "#0f172a" }}>Notifications</h3>
-            <p style={{ fontSize: 11, color: "#94a3b8", marginTop: 1 }}>{activities.length} action{activities.length !== 1 ? "s" : ""} récente{activities.length !== 1 ? "s" : ""}</p>
+        {/* ── En-tête gradient ── */}
+        <div style={{
+          background: "linear-gradient(135deg, #1e0547 0%, #3b0d8c 35%, #5b1fc8 68%, #7c3aed 100%)",
+          padding: "22px 24px 20px",
+          position: "relative", overflow: "hidden", flexShrink: 0,
+        }}>
+          <div style={{ position: "absolute", top: -40, right: -30, width: 160, height: 160, borderRadius: "50%", background: "rgba(139,92,246,0.35)", filter: "blur(55px)", pointerEvents: "none" }} />
+          <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", position: "relative", zIndex: 1 }}>
+            <div>
+              <h3 style={{ fontSize: 17, fontWeight: 800, color: "#ffffff", letterSpacing: "-0.4px", marginBottom: 4 }}>Notifications</h3>
+              <p style={{ fontSize: 12, color: "rgba(255,255,255,0.65)" }}>
+                {activities.length} action{activities.length !== 1 ? "s" : ""} récente{activities.length !== 1 ? "s" : ""}
+              </p>
+            </div>
+            <button onClick={onClose} style={{
+              width: 32, height: 32, borderRadius: "50%",
+              background: "rgba(255,255,255,0.14)",
+              backdropFilter: "blur(8px)",
+              border: "1px solid rgba(255,255,255,0.22)",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              cursor: "pointer", transition: "all 0.15s", flexShrink: 0,
+            }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.26)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.14)"; }}
+            >
+              <X size={13} style={{ color: "#fff" }} />
+            </button>
           </div>
-          <button onClick={onClose} style={{ background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 9, width: 32, height: 32, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
-            <X size={14} style={{ color: "#64748b" }} />
-          </button>
         </div>
+
+        {/* ── Bandeau essai ── */}
         {planKey === "free_trial" && planInfo.daysRemaining <= 14 && (
-          <div style={{ margin: "14px 16px 0", padding: "14px 16px", borderRadius: 12, background: "linear-gradient(135deg, #fffbeb, #fef3c7)", border: "1px solid #fde68a" }}>
-            <div className="flex items-center gap-2" style={{ marginBottom: 6 }}>
+          <div style={{ margin: "14px 16px 0", padding: "14px 16px", borderRadius: 12, background: "linear-gradient(135deg, #fffbeb, #fef3c7)", border: "1px solid #fde68a", flexShrink: 0 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
               <AlertTriangle size={14} style={{ color: "#f59e0b", flexShrink: 0 }} strokeWidth={1.75} />
               <span style={{ fontSize: 13, fontWeight: 700, color: "#92400e" }}>Essai gratuit — {planInfo.daysRemaining} jours restants</span>
             </div>
@@ -233,35 +266,76 @@ function NotifPanel({ user, onClose }: { user: User | null; onClose: () => void 
             </Link>
           </div>
         )}
+
+        {/* ── Contenu ── */}
         <div className="flex-1 overflow-y-auto">
           {activities.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-full" style={{ padding: "48px 20px", textAlign: "center" }}>
-              <div style={{ width: 52, height: 52, borderRadius: 14, background: "#f8fafc", border: "1px solid #e2e8f0", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 14 }}>
-                <Bell size={22} style={{ color: "#cbd5e1" }} strokeWidth={1.5} />
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "100%", padding: "48px 28px", textAlign: "center" }}>
+              <div style={{
+                width: 58, height: 58, borderRadius: 17,
+                background: "rgba(124,58,237,0.10)",
+                border: "1.5px solid rgba(124,58,237,0.20)",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                marginBottom: 18,
+                boxShadow: "0 4px 18px rgba(124,58,237,0.12)",
+              }}>
+                <Bell size={24} style={{ color: "#7c3aed" }} strokeWidth={1.5} />
               </div>
-              <p style={{ fontSize: 13, fontWeight: 600, color: "#64748b" }}>Aucune notification</p>
-              <p style={{ fontSize: 12, color: "#94a3b8", marginTop: 4 }}>Lancez un agent pour voir vos actions ici</p>
+              <p style={{ fontSize: 14, fontWeight: 700, color: "#0f172a", marginBottom: 10 }}>Aucune activité pour l'instant</p>
+              <p style={{ fontSize: 12.5, color: "#64748b", lineHeight: 1.7, marginBottom: 24, maxWidth: 240 }}>
+                Vos relances <strong>Smart Chase</strong>, devis <strong>Deal Draft</strong> et analyses <strong>Pitch Radar</strong> apparaîtront ici au fil de vos actions.
+              </p>
+              <button
+                onClick={() => { onClose(); window.dispatchEvent(new CustomEvent("vyxen:new-action")); }}
+                style={{
+                  display: "inline-flex", alignItems: "center", gap: 7,
+                  padding: "10px 24px", borderRadius: 50,
+                  background: "linear-gradient(135deg, #5b1fc8, #7c3aed)",
+                  color: "#fff", fontSize: 13, fontWeight: 700, border: "none",
+                  cursor: "pointer", boxShadow: "0 4px 18px rgba(91,31,200,0.38)",
+                  letterSpacing: "-0.01em",
+                }}
+              >
+                <Zap size={13} strokeWidth={2} />
+                Lancer un agent
+              </button>
             </div>
           ) : (
-            <div style={{ padding: "10px 0" }}>
+            <div style={{ padding: "8px 0" }}>
               {activities.map((item, i) => {
                 const meta = ACTIVITY_META[item.type];
+                const Icon = NOTIF_ICONS[item.type] ?? Bell;
                 return (
                   <Link key={item.id} href={item.href} onClick={onClose} style={{ textDecoration: "none", display: "block" }}>
-                    <div className="flex items-start gap-3 px-5 py-3.5"
-                      style={{ borderBottom: i < activities.length - 1 ? "1px solid #f8fafc" : "none" }}
+                    <div style={{
+                      display: "flex", alignItems: "flex-start", gap: 12,
+                      padding: "13px 20px",
+                      borderBottom: i < activities.length - 1 ? "1px solid #f8fafc" : "none",
+                      transition: "background 0.12s",
+                    }}
                       onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.background = "#f8fafc"; }}
                       onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.background = "transparent"; }}
                     >
-                      <div style={{ width: 34, height: 34, borderRadius: 10, background: meta.bg, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 1 }}>
-                        <div style={{ width: 9, height: 9, borderRadius: "50%", background: meta.color }} />
+                      <div style={{
+                        width: 36, height: 36, borderRadius: 10,
+                        background: meta.bg,
+                        border: `1px solid ${meta.color}30`,
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                        flexShrink: 0, marginTop: 1,
+                      }}>
+                        <Icon size={15} style={{ color: meta.color }} strokeWidth={1.75} />
                       </div>
-                      <div className="flex-1 min-w-0">
+                      <div style={{ flex: 1, minWidth: 0 }}>
                         <div style={{ fontSize: 12.5, fontWeight: 600, color: "#0f172a", lineHeight: 1.45, marginBottom: 2 }}>{item.title}</div>
-                        <div style={{ fontSize: 11, color: "#94a3b8" }}>{item.subtitle}</div>
-                        <div style={{ fontSize: 10, color: "#cbd5e1", marginTop: 4 }}>{relativeTime(item.timestamp)}</div>
+                        <div style={{ fontSize: 11, color: "#94a3b8", lineHeight: 1.4 }}>{item.subtitle}</div>
+                        <div style={{ fontSize: 10, color: "#cbd5e1", marginTop: 5, display: "flex", alignItems: "center", gap: 5 }}>
+                          <div style={{ width: 5, height: 5, borderRadius: "50%", background: meta.color, opacity: 0.75 }} />
+                          <span style={{ color: meta.color, fontWeight: 600, opacity: 0.85 }}>{meta.label}</span>
+                          <span>·</span>
+                          <span>{relativeTime(item.timestamp)}</span>
+                        </div>
                       </div>
-                      <ChevronRight size={12} style={{ color: "#cbd5e1", flexShrink: 0, marginTop: 6 }} />
+                      <ChevronRight size={12} style={{ color: "#cbd5e1", flexShrink: 0, marginTop: 7 }} />
                     </div>
                   </Link>
                 );
