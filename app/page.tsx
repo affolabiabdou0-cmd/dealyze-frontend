@@ -752,7 +752,12 @@ function Footer() {
             </span>
             <span style={{ fontSize: 11, color: "#475569" }}>· Tous droits réservés.</span>
           </span>
-          <span style={{ fontSize: 11, color: "#475569" }}>© 2026 <span translate="no" className="notranslate">VYXEN</span> · Turn every deal into done.</span>
+          <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
+            <span style={{ fontSize: 11, color: "#475569" }}>© 2026 <span translate="no" className="notranslate">VYXEN</span> · Turn every deal into done.</span>
+            <Link href="/terms"   style={{ fontSize: 11, color: "#475569", textDecoration: "none" }}>CGU</Link>
+            <Link href="/privacy" style={{ fontSize: 11, color: "#475569", textDecoration: "none" }}>Confidentialité</Link>
+            <Link href="/refund"  style={{ fontSize: 11, color: "#475569", textDecoration: "none" }}>Remboursement</Link>
+          </div>
         </div>
       </div>
     </footer>
