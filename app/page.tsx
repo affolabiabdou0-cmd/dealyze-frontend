@@ -648,17 +648,6 @@ function Pricing() {
           ))}
         </div>
 
-        <div style={{ marginTop: 13, textAlign: "center" }}>
-          <span style={{ fontSize: 11.5, color: "#334155" }}>Développé par </span>
-          <span style={{ position: "relative", display: "inline-block" }}>
-            <span style={{ fontSize: 11.5, fontWeight: 500, color: "#c8c8d0" }}>f4ntom_kox</span>
-            <span style={{
-              position: "absolute", bottom: -2, left: 0, right: 0, height: 1,
-              background: "linear-gradient(90deg, #7c3aed, transparent)",
-              display: "block",
-            }} />
-          </span>
-        </div>
       </div>
     </section>
   );
@@ -756,7 +745,15 @@ function Footer() {
 
         <div style={{ height: "0.5px", background: "rgba(255,255,255,0.05)", margin: "0 0 16px" }} />
         <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 8, alignItems: "center" }}>
-          <span style={{ fontSize: 11, color: "#1e293b" }}>© 2026 VYXEN · Turn every deal into done.</span>
+          <span style={{ display: "inline-flex", alignItems: "baseline", gap: 6, flexWrap: "wrap" }}>
+            <span style={{ fontSize: 11, color: "#1e293b" }}>© 2026 VYXEN · Turn every deal into done.</span>
+            <span style={{ fontSize: 11, color: "#1e293b" }}>·</span>
+            <span style={{ fontSize: 11, color: "#1e293b" }}>Développé par</span>
+            <span style={{ position: "relative", display: "inline-block" }}>
+              <span style={{ fontSize: 11, fontWeight: 500, color: "#c8c8d0" }}>f4ntom_kox</span>
+              <span style={{ position: "absolute", bottom: -1, left: 0, right: 0, height: 1, background: "linear-gradient(90deg, #7c3aed, transparent)", display: "block" }} />
+            </span>
+          </span>
           <div style={{ display: "flex", gap: 16 }}>
             <Link href="/terms"  style={{ fontSize: 11, color: "#1e293b", textDecoration: "none" }}>CGU</Link>
             <Link href="/privacy" style={{ fontSize: 11, color: "#1e293b", textDecoration: "none" }}>Confidentialité</Link>
