@@ -717,7 +717,7 @@ function Footer() {
                 letterSpacing: 0,
               }}>X</span>EN
             </span>
-            <p style={{ fontSize: 12, color: "#334155", maxWidth: 260, lineHeight: 1.7, marginTop: 8 }}>
+            <p style={{ fontSize: 12, color: "#475569", maxWidth: 260, lineHeight: 1.7, marginTop: 8 }}>
               Plateforme IA pour PME et investisseurs. 4 agents spécialisés pour automatiser chaque étape de vos deals. Projet XPRIZE AI Hackathon 2026.
             </p>
           </div>
@@ -725,38 +725,38 @@ function Footer() {
           {/* Links */}
           <div style={{ display: "flex", gap: 48, flexWrap: "wrap" }}>
             <div>
-              <div style={{ fontSize: 10, color: "#334155", letterSpacing: "1.5px", textTransform: "uppercase", fontWeight: 600, marginBottom: 12 }}>Produit</div>
+              <div style={{ fontSize: 10, color: "#475569", letterSpacing: "1.5px", textTransform: "uppercase", fontWeight: 600, marginBottom: 12 }}>Produit</div>
               {[["Agents IA", "#agents"], ["Tarifs", "#tarifs"], ["Se connecter", "/login"], ["Essai gratuit", "/register"]].map(([l, href]) => (
                 <div key={l} style={{ marginBottom: 8 }}>
-                  <Link href={href} style={{ fontSize: 13, color: "#1e293b", textDecoration: "none" }}>{l}</Link>
+                  <Link href={href} style={{ fontSize: 13, color: "#64748b", textDecoration: "none" }}>{l}</Link>
                 </div>
               ))}
             </div>
             <div>
-              <div style={{ fontSize: 10, color: "#334155", letterSpacing: "1.5px", textTransform: "uppercase", fontWeight: 600, marginBottom: 12 }}>Légal</div>
+              <div style={{ fontSize: 10, color: "#475569", letterSpacing: "1.5px", textTransform: "uppercase", fontWeight: 600, marginBottom: 12 }}>Légal</div>
               {[["Conditions d'utilisation", "/terms"], ["Politique de confidentialité", "/privacy"], ["Politique de remboursement", "/refund"]].map(([l, href]) => (
                 <div key={l} style={{ marginBottom: 8 }}>
-                  <Link href={href} style={{ fontSize: 13, color: "#1e293b", textDecoration: "none" }}>{l}</Link>
+                  <Link href={href} style={{ fontSize: 13, color: "#64748b", textDecoration: "none" }}>{l}</Link>
                 </div>
               ))}
             </div>
           </div>
         </div>
 
-        <div style={{ height: "0.5px", background: "rgba(255,255,255,0.05)", margin: "0 0 16px" }} />
+        <div style={{ height: "0.5px", background: "rgba(255,255,255,0.06)", margin: "0 0 16px" }} />
         <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 8, alignItems: "center" }}>
           <span style={{ display: "inline-flex", alignItems: "baseline", gap: 6, flexWrap: "wrap" }}>
-            <span style={{ fontSize: 11, color: "#1e293b" }}>© 2026 <span translate="no" className="notranslate">VYXEN</span> · Tous droits réservés.</span>
-            <span style={{ fontSize: 11, color: "#1e293b" }}>·</span>
             <span translate="no" className="notranslate" style={{ position: "relative", display: "inline-block" }}>
               <span style={{ fontSize: 11, fontWeight: 500, color: "#c8c8d0" }}>f4ntom_kox</span>
               <span style={{ position: "absolute", bottom: -1, left: 0, right: 0, height: 1, background: "linear-gradient(90deg, #7c3aed, transparent)", display: "block" }} />
             </span>
+            <span style={{ fontSize: 11, color: "#475569" }}>·</span>
+            <span style={{ fontSize: 11, color: "#475569" }}>© 2026 <span translate="no" className="notranslate">VYXEN</span> · Tous droits réservés.</span>
           </span>
           <div style={{ display: "flex", gap: 16 }}>
-            <Link href="/terms"  style={{ fontSize: 11, color: "#1e293b", textDecoration: "none" }}>CGU</Link>
-            <Link href="/privacy" style={{ fontSize: 11, color: "#1e293b", textDecoration: "none" }}>Confidentialité</Link>
-            <Link href="/refund"  style={{ fontSize: 11, color: "#1e293b", textDecoration: "none" }}>Remboursement</Link>
+            <Link href="/terms"   style={{ fontSize: 11, color: "#475569", textDecoration: "none" }}>CGU</Link>
+            <Link href="/privacy" style={{ fontSize: 11, color: "#475569", textDecoration: "none" }}>Confidentialité</Link>
+            <Link href="/refund"  style={{ fontSize: 11, color: "#475569", textDecoration: "none" }}>Remboursement</Link>
           </div>
         </div>
       </div>
