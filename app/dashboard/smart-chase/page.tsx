@@ -116,44 +116,78 @@ export default function SmartChasePage() {
     const esc = lvl >= 1 && lvl <= 4 ? ESCALATION_CONFIG[lvl] : { label: `Niveau ${lvl}`, color: COLOR, bg: "#fff7ed" };
     const emailLines = result.email_body.split("\n").map((l) => l ? `<p>${l}</p>` : "<br>").join("");
 
+    const dateStr = new Date(result.generated_at).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
+
     win.document.write(`<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><title>Relance — ${result.client_name}</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#1a1a2e;background:#fff;line-height:1.7}
-.page{max-width:794px;margin:0 auto;padding:48px 56px}
-.header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:32px;padding-bottom:24px;border-bottom:2px solid #f0f0f8}
-.logo{font-size:20px;font-weight:800;color:#f97316}.logo span{color:#1a1a2e}
-.meta-right{text-align:right}.chase-id{font-family:monospace;font-size:11px;color:#9090b0;margin-bottom:4px}.chase-date{font-size:12px;color:#555}
-.title-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
-h1{font-size:22px;font-weight:800;color:#1a1a2e;letter-spacing:-0.5px}
-.level-badge{font-size:11px;font-weight:700;padding:5px 14px;border-radius:20px;background:${esc.bg};color:${esc.color};border:1px solid ${esc.color}40}
-.info-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px;padding:18px;background:#fff8f5;border-radius:12px;border:1px solid #fed7aa}
-.info-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#9090b0;margin-bottom:4px}
-.info-value{font-size:13px;font-weight:700;color:#1a1a2e}
-.alert-bar{display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:10px;background:${esc.bg};border:1px solid ${esc.color}33;margin-bottom:24px}
-.alert-text{font-size:13px;font-weight:600;color:${esc.color}}.alert-sub{font-size:12px;color:#666}
-.email-wrap{border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;margin-bottom:24px}
-.email-head{background:#f8fafc;border-bottom:1px solid #e2e8f0;padding:16px 20px}
-.email-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#9090b0;margin-bottom:4px}
-.email-subject{font-size:15px;font-weight:700;color:#1a1a2e}
-.email-body{padding:24px}.email-body p{font-size:13.5px;color:#333;line-height:1.8}
-.next-box{display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:10px;background:#f0fdf4;border:1px solid #86efac;margin-bottom:24px}
-.next-label{font-size:11px;font-weight:600;color:#16a34a}.next-date{font-size:13px;font-weight:700;color:#15803d}
-.footer{margin-top:32px;padding-top:20px;border-top:2px solid #f0f0f8;display:flex;justify-content:space-between;align-items:center}
-.footer-left{font-size:11px;color:#9090b0;line-height:1.6}.footer-badge{background:#f97316;color:#fff;font-size:11px;font-weight:700;padding:6px 16px;border-radius:8px}
-@media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact}.page{padding:24px 32px}}
-</style></head><body><div class="page">
-<div class="header"><div class="logo">Smart<span>Chase</span> <span style="font-size:13px;color:#9090b0;font-weight:400">by VYXEN</span></div><div class="meta-right"><div class="chase-id">${result.chase_id}</div><div class="chase-date">Généré le ${new Date(result.generated_at).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })}</div></div></div>
-<div class="title-row"><h1>Relance — ${result.client_name}</h1><span class="level-badge">${esc.label}</span></div>
-<div class="info-grid">
-  <div><div class="info-label">Client</div><div class="info-value">${result.client_name}</div></div>
-  <div><div class="info-label">Montant</div><div class="info-value">${result.amount_display}</div></div>
-  <div><div class="info-label">Retard</div><div class="info-value">${result.days_overdue} jours</div></div>
-  <div><div class="info-label">Facture</div><div class="info-value">${result.invoice_id}</div></div>
-</div>
-<div class="alert-bar"><div><div class="alert-text">Niveau d'escalade ${result.escalation_level}/4 — ${esc.label}</div><div class="alert-sub">Ton appliqué : ${result.tone}</div></div></div>
-<div class="email-wrap"><div class="email-head"><div class="email-label">Objet de l'email</div><div class="email-subject">${result.email_subject}</div></div><div class="email-body">${emailLines}</div></div>
-${result.next_action_date ? `<div class="next-box"><span style="font-size:18px">📅</span><div><div class="next-label">Prochaine action recommandée</div><div class="next-date">${new Date(result.next_action_date).toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" })}</div></div></div>` : ""}
-<div class="footer"><div class="footer-left">Document généré par VYXEN Smart Chase IA · ${new Date().getFullYear()}<br>Ce document est confidentiel et destiné uniquement au destinataire désigné.</div><div class="footer-badge">VYXEN · XPRIZE 2026</div></div>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1c0a00;background:#fff;line-height:1.7;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.page{max-width:794px;margin:0 auto}
+/* ── Banner ── */
+.banner{background:linear-gradient(135deg,#9a3412 0%,#c2410c 50%,#ea580c 100%);padding:32px 56px 28px}
+.brand-row{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:22px}
+.brand-name{font-size:24px;font-weight:900;letter-spacing:5px;color:#fff;line-height:1}
+.brand-x{font-size:1.65em;font-weight:900;line-height:.85;letter-spacing:0;color:#fed7aa}
+.brand-sub{font-size:9.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-top:5px}
+.doc-meta{text-align:right}.doc-id{font-family:monospace;font-size:10.5px;color:rgba(255,255,255,.45);margin-bottom:3px}.doc-date{font-size:12px;color:rgba(255,255,255,.65)}
+.banner-title{font-size:24px;font-weight:800;color:#fff;letter-spacing:-.5px;margin-bottom:8px}
+.banner-badge{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;padding:6px 16px;border-radius:20px;background:rgba(255,255,255,.18);color:#fff;border:1px solid rgba(255,255,255,.3)}
+/* ── Body ── */
+.body{padding:36px 56px 52px}
+/* Info grid */
+.info-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:#fed7aa;border-radius:12px;overflow:hidden;margin-bottom:28px;border:1px solid #fed7aa}
+.info-cell{background:#fff8f5;padding:16px 18px}.il{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#fb923c;margin-bottom:5px}.iv{font-size:13px;font-weight:700;color:#1c0a00}
+/* Alert */
+.alert-bar{display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:10px;background:${esc.bg};border:1px solid ${esc.color}44;margin-bottom:24px}
+.at{font-size:13px;font-weight:700;color:${esc.color}}.as{font-size:12px;color:#666;margin-top:2px}
+/* Email */
+.email-wrap{border:1.5px solid #e2e8f0;border-radius:14px;overflow:hidden;margin-bottom:24px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.email-head{background:linear-gradient(135deg,#fff8f5,#fff);border-bottom:1px solid #fed7aa;padding:18px 22px}
+.email-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#fb923c;margin-bottom:5px}
+.email-subject{font-size:15px;font-weight:700;color:#1c0a00}
+.email-body{padding:24px 28px}.email-body p{font-size:13.5px;color:#374151;line-height:1.85}
+/* Next action */
+.next-box{display:flex;align-items:center;gap:14px;padding:16px 20px;border-radius:12px;background:#f0fdf4;border:1.5px solid #86efac;margin-bottom:24px}
+.next-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#16a34a;margin-bottom:3px}.next-date{font-size:14px;font-weight:700;color:#15803d}
+/* Footer */
+.footer{display:flex;justify-content:space-between;align-items:center;margin-top:40px;padding-top:20px;border-top:2px solid #fef3c7}
+.footer-left{font-size:11px;color:#9ca3af;line-height:1.7}
+.footer-badge{background:linear-gradient(135deg,#c2410c,#ea580c);color:#fff;font-size:10px;font-weight:700;padding:7px 16px;border-radius:8px;letter-spacing:.06em}
+@media print{.banner{padding:24px 40px 20px}.body{padding:28px 40px 36px}}
+</style></head><body>
+<div class="page">
+  <div class="banner">
+    <div class="brand-row">
+      <div>
+        <div class="brand-name">VY<span class="brand-x">X</span>EN</div>
+        <div class="brand-sub">Smart Chase &middot; Relance Impayés</div>
+      </div>
+      <div class="doc-meta">
+        <div class="doc-id">${result.chase_id}</div>
+        <div class="doc-date">Généré le ${dateStr}</div>
+      </div>
+    </div>
+    <div class="banner-title">Relance — ${result.client_name}</div>
+    <div class="banner-badge">${esc.label} &nbsp;·&nbsp; Niveau ${result.escalation_level}/4</div>
+  </div>
+  <div class="body">
+    <div class="info-bar">
+      <div class="info-cell"><div class="il">Client</div><div class="iv">${result.client_name}</div></div>
+      <div class="info-cell"><div class="il">Montant</div><div class="iv">${result.amount_display}</div></div>
+      <div class="info-cell"><div class="il">Retard</div><div class="iv">${result.days_overdue} jours</div></div>
+      <div class="info-cell"><div class="il">Facture</div><div class="iv">${result.invoice_id}</div></div>
+    </div>
+    <div class="alert-bar"><div><div class="at">Niveau d'escalade ${result.escalation_level}/4 — ${esc.label}</div><div class="as">Ton appliqué : ${result.tone}</div></div></div>
+    <div class="email-wrap">
+      <div class="email-head"><div class="email-label">Objet de l'email</div><div class="email-subject">${result.email_subject}</div></div>
+      <div class="email-body">${emailLines}</div>
+    </div>
+    ${result.next_action_date ? `<div class="next-box"><span style="font-size:22px">📅</span><div><div class="next-label">Prochaine action recommandée</div><div class="next-date">${new Date(result.next_action_date).toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" })}</div></div></div>` : ""}
+    <div class="footer">
+      <div class="footer-left">Document généré par VYXEN Smart Chase IA &middot; ${new Date().getFullYear()}<br>Confidentiel — destiné uniquement au destinataire désigné.</div>
+      <div class="footer-badge">VYXEN &middot; XPRIZE 2026</div>
+    </div>
+  </div>
 </div></body></html>`);
     setTimeout(() => { win.print(); }, 300);
   }

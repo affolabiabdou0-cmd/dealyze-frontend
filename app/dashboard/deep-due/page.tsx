@@ -126,60 +126,105 @@ export default function DeepDuePage() {
       return `<div class="risk-item" style="border-left:3px solid ${rs.color}"><span class="risk-badge" style="background:${rs.bg};color:${rs.color}">${rs.label}</span><p class="risk-desc">${r.description}</p></div>`;
     }).join("");
 
+    const dateStr = new Date(result.generated_at).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
+
     win.document.write(`<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><title>Due Diligence — ${result.company_name}</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#1a1a2e;background:#fff;line-height:1.7}
-.page{max-width:794px;margin:0 auto;padding:48px 56px}
-.header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:32px;padding-bottom:24px;border-bottom:2px solid #f0f0f8}
-.logo{font-size:20px;font-weight:800;color:#059669}.logo span{color:#1a1a2e}
-.meta-right{text-align:right}.due-id{font-family:monospace;font-size:11px;color:#9090b0;margin-bottom:4px}.due-date{font-size:12px;color:#555}
-h1{font-size:26px;font-weight:800;color:#1a1a2e;letter-spacing:-0.5px;margin-bottom:4px}.subtitle{font-size:14px;color:#059669;font-weight:600;margin-bottom:24px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#052e16;background:#fff;line-height:1.7;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.page{max-width:794px;margin:0 auto}
+/* ── Banner ── */
+.banner{background:linear-gradient(135deg,#14532d 0%,#15803d 50%,#16a34a 100%);padding:32px 56px 28px}
+.brand-row{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:22px}
+.brand-name{font-size:24px;font-weight:900;letter-spacing:5px;color:#fff;line-height:1}
+.brand-x{font-size:1.65em;font-weight:900;line-height:.85;letter-spacing:0;color:#a7f3d0}
+.brand-sub{font-size:9.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-top:5px}
+.doc-meta{text-align:right}.doc-id{font-family:monospace;font-size:10.5px;color:rgba(255,255,255,.45);margin-bottom:3px}.doc-date{font-size:12px;color:rgba(255,255,255,.65)}
+.banner-title{font-size:24px;font-weight:800;color:#fff;letter-spacing:-.5px;margin-bottom:5px}
+.banner-sub{font-size:13px;color:rgba(255,255,255,.7)}
+/* ── Body ── */
+.body{padding:36px 56px 52px}
+/* Hero cards */
 .hero{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:32px}
-.hero-card{padding:20px;border-radius:12px;border:1px solid #e2e8f0}.hero-card.reco{background:${rc.bg};border-color:${rc.border}}
-.hero-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#9090b0;margin-bottom:8px}
-.reco-text{font-size:20px;font-weight:800;color:${rc.color}}
-.conf-bar-bg{height:8px;background:#f0f0f8;border-radius:4px;overflow:hidden;margin:10px 0 4px}
+.hero-card{padding:20px 24px;border-radius:14px;border:1.5px solid #e2e8f0;background:#fafffe;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.hero-card.reco{background:${rc.bg};border-color:${rc.border}}
+.hero-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#9090c0;margin-bottom:10px}
+.reco-text{font-size:20px;font-weight:800;color:${rc.color};line-height:1.2}
+.conf-bar-bg{height:8px;background:#dcfce7;border-radius:4px;overflow:hidden;margin:10px 0 6px}
 .conf-bar-fill{height:100%;width:${confPct}%;background:${confCol};border-radius:4px}
-.conf-num{font-size:22px;font-weight:800;color:${confCol};font-family:monospace}
-.section-title{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:#059669;margin:28px 0 14px;padding-bottom:8px;border-bottom:1px solid #f0f0f8}
-.prose{font-size:13.5px;color:#333;line-height:1.8;margin-bottom:8px}
+.conf-num{font-size:24px;font-weight:900;color:${confCol};font-family:monospace}
+/* Section titles */
+.st{display:flex;align-items:center;gap:8px;font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.15em;color:#15803d;margin:28px 0 14px;padding-bottom:8px;border-bottom:2px solid #dcfce7}
+.st::before{content:'';display:block;width:4px;height:14px;background:linear-gradient(180deg,#10b981,#059669);border-radius:2px;flex-shrink:0}
+/* Prose */
+.prose{font-size:13.5px;color:#374151;line-height:1.85;margin-bottom:10px}
+/* Signals */
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:8px}
-.signal-box{padding:14px;border-radius:10px}
-.signal-box.pos{background:#f0fdf4;border:1px solid #86efac}.signal-box.neg{background:#fef2f2;border:1px solid #fca5a5}
-.signal-title{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px}
+.signal-box{padding:16px 18px;border-radius:12px}
+.signal-box.pos{background:#f0fdf4;border:1.5px solid #86efac}.signal-box.neg{background:#fef2f2;border:1.5px solid #fca5a5}
+.signal-title{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px}
 .signal-box.pos .signal-title{color:#16a34a}.signal-box.neg .signal-title{color:#dc2626}
-.signal-box ul{list-style:none;display:flex;flex-direction:column;gap:6px}
-.signal-box li{font-size:12.5px;color:#333;display:flex;gap:8px;align-items:flex-start}
-.signal-box.pos li::before{content:"+";color:#16a34a;font-weight:700;flex-shrink:0}
-.signal-box.neg li::before{content:"−";color:#dc2626;font-weight:700;flex-shrink:0}
-.tag-list{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-.tag{font-size:11px;padding:4px 10px;border-radius:20px;background:#f8fafc;border:1px solid #e2e8f0;color:#555}
-.risk-item{padding:12px 14px 12px 16px;border-radius:8px;margin-bottom:8px;background:#fafafa;display:flex;gap:12px;align-items:flex-start}
-.risk-badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:5px;flex-shrink:0;margin-top:2px}
-.risk-desc{font-size:13px;color:#333;line-height:1.6}
-.footer{margin-top:40px;padding-top:20px;border-top:2px solid #f0f0f8;display:flex;justify-content:space-between;align-items:center}
-.footer-left{font-size:11px;color:#9090b0;line-height:1.6}.footer-badge{background:#059669;color:#fff;font-size:11px;font-weight:700;padding:6px 16px;border-radius:8px}
-@media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact}.page{padding:24px 32px}}
-</style></head><body><div class="page">
-<div class="header"><div class="logo">Deep<span>Due</span> <span style="font-size:13px;color:#9090b0;font-weight:400">by VYXEN</span></div><div class="meta-right"><div class="due-id">${result.due_id}</div><div class="due-date">Analysé le ${new Date(result.generated_at).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })}</div></div></div>
-<h1>Due Diligence — ${result.company_name}</h1>
-<div class="subtitle">${result.founder_name ? `Fondateur : ${result.founder_name}` : "Analyse entreprise"}</div>
-<div class="hero">
-  <div class="hero-card reco"><div class="hero-label">Recommandation finale</div><div class="reco-text">${rc.icon} ${result.recommandation_finale}</div></div>
-  <div class="hero-card"><div class="hero-label">Score de confiance données</div><div class="conf-num">${result.score_confiance}<span style="font-size:14px;color:#9090b0">/10</span></div><div class="conf-bar-bg"><div class="conf-bar-fill"></div></div><div style="font-size:11px;color:#9090b0">Qualité et quantité des données disponibles</div></div>
-</div>
-${result.synthese_executive ? `<div class="section-title">Synthèse exécutive</div><p class="prose">${result.synthese_executive}</p>` : ""}
-${result.profil_fondateur ? `<div class="section-title">Profil fondateur</div>
-${result.profil_fondateur.resume ? `<p class="prose">${result.profil_fondateur.resume}</p>` : ""}
-${result.profil_fondateur.experience ? `<p class="prose"><strong>Expérience :</strong> ${result.profil_fondateur.experience}</p>` : ""}
-${(result.profil_fondateur.signaux_positifs?.length || result.profil_fondateur.signaux_negatifs?.length) ? `<div class="two-col" style="margin-top:12px"><div class="signal-box pos"><div class="signal-title">Signaux positifs</div><ul>${(result.profil_fondateur.signaux_positifs ?? []).map((s) => `<li>${s}</li>`).join("")}</ul></div><div class="signal-box neg"><div class="signal-title">Signaux négatifs</div><ul>${(result.profil_fondateur.signaux_negatifs ?? []).map((s) => `<li>${s}</li>`).join("")}</ul></div></div>` : ""}` : ""}
-${result.analyse_entreprise ? `<div class="section-title">Analyse entreprise</div>
-${result.analyse_entreprise.resume ? `<p class="prose">${result.analyse_entreprise.resume}</p>` : ""}
-${result.analyse_entreprise.structure ? `<p class="prose"><strong>Structure :</strong> ${result.analyse_entreprise.structure}</p>` : ""}
-${result.analyse_entreprise.position_marche ? `<p class="prose"><strong>Position marché :</strong> ${result.analyse_entreprise.position_marche}</p>` : ""}
-${result.analyse_entreprise.concurrents?.length ? `<p class="prose"><strong>Concurrents :</strong></p><div class="tag-list">${result.analyse_entreprise.concurrents.map((c) => `<span class="tag">${c}</span>`).join("")}</div>` : ""}` : ""}
-${result.risques_identifies?.length ? `<div class="section-title">Risques identifiés</div>${risksHtml}` : ""}
-<div class="footer"><div class="footer-left">Document généré par VYXEN Deep Due IA · ${new Date().getFullYear()}<br>Rapport confidentiel — Usage investisseur uniquement</div><div class="footer-badge">VYXEN · XPRIZE 2026</div></div>
+.signal-box ul{list-style:none;display:flex;flex-direction:column;gap:7px}
+.signal-box li{font-size:12.5px;color:#374151;display:flex;gap:8px;align-items:flex-start;line-height:1.5}
+.signal-box.pos li::before{content:"+";color:#16a34a;font-weight:800;flex-shrink:0;margin-top:1px}
+.signal-box.neg li::before{content:"−";color:#dc2626;font-weight:800;flex-shrink:0;margin-top:1px}
+/* Tags */
+.tag-list{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.tag{font-size:11px;padding:4px 12px;border-radius:20px;background:#f0fdf4;border:1px solid #86efac;color:#15803d;font-weight:500}
+/* Risks */
+.risk-item{padding:13px 16px;border-radius:10px;margin-bottom:10px;background:#fafafa;display:flex;gap:14px;align-items:flex-start;border-left:3px solid transparent}
+.risk-badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:6px;flex-shrink:0;margin-top:1px}
+.risk-desc{font-size:13px;color:#374151;line-height:1.65}
+/* Footer */
+.footer{display:flex;justify-content:space-between;align-items:center;margin-top:44px;padding-top:20px;border-top:2px solid #dcfce7}
+.footer-left{font-size:11px;color:#9ca3af;line-height:1.7}
+.footer-badge{background:linear-gradient(135deg,#15803d,#16a34a);color:#fff;font-size:10px;font-weight:700;padding:7px 16px;border-radius:8px;letter-spacing:.06em}
+@media print{.banner{padding:24px 40px 20px}.body{padding:28px 40px 36px}}
+</style></head><body>
+<div class="page">
+  <div class="banner">
+    <div class="brand-row">
+      <div>
+        <div class="brand-name">VY<span class="brand-x">X</span>EN</div>
+        <div class="brand-sub">Deep Due &middot; Due Diligence IA</div>
+      </div>
+      <div class="doc-meta">
+        <div class="doc-id">${result.due_id}</div>
+        <div class="doc-date">Analysé le ${dateStr}</div>
+      </div>
+    </div>
+    <div class="banner-title">Due Diligence — ${result.company_name}</div>
+    <div class="banner-sub">${result.founder_name ? `Fondateur : ${result.founder_name}` : "Analyse entreprise"}</div>
+  </div>
+  <div class="body">
+    <div class="hero">
+      <div class="hero-card reco">
+        <div class="hero-label">Recommandation finale</div>
+        <div class="reco-text">${rc.icon} ${result.recommandation_finale}</div>
+      </div>
+      <div class="hero-card">
+        <div class="hero-label">Score de confiance données</div>
+        <div class="conf-num">${result.score_confiance}<span style="font-size:14px;color:#9090b0;font-weight:400">/10</span></div>
+        <div class="conf-bar-bg"><div class="conf-bar-fill"></div></div>
+        <div style="font-size:11px;color:#9ca3af">Qualité et quantité des données disponibles</div>
+      </div>
+    </div>
+    ${result.synthese_executive ? `<div class="st">Synthèse exécutive</div><p class="prose">${result.synthese_executive}</p>` : ""}
+    ${result.profil_fondateur ? `<div class="st">Profil fondateur</div>
+    ${result.profil_fondateur.resume ? `<p class="prose">${result.profil_fondateur.resume}</p>` : ""}
+    ${result.profil_fondateur.experience ? `<p class="prose"><strong>Expérience :</strong> ${result.profil_fondateur.experience}</p>` : ""}
+    ${(result.profil_fondateur.signaux_positifs?.length || result.profil_fondateur.signaux_negatifs?.length) ? `<div class="two-col" style="margin-top:12px"><div class="signal-box pos"><div class="signal-title">+ Signaux positifs</div><ul>${(result.profil_fondateur.signaux_positifs ?? []).map((s) => `<li>${s}</li>`).join("")}</ul></div><div class="signal-box neg"><div class="signal-title">− Signaux négatifs</div><ul>${(result.profil_fondateur.signaux_negatifs ?? []).map((s) => `<li>${s}</li>`).join("")}</ul></div></div>` : ""}` : ""}
+    ${result.analyse_entreprise ? `<div class="st">Analyse entreprise</div>
+    ${result.analyse_entreprise.resume ? `<p class="prose">${result.analyse_entreprise.resume}</p>` : ""}
+    ${result.analyse_entreprise.structure ? `<p class="prose"><strong>Structure :</strong> ${result.analyse_entreprise.structure}</p>` : ""}
+    ${result.analyse_entreprise.position_marche ? `<p class="prose"><strong>Position marché :</strong> ${result.analyse_entreprise.position_marche}</p>` : ""}
+    ${result.analyse_entreprise.concurrents?.length ? `<p class="prose"><strong>Concurrents :</strong></p><div class="tag-list">${result.analyse_entreprise.concurrents.map((c) => `<span class="tag">${c}</span>`).join("")}</div>` : ""}` : ""}
+    ${result.risques_identifies?.length ? `<div class="st">Risques identifiés</div>${risksHtml}` : ""}
+    <div class="footer">
+      <div class="footer-left">Document généré par VYXEN Deep Due IA &middot; ${new Date().getFullYear()}<br>Rapport confidentiel &middot; Usage investisseur uniquement</div>
+      <div class="footer-badge">VYXEN &middot; XPRIZE 2026</div>
+    </div>
+  </div>
 </div></body></html>`);
     setTimeout(() => { win.print(); }, 300);
   }

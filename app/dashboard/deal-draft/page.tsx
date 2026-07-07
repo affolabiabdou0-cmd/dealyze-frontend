@@ -122,51 +122,83 @@ export default function DealDraftPage() {
     const sectionsHtml = CONTENT_SECTIONS.map((s) => {
       const val = c[s.key];
       if (!val || typeof val !== "string") return "";
-      return `<div class="section"><div class="section-label">${s.label}</div><p>${val.replace(/\n/g, "<br>")}</p></div>`;
+      return `<div class="section"><div class="section-label"><span class="sl-dot"></span>${s.label}</div><p>${val.replace(/\n/g, "<br>")}</p></div>`;
     }).join("");
 
     const livrablesHtml = Array.isArray(c.livrables) && c.livrables.length
-      ? `<div class="section"><div class="section-label">Livrables inclus</div><ul>${(c.livrables as string[]).map((l) => `<li>${l}</li>`).join("")}</ul></div>` : "";
+      ? `<div class="section"><div class="section-label"><span class="sl-dot"></span>Livrables inclus</div><ul class="livrable-list">${(c.livrables as string[]).map((l) => `<li>${l}</li>`).join("")}</ul></div>` : "";
+
+    const dateStr = new Date(result.generated_at).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
 
     win.document.write(`<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8">
-<title>${c.titre || `Devis — ${result.client_name}`}</title>
+<title>${c.titre || `Proposition — ${result.client_name}`}</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#1a1a2e;background:#fff;line-height:1.7}
-.page{max-width:794px;margin:0 auto;padding:48px 56px}
-.header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:36px;padding-bottom:28px;border-bottom:2px solid #f0f0f8}
-.logo{font-size:22px;font-weight:800;letter-spacing:-0.5px;color:#7c3aed}.logo span{color:#1a1a2e}
-.quote-meta{text-align:right}.quote-id{font-family:monospace;font-size:11px;color:#9090b0;margin-bottom:4px}.quote-date{font-size:13px;color:#555}
-.quote-title{font-size:26px;font-weight:800;color:#1a1a2e;letter-spacing:-0.5px;margin-bottom:6px;line-height:1.2}
-.quote-subtitle{font-size:14px;color:#7c3aed;font-weight:600;margin-bottom:28px}
-.client-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:36px;padding:20px;background:#f8f7ff;border-radius:12px;border:1px solid #ede9fe}
-.client-item-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#9090b0;margin-bottom:4px}
-.client-item-value{font-size:13px;font-weight:600;color:#1a1a2e}
-.section{margin-bottom:26px;padding-bottom:26px;border-bottom:1px solid #f0f0f8}.section:last-child{border-bottom:none}
-.section-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:#7c3aed;margin-bottom:10px}
-.section p{font-size:13.5px;color:#333;line-height:1.8}
-ul{padding-left:0;list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:8px}
-ul li{font-size:13px;color:#333;display:flex;align-items:flex-start;gap:8px}
-ul li::before{content:"✓";color:#7c3aed;font-weight:700;flex-shrink:0;margin-top:1px}
-.tone-badge{display:inline-block;font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;background:#ede9fe;color:#7c3aed;margin-bottom:28px}
-.footer{margin-top:40px;padding-top:24px;border-top:2px solid #f0f0f8;display:flex;justify-content:space-between;align-items:center}
-.footer-left{font-size:12px;color:#9090b0;line-height:1.6}
-.footer-badge{background:#7c3aed;color:#fff;font-size:11px;font-weight:700;padding:8px 18px;border-radius:8px}
-@media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact}.page{padding:24px 32px}}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1e1b4b;background:#fff;line-height:1.7;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.page{max-width:794px;margin:0 auto}
+/* ── Banner ── */
+.banner{background:linear-gradient(135deg,#4c1d95 0%,#6d28d9 55%,#7c3aed 100%);padding:32px 56px 28px}
+.brand-row{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px}
+.brand-name{font-size:24px;font-weight:900;letter-spacing:5px;color:#fff;line-height:1}
+.brand-x{font-size:1.65em;font-weight:900;line-height:.85;letter-spacing:0;color:#c4b5fd}
+.brand-sub{font-size:9.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-top:5px}
+.doc-meta{text-align:right}
+.doc-id{font-family:monospace;font-size:10.5px;color:rgba(255,255,255,.45);margin-bottom:3px}
+.doc-date{font-size:12px;color:rgba(255,255,255,.65)}
+.banner-title{font-size:26px;font-weight:800;color:#fff;letter-spacing:-.5px;line-height:1.2;margin-bottom:6px}
+.banner-sub{font-size:13px;color:rgba(255,255,255,.7)}
+/* ── Body ── */
+.body{padding:36px 56px 52px}
+.tone-pill{display:inline-flex;align-items:center;gap:6px;font-size:10.5px;font-weight:700;padding:5px 14px;border-radius:20px;background:#ede9fe;color:#6d28d9;margin-bottom:30px;border:1px solid #c4b5fd;letter-spacing:.03em}
+/* Client info */
+.client-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:#e0e7ff;border-radius:12px;overflow:hidden;margin-bottom:36px;border:1px solid #e0e7ff}
+.client-cell{background:#f9f8ff;padding:16px 18px}
+.cl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#a5b4fc;margin-bottom:5px}
+.cv{font-size:13px;font-weight:700;color:#1e1b4b}
+/* Sections */
+.section{margin-bottom:28px;padding-bottom:28px;border-bottom:1px solid #f1f0fb}
+.section:last-of-type{border-bottom:none}
+.section-label{display:flex;align-items:center;gap:8px;font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.15em;color:#6d28d9;margin-bottom:12px}
+.sl-dot{display:inline-block;width:4px;height:14px;background:#6d28d9;border-radius:2px;flex-shrink:0}
+.section p{font-size:13.5px;color:#374151;line-height:1.85}
+.livrable-list{padding-left:0;list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:4px}
+.livrable-list li{font-size:13px;color:#374151;display:flex;align-items:flex-start;gap:8px;line-height:1.5}
+.livrable-list li::before{content:"✓";color:#6d28d9;font-weight:800;flex-shrink:0;margin-top:1px}
+/* Footer */
+.footer{display:flex;justify-content:space-between;align-items:center;margin-top:44px;padding-top:22px;border-top:2px solid #f1f0fb}
+.footer-left{font-size:11px;color:#9ca3af;line-height:1.7}
+.footer-badge{background:linear-gradient(135deg,#6d28d9,#7c3aed);color:#fff;font-size:10px;font-weight:700;padding:7px 16px;border-radius:8px;letter-spacing:.06em}
+@media print{.banner{padding:24px 40px 20px}.body{padding:28px 40px 36px}}
 </style></head><body>
 <div class="page">
-  <div class="header"><div class="logo">Deal<span>yze</span></div><div class="quote-meta"><div class="quote-id">${result.quote_id}</div><div class="quote-date">Généré le ${new Date(result.generated_at).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })}</div></div></div>
-  <h1 class="quote-title">${c.titre || `Proposition commerciale — ${result.client_name}`}</h1>
-  <div class="quote-subtitle">Préparée exclusivement pour ${result.client_name}</div>
-  <div class="tone-badge">Ton : ${TONE_LABELS[result.tone] || result.tone}</div>
-  <div class="client-bar">
-    <div><div class="client-item-label">Client</div><div class="client-item-value">${result.client_name}</div></div>
-    <div><div class="client-item-label">Secteur</div><div class="client-item-value">${form.sector || "—"}</div></div>
-    <div><div class="client-item-label">Budget</div><div class="client-item-value">${form.budget || "—"}</div></div>
-    <div><div class="client-item-label">Délai</div><div class="client-item-value">${form.timeline || "—"}</div></div>
+  <div class="banner">
+    <div class="brand-row">
+      <div>
+        <div class="brand-name">VY<span class="brand-x">X</span>EN</div>
+        <div class="brand-sub">Deal Draft &middot; Proposition Commerciale</div>
+      </div>
+      <div class="doc-meta">
+        <div class="doc-id">${result.quote_id}</div>
+        <div class="doc-date">Généré le ${dateStr}</div>
+      </div>
+    </div>
+    <div class="banner-title">${c.titre || `Proposition commerciale — ${result.client_name}`}</div>
+    <div class="banner-sub">Préparée exclusivement pour ${result.client_name}</div>
   </div>
-  ${sectionsHtml}${livrablesHtml}
-  <div class="footer"><div class="footer-left">Document généré par VYXEN AI · ${new Date().getFullYear()}<br>Ce devis est valable 30 jours à compter de sa date d'émission.</div><div class="footer-badge">VYXEN · XPRIZE 2026</div></div>
+  <div class="body">
+    <div class="tone-pill">Ton : ${TONE_LABELS[result.tone] || result.tone}</div>
+    <div class="client-bar">
+      <div class="client-cell"><div class="cl">Client</div><div class="cv">${result.client_name}</div></div>
+      <div class="client-cell"><div class="cl">Secteur</div><div class="cv">${form.sector || "—"}</div></div>
+      <div class="client-cell"><div class="cl">Budget</div><div class="cv">${form.budget || "—"}</div></div>
+      <div class="client-cell"><div class="cl">Délai</div><div class="cv">${form.timeline || "—"}</div></div>
+    </div>
+    ${sectionsHtml}${livrablesHtml}
+    <div class="footer">
+      <div class="footer-left">Document généré par VYXEN AI &middot; ${new Date().getFullYear()}<br>Ce devis est valable 30 jours à compter de sa date d'émission.</div>
+      <div class="footer-badge">VYXEN &middot; XPRIZE 2026</div>
+    </div>
+  </div>
 </div></body></html>`);
     setTimeout(() => { win.print(); }, 300);
   }

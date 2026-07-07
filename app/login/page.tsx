@@ -31,14 +31,17 @@ export default function LoginPage() {
   const [email,    setEmail]    = useState("");
   const [password, setPassword] = useState("");
   const [showPw,   setShowPw]   = useState(false);
-  const [loading,  setLoading]  = useState(false);
-  const [gLoading, setGLoading] = useState(false);
-  const [error,    setError]    = useState("");
+  const [loading,    setLoading]    = useState(false);
+  const [gLoading,   setGLoading]   = useState(false);
+  const [error,      setError]      = useState("");
+  const [serverWarm, setServerWarm] = useState<"pending"|"ready">("pending");
 
   // Wake up Render backend on mount to reduce cold-start latency
   useEffect(() => {
     const base = (process.env.NEXT_PUBLIC_API_URL ?? "https://dealyze-api.onrender.com").replace(/\/$/, "");
-    fetch(`${base}/health`).catch(() => {});
+    fetch(`${base}/health`)
+      .then(() => setServerWarm("ready"))
+      .catch(() => setServerWarm("ready")); // allow login even if health check fails
   }, []);
 
   async function handleSubmit(e: React.FormEvent) {
@@ -203,6 +206,14 @@ export default function LoginPage() {
               : <GIcon />}
             {gLoading ? "Connexion en cours…" : "Continuer avec Google"}
           </button>
+
+          {/* Server warm-up indicator */}
+          {serverWarm === "pending" && !gLoading && (
+            <div style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:6, marginTop:-14, marginBottom:14, fontSize:11, color:"#94a3b8" }}>
+              <span style={{ width:6, height:6, borderRadius:"50%", background:"#f59e0b", display:"inline-block", animation:"pulse 1.5s ease-in-out infinite" }} />
+              Initialisation du serveur IA…
+            </div>
+          )}
 
           <div className="flex items-center gap-4" style={{ marginBottom:22 }}>
             <div className="flex-1" style={{ height:1, background:"#F1F5F9" }} />

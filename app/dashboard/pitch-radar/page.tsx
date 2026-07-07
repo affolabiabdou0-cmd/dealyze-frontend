@@ -143,56 +143,101 @@ export default function PitchRadarPage() {
       </div>`;
     }).join("");
 
+    const dateStr = new Date(result.generated_at).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
+
     win.document.write(`<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><title>Pitch Radar — ${result.startup_name}</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#1a1a2e;background:#fff;line-height:1.7}
-.page{max-width:794px;margin:0 auto;padding:48px 56px}
-.header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:32px;padding-bottom:24px;border-bottom:2px solid #f0f0f8}
-.logo{font-size:20px;font-weight:800;color:#0891b2}.logo span{color:#1a1a2e}
-.meta-right{text-align:right}.radar-id{font-family:monospace;font-size:11px;color:#9090b0;margin-bottom:4px}.radar-date{font-size:12px;color:#555}
-h1{font-size:26px;font-weight:800;color:#1a1a2e;letter-spacing:-0.5px;margin-bottom:4px}.subtitle{font-size:14px;color:#0891b2;font-weight:600;margin-bottom:28px}
-.score-hero{display:flex;align-items:center;gap:32px;padding:24px;background:#f0fdff;border-radius:16px;border:1px solid #a5f3fc;margin-bottom:32px}
-.score-big{font-size:52px;font-weight:800;color:${col};font-family:monospace;line-height:1}.score-denom{font-size:16px;color:#9090b0}
-.score-desc h2{font-size:16px;font-weight:700;color:#1a1a2e;margin-bottom:8px}.score-desc p{font-size:13px;color:#555;line-height:1.6}
-.reco-box{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border-radius:20px;background:${rc.bg};border:1px solid ${rc.border};color:${rc.color};font-size:13px;font-weight:700;margin-top:12px}
-.section-title{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:#0891b2;margin-bottom:16px;margin-top:28px;padding-bottom:8px;border-bottom:1px solid #f0f0f8}
-.score-item{margin-bottom:18px}.score-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
-.score-label{font-size:13px;font-weight:600;color:#1a1a2e}.score-right{display:flex;align-items:center;gap:12px}
-.score-weight{font-size:11px;color:#9090b0}.score-num{font-family:monospace;font-size:13px;font-weight:700}
-.bar-bg{height:6px;background:#f0f0f8;border-radius:4px;overflow:hidden;margin-bottom:4px}.bar-fill{height:100%;border-radius:4px}
-.score-note{font-size:12px;color:#666;line-height:1.5}
-.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:8px}
-.col-box{padding:16px;border-radius:10px}.col-box.green{background:#f0fdf4;border:1px solid #86efac}.col-box.amber{background:#fffbeb;border:1px solid #fcd34d}
-.col-title{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#083344;background:#fff;line-height:1.7;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.page{max-width:794px;margin:0 auto}
+/* ── Banner ── */
+.banner{background:linear-gradient(135deg,#155e75 0%,#0e7490 50%,#0891b2 100%);padding:32px 56px 28px}
+.brand-row{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:22px}
+.brand-name{font-size:24px;font-weight:900;letter-spacing:5px;color:#fff;line-height:1}
+.brand-x{font-size:1.65em;font-weight:900;line-height:.85;letter-spacing:0;color:#a5f3fc}
+.brand-sub{font-size:9.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-top:5px}
+.doc-meta{text-align:right}.doc-id{font-family:monospace;font-size:10.5px;color:rgba(255,255,255,.45);margin-bottom:3px}.doc-date{font-size:12px;color:rgba(255,255,255,.65)}
+.banner-title{font-size:24px;font-weight:800;color:#fff;letter-spacing:-.5px;margin-bottom:5px}
+.banner-sub{font-size:13px;color:rgba(255,255,255,.7)}
+/* ── Body ── */
+.body{padding:36px 56px 52px}
+/* Score hero */
+.score-hero{display:flex;align-items:center;gap:32px;padding:24px 28px;background:linear-gradient(135deg,#f0fdff,#ecfeff);border-radius:16px;border:1.5px solid #a5f3fc;margin-bottom:32px;box-shadow:0 2px 12px rgba(8,145,178,.08)}
+.score-big{font-size:56px;font-weight:900;color:${col};font-family:monospace;line-height:1}.score-denom{font-size:18px;color:#9090c0;font-weight:500}
+.score-desc h2{font-size:17px;font-weight:800;color:#083344;margin-bottom:8px}.score-desc p{font-size:13px;color:#4b7a8a;line-height:1.65}
+.reco-box{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:20px;background:${rc.bg};border:1.5px solid ${rc.border};color:${rc.color};font-size:13px;font-weight:700;margin-top:12px}
+/* Section titles */
+.st{display:flex;align-items:center;gap:8px;font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.15em;color:#0891b2;margin:30px 0 16px;padding-bottom:8px;border-bottom:2px solid #ecfeff}
+.st::before{content:'';display:block;width:4px;height:14px;background:linear-gradient(180deg,#06b6d4,#0891b2);border-radius:2px;flex-shrink:0}
+/* Score items */
+.score-item{margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid #f0faff}.score-item:last-child{border-bottom:none}
+.score-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.score-label{font-size:13px;font-weight:700;color:#083344}.score-right{display:flex;align-items:center;gap:12px}
+.score-weight{font-size:11px;color:#9090b0;background:#f8fafc;padding:2px 6px;border-radius:5px}.score-num{font-family:monospace;font-size:13px;font-weight:800}
+.bar-bg{height:7px;background:#e0f7fa;border-radius:4px;overflow:hidden;margin-bottom:5px}.bar-fill{height:100%;border-radius:4px;transition:width .6s}
+.score-note{font-size:12px;color:#64748b;line-height:1.55}
+/* Two columns */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:8px}
+.col-box{padding:16px 18px;border-radius:12px}
+.col-box.green{background:#f0fdf4;border:1.5px solid #86efac}.col-box.amber{background:#fffbeb;border:1.5px solid #fcd34d}
+.col-title{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px}
 .col-box.green .col-title{color:#16a34a}.col-box.amber .col-title{color:#d97706}
-.col-box ul{list-style:none;padding:0;display:flex;flex-direction:column;gap:6px}
-.col-box li{font-size:12.5px;color:#333;display:flex;gap:8px;align-items:flex-start}
-.col-box.green li::before{content:"✓";color:#16a34a;font-weight:700;flex-shrink:0}
-.col-box.amber li::before{content:"⚠";color:#d97706;flex-shrink:0}
-.q-list{display:flex;flex-direction:column;gap:10px}
-.q-item{display:flex;gap:12px;align-items:flex-start}
-.q-num{font-family:monospace;font-size:11px;color:#9090b0;flex-shrink:0;margin-top:2px;background:#f8fafc;padding:2px 6px;border-radius:4px}
-.q-text{font-size:13px;color:#333;line-height:1.6}
-.footer{margin-top:40px;padding-top:20px;border-top:2px solid #f0f0f8;display:flex;justify-content:space-between;align-items:center}
-.footer-left{font-size:11px;color:#9090b0;line-height:1.6}.footer-badge{background:#0891b2;color:#fff;font-size:11px;font-weight:700;padding:6px 16px;border-radius:8px}
-@media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact}.page{padding:24px 32px}}
-</style></head><body><div class="page">
-<div class="header"><div class="logo">Pitch<span>Radar</span> <span style="font-size:13px;color:#9090b0;font-weight:400">by VYXEN</span></div><div class="meta-right"><div class="radar-id">${result.radar_id}</div><div class="radar-date">Analysé le ${new Date(result.generated_at).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })}</div></div></div>
-<h1>Rapport d'analyse — ${result.startup_name}</h1>
-<div class="subtitle">Scoring VC par critères pondérés · VYXEN AI</div>
-<div class="score-hero">
-  <div style="text-align:center;flex-shrink:0"><div class="score-big">${result.score_global.toFixed(1)}<span class="score-denom">/10</span></div><div style="font-size:12px;color:#9090b0;margin-top:4px">Score global</div></div>
-  <div class="score-desc"><h2>${result.startup_name}</h2><p>Analyse sur 8 critères VC pondérés : équipe, marché, traction, modèle économique, solution, problème, concurrence et demande financement.</p><div class="reco-box">${rc.icon} ${result.recommandation}</div></div>
-</div>
-<div class="section-title">Scores par critère</div>${barsHtml}
-<div class="section-title">Synthèse analytique</div>
-<div class="two-col">
-  <div class="col-box green"><div class="col-title">Points forts</div><ul>${result.points_forts.map((f) => `<li>${f}</li>`).join("")}</ul></div>
-  <div class="col-box amber"><div class="col-title">Points d'alerte</div><ul>${result.points_alerte.map((a) => `<li>${a}</li>`).join("")}</ul></div>
-</div>
-<div class="section-title">Questions à poser au fondateur</div>
-<div class="q-list">${result.questions_suggerees.map((q, i) => `<div class="q-item"><span class="q-num">Q${i+1}</span><span class="q-text">${q}</span></div>`).join("")}</div>
-<div class="footer"><div class="footer-left">Document généré par VYXEN Pitch Radar IA · ${new Date().getFullYear()}<br>Rapport confidentiel · Usage investisseur uniquement</div><div class="footer-badge">VYXEN · XPRIZE 2026</div></div>
+.col-box ul{list-style:none;padding:0;display:flex;flex-direction:column;gap:7px}
+.col-box li{font-size:12.5px;color:#374151;display:flex;gap:8px;align-items:flex-start;line-height:1.5}
+.col-box.green li::before{content:"✓";color:#16a34a;font-weight:800;flex-shrink:0;margin-top:1px}
+.col-box.amber li::before{content:"!";color:#d97706;font-weight:800;flex-shrink:0;margin-top:1px}
+/* Questions */
+.q-list{display:flex;flex-direction:column;gap:12px}
+.q-item{display:flex;gap:14px;align-items:flex-start}
+.q-num{font-family:monospace;font-size:11px;color:#0891b2;font-weight:700;flex-shrink:0;margin-top:2px;background:#ecfeff;padding:3px 8px;border-radius:6px;border:1px solid #a5f3fc}
+.q-text{font-size:13px;color:#374151;line-height:1.65}
+/* Footer */
+.footer{display:flex;justify-content:space-between;align-items:center;margin-top:44px;padding-top:20px;border-top:2px solid #ecfeff}
+.footer-left{font-size:11px;color:#9ca3af;line-height:1.7}
+.footer-badge{background:linear-gradient(135deg,#0e7490,#0891b2);color:#fff;font-size:10px;font-weight:700;padding:7px 16px;border-radius:8px;letter-spacing:.06em}
+@media print{.banner{padding:24px 40px 20px}.body{padding:28px 40px 36px}}
+</style></head><body>
+<div class="page">
+  <div class="banner">
+    <div class="brand-row">
+      <div>
+        <div class="brand-name">VY<span class="brand-x">X</span>EN</div>
+        <div class="brand-sub">Pitch Radar &middot; Analyse VC</div>
+      </div>
+      <div class="doc-meta">
+        <div class="doc-id">${result.radar_id}</div>
+        <div class="doc-date">Analysé le ${dateStr}</div>
+      </div>
+    </div>
+    <div class="banner-title">Rapport d'analyse — ${result.startup_name}</div>
+    <div class="banner-sub">Scoring VC par critères pondérés &middot; VYXEN AI</div>
+  </div>
+  <div class="body">
+    <div class="score-hero">
+      <div style="text-align:center;flex-shrink:0">
+        <div class="score-big">${result.score_global.toFixed(1)}<span class="score-denom">/10</span></div>
+        <div style="font-size:11px;color:#9090b0;margin-top:5px;letter-spacing:.05em">Score global</div>
+      </div>
+      <div class="score-desc">
+        <h2>${result.startup_name}</h2>
+        <p>Analyse sur 8 critères VC pondérés : équipe, marché, traction, modèle économique, solution, problème, concurrence et financement.</p>
+        <div class="reco-box">${rc.icon} ${result.recommandation}</div>
+      </div>
+    </div>
+    <div class="st">Scores par critère</div>
+    ${barsHtml}
+    <div class="st">Synthèse analytique</div>
+    <div class="two-col">
+      <div class="col-box green"><div class="col-title">✓ Points forts</div><ul>${result.points_forts.map((f) => `<li>${f}</li>`).join("")}</ul></div>
+      <div class="col-box amber"><div class="col-title">! Points d'alerte</div><ul>${result.points_alerte.map((a) => `<li>${a}</li>`).join("")}</ul></div>
+    </div>
+    <div class="st">Questions à poser au fondateur</div>
+    <div class="q-list">${result.questions_suggerees.map((q, i) => `<div class="q-item"><span class="q-num">Q${i+1}</span><span class="q-text">${q}</span></div>`).join("")}</div>
+    <div class="footer">
+      <div class="footer-left">Document généré par VYXEN Pitch Radar IA &middot; ${new Date().getFullYear()}<br>Rapport confidentiel &middot; Usage investisseur uniquement</div>
+      <div class="footer-badge">VYXEN &middot; XPRIZE 2026</div>
+    </div>
+  </div>
 </div></body></html>`);
     setTimeout(() => { win.print(); }, 300);
   }

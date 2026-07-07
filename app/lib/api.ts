@@ -36,6 +36,7 @@ export interface TokenResponse {
   full_name: string;
   profile: string;
   plan: string;
+  created_at?: string;
 }
 
 export interface UsageResponse {

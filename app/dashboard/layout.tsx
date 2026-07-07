@@ -101,25 +101,25 @@ function Sidebar({ user, onClose }: { user: User | null; onClose?: () => void })
     <aside className="flex flex-col h-full" style={{ background: "#0b1526" }}>
 
       {/* Logo */}
-      <div className="flex items-center justify-between px-5 py-6">
+      <div className="flex items-center justify-between px-5 py-7">
         <Link href="/dashboard" style={{ textDecoration: "none", display: "block" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 5 }}>
-            <img src="/logo-vyxen.png" alt="" style={{ height: 36, width: "auto", display: "block", flexShrink: 0 }} />
+          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 7 }}>
+            <img src="/logo-vyxen.png" alt="" style={{ height: 46, width: "auto", display: "block", flexShrink: 0 }} />
             <span translate="no" className="notranslate" style={{
               background: "linear-gradient(135deg, #8b5cf6, #22d3ee)",
               WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
-              fontSize: 20, fontWeight: 800, letterSpacing: "5px",
+              fontSize: 22, fontWeight: 800, letterSpacing: "5px",
               display: "inline-flex", alignItems: "center", lineHeight: 1,
             }}>
               VY<span style={{
-                fontSize: "1.6em", fontWeight: 900, lineHeight: 0.85,
+                fontSize: "1.65em", fontWeight: 900, lineHeight: 0.85,
                 background: "linear-gradient(180deg, #c4b5fd 0%, #8b5cf6 55%, #7c3aed 100%)",
                 WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
                 letterSpacing: 0,
               }}>X</span>EN
             </span>
           </div>
-          <div style={{ fontSize: 8.5, color: "rgba(255,255,255,0.18)", letterSpacing: "0.22em", fontWeight: 700, textTransform: "uppercase", paddingLeft: 28 }}>AI PLATFORM</div>
+          <div style={{ fontSize: 8.5, color: "rgba(255,255,255,0.18)", letterSpacing: "0.22em", fontWeight: 700, textTransform: "uppercase", paddingLeft: 58 }}>AI PLATFORM</div>
         </Link>
         {onClose && (
           <button onClick={onClose} style={{ color: "rgba(255,255,255,0.35)", background: "none", border: "none", cursor: "pointer", padding: 4 }}>
@@ -132,7 +132,7 @@ function Sidebar({ user, onClose }: { user: User | null; onClose?: () => void })
       <div style={{ height: 1, background: "rgba(255,255,255,0.06)", marginInline: 20 }} />
 
       {/* Nav */}
-      <nav className="flex-1 overflow-y-auto" style={{ padding: "8px 12px", display: "flex", flexDirection: "column", gap: 1 }}>
+      <nav className="flex-1 overflow-y-auto" style={{ padding: "14px 12px 8px", display: "flex", flexDirection: "column", gap: 1 }}>
         <SectionLabel first>Vue d&apos;ensemble</SectionLabel>
         {NAV_OVERVIEW.map((n) => <NavItem key={n.href} {...n} onClose={onClose} />)}
 

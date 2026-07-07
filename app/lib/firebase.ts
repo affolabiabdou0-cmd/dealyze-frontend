@@ -13,8 +13,11 @@ function getFirebaseApp(): FirebaseApp {
   });
 }
 
-// Pre-init Firebase on module load — avoids cold SDK start on first click
-if (typeof window !== "undefined") getFirebaseApp();
+// Pre-init Firebase + Auth on module load — avoids cold SDK start on first click
+if (typeof window !== "undefined") {
+  const _app = getFirebaseApp();
+  getAuth(_app); // pre-connects to Firebase Auth
+}
 
 export async function signInWithGoogle(): Promise<string> {
   const app      = getFirebaseApp();

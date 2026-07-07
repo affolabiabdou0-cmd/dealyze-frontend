@@ -29,6 +29,7 @@ export function saveAuth(data: TokenResponse): void {
     full_name: data.full_name,
     profile: data.profile,
     plan: data.plan,
+    created_at: data.created_at,
   }));
 }
 

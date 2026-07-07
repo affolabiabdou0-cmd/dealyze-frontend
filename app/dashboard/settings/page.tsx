@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { User, Lock, Info, AlertTriangle, Check, AlertCircle, Copy, CheckCircle, Eye, EyeOff, Settings } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { User, Lock, Info, AlertTriangle, Check, AlertCircle, Copy, CheckCircle, Eye, EyeOff, Settings, Camera } from "lucide-react";
 import { getUser, clearAuth } from "../../lib/auth";
 import { api } from "../../lib/api";
 import { useRouter } from "next/navigation";
@@ -75,6 +75,26 @@ export default function SettingsPage() {
   const [idCopied,       setIdCopied]       = useState(false);
   const [deleteConfirm,  setDeleteConfirm]  = useState("");
   const [deleting,       setDeleting]       = useState(false);
+  const [avatarUrl,      setAvatarUrl]      = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("vyxen_avatar");
+    if (saved) setAvatarUrl(saved);
+  }, []);
+
+  function handleAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 2 * 1024 * 1024) { setSaveErr("L'image doit faire moins de 2 Mo."); return; }
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const b64 = ev.target?.result as string;
+      localStorage.setItem("vyxen_avatar", b64);
+      setAvatarUrl(b64);
+    };
+    reader.readAsDataURL(file);
+  }
 
   const strength = newPw ? pwStrength(newPw) : null;
 
@@ -165,20 +185,27 @@ export default function SettingsPage() {
               <SectionTitle>Profil</SectionTitle>
               <SectionSub>Gérez vos informations personnelles</SectionSub>
               <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 28 }}>
-                <div style={{
-                  width: 72, height: 72, borderRadius: 18,
-                  background: "linear-gradient(135deg, #7c3aed, #a855f7)",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: 26, fontWeight: 700, color: "#fff",
-                  boxShadow: "0 4px 16px rgba(124,58,237,0.25)",
-                }}>
-                  {user?.full_name?.split(" ").map((w) => w[0]).join("").toUpperCase().slice(0, 2) ?? "?"}
+                <div style={{ position: "relative", flexShrink: 0 }}>
+                  {avatarUrl ? (
+                    <img src={avatarUrl} alt="" style={{ width: 72, height: 72, borderRadius: 18, objectFit: "cover", border: "2px solid #ede9fe", display: "block" }} />
+                  ) : (
+                    <div style={{
+                      width: 72, height: 72, borderRadius: 18,
+                      background: "linear-gradient(135deg, #7c3aed, #a855f7)",
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      fontSize: 26, fontWeight: 700, color: "#fff",
+                      boxShadow: "0 4px 16px rgba(124,58,237,0.25)",
+                    }}>
+                      {user?.full_name?.split(" ").map((w) => w[0]).join("").toUpperCase().slice(0, 2) ?? "?"}
+                    </div>
+                  )}
                 </div>
                 <div>
                   <div style={{ fontSize: 16, fontWeight: 700, color: "#0f172a", marginBottom: 4 }}>{user?.full_name ?? "—"}</div>
                   <div style={{ fontSize: 13, color: "#94a3b8", marginBottom: 10 }}>{user?.email}</div>
-                  <button style={{ fontSize: 12, fontWeight: 600, color: ACCENT, background: "#ede9fe", border: "1px solid #c4b5fd", borderRadius: 7, padding: "5px 12px", cursor: "pointer" }}>
-                    Changer la photo
+                  <input type="file" ref={fileInputRef} accept="image/*" style={{ display: "none" }} onChange={handleAvatarChange} />
+                  <button onClick={() => fileInputRef.current?.click()} style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 12, fontWeight: 600, color: ACCENT, background: "#ede9fe", border: "1px solid #c4b5fd", borderRadius: 7, padding: "5px 12px", cursor: "pointer" }}>
+                    <Camera size={12} /> Changer la photo
                   </button>
                 </div>
               </div>
