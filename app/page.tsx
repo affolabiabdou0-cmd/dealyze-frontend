@@ -7,6 +7,7 @@ import {
   Check, ArrowRight, Menu, X as CloseIcon, ChevronDown,
   Zap, Clock, Users, Play,
 } from "lucide-react";
+import VyxenMark from "./components/VyxenMark";
 
 // ─── NAVBAR ───────────────────────────────────────────────────────────────────
 function Navbar() {
@@ -30,13 +31,21 @@ function Navbar() {
       <div style={{ maxWidth: 1160, margin: "0 auto", padding: "0 32px", display: "flex", alignItems: "center", justifyContent: "space-between", height: 66 }}>
 
         {/* ── GAUCHE : Logo ── */}
-        <a href="#" style={{ textDecoration: "none", flexShrink: 0, display: "flex", alignItems: "center", gap: 9 }}>
-          <img src="/logo-vyxen.png" alt="VYXEN" style={{ height: 36, width: "auto", display: "block" }} />
+        <a href="#" style={{ textDecoration: "none", flexShrink: 0, display: "flex", alignItems: "center", gap: 10 }}>
+          <VyxenMark size={36} />
           <span translate="no" className="notranslate" style={{
             background: "linear-gradient(135deg, #c4b5fd, #67e8f9)",
             WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
-            fontSize: 20, fontWeight: 800, letterSpacing: "6px",
-          }}>VYXEN</span>
+            fontSize: 16, fontWeight: 800, letterSpacing: "5px",
+            display: "inline-flex", alignItems: "center",
+          }}>
+            VY<span style={{
+              fontSize: "1.6em", fontWeight: 900, lineHeight: 0.85,
+              background: "linear-gradient(180deg, #e0f2fe 0%, #67e8f9 50%, #22d3ee 100%)",
+              WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
+              letterSpacing: 0,
+            }}>X</span>EN
+          </span>
         </a>
 
         {/* ── CENTRE : Liens ── */}
@@ -699,12 +708,20 @@ function Footer() {
           {/* Logo + about */}
           <div>
             <span translate="no" className="notranslate" style={{ display: "inline-flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
-              <img src="/logo-vyxen.png" alt="VYXEN" style={{ height: 26, width: "auto", display: "block" }} />
+              <VyxenMark size={28} />
               <span style={{
                 background: "linear-gradient(135deg, #c4b5fd, #67e8f9)",
                 WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
-                fontSize: 18, fontWeight: 800, letterSpacing: "4px",
-              }}>VYXEN</span>
+                fontSize: 14, fontWeight: 800, letterSpacing: "4px",
+                display: "inline-flex", alignItems: "center",
+              }}>
+                VY<span style={{
+                  fontSize: "1.55em", fontWeight: 900, lineHeight: 0.85,
+                  background: "linear-gradient(180deg, #e0f2fe 0%, #67e8f9 50%, #22d3ee 100%)",
+                  WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
+                  letterSpacing: 0,
+                }}>X</span>EN
+              </span>
             </span>
             <p style={{ fontSize: 12, color: "#475569", maxWidth: 260, lineHeight: 1.7, marginTop: 8 }}>
               Plateforme IA pour PME et investisseurs. 4 agents spécialisés pour automatiser chaque étape de vos deals. Projet XPRIZE AI Hackathon 2026.

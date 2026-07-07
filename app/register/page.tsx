@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff, ArrowRight, AlertCircle, Building2, TrendingUp, FileText, Mail, BarChart3, Shield } from "lucide-react";
 import { register, saveAuth } from "../lib/auth";
+import VyxenMark from "../components/VyxenMark";
 import { signInWithGoogle } from "../lib/firebase";
 import { api, type TokenResponse } from "../lib/api";
 
@@ -115,13 +116,21 @@ export default function RegisterPage() {
         style={{ padding:"52px 64px", background:"linear-gradient(150deg,#060C1A 0%,#0B1830 52%,#0F2552 100%)" }}>
         <div className="absolute inset-0 pointer-events-none" style={{ background:"radial-gradient(ellipse 70% 55% at 65% 25%, rgba(37,99,235,0.13) 0%, transparent 70%)" }} />
 
-        <Link href="/" className="relative z-10" style={{ textDecoration:"none", display:"flex", alignItems:"center", gap:14 }}>
-          <img src="/logo-vyxen.png" alt="VYXEN" style={{ height: 52, width:"auto", display:"block" }} />
+        <Link href="/" className="relative z-10" style={{ textDecoration:"none", display:"flex", alignItems:"center", gap:16 }}>
+          <VyxenMark size={58} glow />
           <span translate="no" className="notranslate" style={{
             background: "linear-gradient(135deg, #8b5cf6, #22d3ee)",
             WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
-            fontSize: 40, fontWeight: 800, letterSpacing: "8px",
-          }}>VYXEN</span>
+            fontSize: 28, fontWeight: 800, letterSpacing: "7px",
+            display: "inline-flex", alignItems: "center",
+          }}>
+            VY<span style={{
+              fontSize: "1.85em", fontWeight: 900, lineHeight: 0.82,
+              background: "linear-gradient(180deg, #7ffeff 0%, #22d3ee 55%, #0ea5e9 100%)",
+              WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
+              letterSpacing: 0,
+            }}>X</span>EN
+          </span>
         </Link>
 
         <div className="relative z-10">
@@ -166,13 +175,21 @@ export default function RegisterPage() {
         <div style={{ width:"100%", maxWidth:380, paddingTop:8, paddingBottom:8 }}>
 
           <Link href="/" className="lg:hidden"
-            style={{ textDecoration:"none", display:"flex", alignItems:"center", gap:8, marginBottom:28 }}>
-            <img src="/logo-vyxen.png" alt="VYXEN" style={{ height: 30, width:"auto", display:"block" }} />
+            style={{ textDecoration:"none", display:"flex", alignItems:"center", gap:9, marginBottom:28 }}>
+            <VyxenMark size={32} />
             <span translate="no" className="notranslate" style={{
-              background: "linear-gradient(135deg, #8b5cf6, #22d3ee)",
+              background: "linear-gradient(135deg, #7c3aed, #22d3ee)",
               WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
-              fontSize: 22, fontWeight: 800, letterSpacing: "5px",
-            }}>VYXEN</span>
+              fontSize: 17, fontWeight: 800, letterSpacing: "5px",
+              display: "inline-flex", alignItems: "center",
+            }}>
+              VY<span style={{
+                fontSize: "1.6em", fontWeight: 900, lineHeight: 0.85,
+                background: "linear-gradient(180deg, #c4b5fd 0%, #8b5cf6 55%, #7c3aed 100%)",
+                WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
+                letterSpacing: 0,
+              }}>X</span>EN
+            </span>
           </Link>
 
           <h2 style={{ fontSize:28, fontWeight:700, color:"#0A1628", letterSpacing:"-0.75px", marginBottom:4 }}>Créer votre compte</h2>
