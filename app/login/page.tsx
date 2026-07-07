@@ -121,16 +121,16 @@ export default function LoginPage() {
           <div style={{ position:"absolute", inset:0, backgroundImage:"radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px)", backgroundSize:"32px 32px", animation:"gridPulse 6s ease-in-out infinite" }} />
         </div>
 
-        <Link href="/" className="relative z-10" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: 16 }}>
-          <img src="/logo-vyxen.png" alt="VYXEN" style={{ height: 64, width: "auto", display: "block" }} />
+        <Link href="/" className="relative z-10" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: 14 }}>
+          <img src="/logo-vyxen.png" alt="VYXEN" style={{ height: 88, width: "auto", display: "block" }} />
           <span translate="no" className="notranslate" style={{
             background: "linear-gradient(135deg, #8b5cf6, #22d3ee)",
             WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
-            fontSize: 32, fontWeight: 800, letterSpacing: "7px",
+            fontSize: 38, fontWeight: 800, letterSpacing: "3px",
             display: "inline-flex", alignItems: "center",
           }}>
             VY<span style={{
-              fontSize: "1.85em", fontWeight: 900, lineHeight: 0.82,
+              fontSize: "1.75em", fontWeight: 900, lineHeight: 0.82,
               background: "linear-gradient(180deg, #7ffeff 0%, #22d3ee 55%, #0ea5e9 100%)",
               WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
               letterSpacing: 0,
@@ -174,16 +174,16 @@ export default function LoginPage() {
         style={{ background:"#fff", padding:"48px 28px", minHeight:"100vh" }}>
         <div style={{ width:"100%", maxWidth:380 }}>
 
-          <Link href="/" className="lg:hidden" style={{ textDecoration:"none", display:"flex", alignItems:"center", gap:10, marginBottom:28 }}>
-            <img src="/logo-vyxen.png" alt="VYXEN" style={{ height: 36, width:"auto", display:"block" }} />
+          <Link href="/" className="lg:hidden" style={{ textDecoration:"none", display:"flex", alignItems:"center", gap:12, marginBottom:28 }}>
+            <img src="/logo-vyxen.png" alt="VYXEN" style={{ height: 52, width:"auto", display:"block" }} />
             <span translate="no" className="notranslate" style={{
               background: "linear-gradient(135deg, #7c3aed, #22d3ee)",
               WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
-              fontSize: 20, fontWeight: 800, letterSpacing: "5px",
+              fontSize: 28, fontWeight: 800, letterSpacing: "2px",
               display: "inline-flex", alignItems: "center",
             }}>
               VY<span style={{
-                fontSize: "1.7em", fontWeight: 900, lineHeight: 0.85,
+                fontSize: "1.65em", fontWeight: 900, lineHeight: 0.85,
                 background: "linear-gradient(180deg, #c4b5fd 0%, #8b5cf6 55%, #7c3aed 100%)",
                 WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
                 letterSpacing: 0,

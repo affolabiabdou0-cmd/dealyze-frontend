@@ -42,7 +42,7 @@ function SectionLabel({ children, first }: { children: React.ReactNode; first?: 
     <div style={{
       fontSize: 9.5, fontWeight: 800, letterSpacing: "0.14em",
       color: "rgba(255,255,255,0.22)", textTransform: "uppercase",
-      padding: first ? "6px 14px 10px" : "24px 14px 10px",
+      padding: first ? "20px 14px 10px" : "24px 14px 10px",
       display: "flex", alignItems: "center", gap: 8,
     }}>
       <div style={{ flex: 1, height: "1px", background: "rgba(255,255,255,0.06)" }} />
@@ -102,13 +102,13 @@ function Sidebar({ user, onClose }: { user: User | null; onClose?: () => void })
 
       {/* Logo */}
       <div className="flex items-center justify-between px-5 py-7">
-        <Link href="/dashboard" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: 14 }}>
-          <img src="/logo-vyxen.png" alt="" style={{ height: 56, width: "auto", display: "block", flexShrink: 0 }} />
+        <Link href="/dashboard" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: 10 }}>
+          <img src="/logo-vyxen.png" alt="" style={{ height: 64, width: "auto", display: "block", flexShrink: 0 }} />
           <div>
             <span translate="no" className="notranslate" style={{
               background: "linear-gradient(135deg, #8b5cf6, #22d3ee)",
               WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
-              fontSize: 26, fontWeight: 800, letterSpacing: "5px",
+              fontSize: 30, fontWeight: 800, letterSpacing: "2px",
               display: "inline-flex", alignItems: "center", lineHeight: 1,
             }}>
               VY<span style={{
@@ -118,7 +118,7 @@ function Sidebar({ user, onClose }: { user: User | null; onClose?: () => void })
                 letterSpacing: 0,
               }}>X</span>EN
             </span>
-            <div style={{ fontSize: 8.5, color: "rgba(255,255,255,0.22)", letterSpacing: "0.22em", fontWeight: 700, textTransform: "uppercase", marginTop: 6 }}>AI PLATFORM</div>
+            <div style={{ fontSize: 8.5, color: "rgba(255,255,255,0.22)", letterSpacing: "0.2em", fontWeight: 700, textTransform: "uppercase", marginTop: 5 }}>AI PLATFORM</div>
           </div>
         </Link>
         {onClose && (
