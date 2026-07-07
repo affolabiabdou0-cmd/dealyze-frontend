@@ -197,7 +197,7 @@ ul li::before{content:"✓";color:#7c3aed;font-weight:700;flex-shrink:0;margin-t
               <div><Label>Besoin / Prestation *</Label>
                 <textarea required value={form.need} onChange={(e) => set("need", e.target.value)} placeholder="Création d'un site e-commerce avec tableau de bord analytique..." rows={3} style={{ ...inputStyle, resize: "none", minHeight: 90 }} onFocus={onFocus} onBlur={onBlur} />
               </div>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+              <div className="grid grid-cols-1 sm:grid-cols-2" style={{ gap: 12 }}>
                 <div><Label>Budget *</Label><input type="text" required value={form.budget} onChange={(e) => set("budget", e.target.value)} placeholder="8 000 €" style={inputStyle} onFocus={onFocus} onBlur={onBlur} /></div>
                 <div><Label>Délai *</Label><input type="text" required value={form.timeline} onChange={(e) => set("timeline", e.target.value)} placeholder="6 semaines" style={inputStyle} onFocus={onFocus} onBlur={onBlur} /></div>
               </div>
@@ -343,7 +343,7 @@ ul li::before{content:"✓";color:#7c3aed;font-weight:700;flex-shrink:0;margin-t
                       </div>
                       <span style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", color: COLOR }}>Livrables inclus</span>
                     </div>
-                    <div style={{ paddingLeft: 36, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+                    <div className="grid grid-cols-1 sm:grid-cols-2" style={{ paddingLeft: 36, gap: 8 }}>
                       {(result.content.livrables as string[]).map((l, i) => (
                         <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 8 }}>
                           <div style={{ width: 18, height: 18, borderRadius: 5, background: "#ede9fe", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 1 }}>

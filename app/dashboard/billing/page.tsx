@@ -349,11 +349,11 @@ export default function BillingPage() {
           <Receipt size={14} style={{ color: "#94a3b8" }} strokeWidth={1.5} />
           <h3 style={{ fontSize: 13, fontWeight: 700, color: "#0f172a" }}>Historique des paiements</h3>
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "1.2fr 2fr 1fr 1fr 0.8fr", gap: 10, padding: "0 12px 10px", borderBottom: "1px solid #f1f5f9" }}>
+        <div style={{ overflowX: "auto" }}><div style={{ display: "grid", gridTemplateColumns: "1.2fr 2fr 1fr 1fr 0.8fr", gap: 10, padding: "0 12px 10px", borderBottom: "1px solid #f1f5f9", minWidth: 460 }}>
           {["Date", "Description", "Montant", "Statut", "Facture"].map((h) => (
             <span key={h} style={{ fontSize: 9.5, fontWeight: 700, letterSpacing: "0.07em", color: "#94a3b8", textTransform: "uppercase" }}>{h}</span>
           ))}
-        </div>
+        </div></div>
         <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "14px 12px" }}>
           <div style={{ width: 34, height: 34, borderRadius: 9, background: "#f8fafc", border: "1px solid #e2e8f0", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
             <Receipt size={15} style={{ color: "#cbd5e1" }} strokeWidth={1.5} />

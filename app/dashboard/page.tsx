@@ -45,7 +45,7 @@ function ActivityDrawer({ item, onClose }: { item: ActivityItem; onClose: () => 
     <div className="fixed inset-0 z-50" onClick={onClose}>
       <div className="absolute inset-0" style={{ background: "rgba(11,21,38,0.4)", backdropFilter: "blur(5px)" }} />
       <div className="absolute right-0 top-0 h-full flex flex-col"
-        style={{ width: 420, background: "#fff", boxShadow: "-12px 0 50px rgba(0,0,0,0.14)" }}
+        style={{ width: "min(420px, 100vw)", background: "#fff", boxShadow: "-12px 0 50px rgba(0,0,0,0.14)" }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}

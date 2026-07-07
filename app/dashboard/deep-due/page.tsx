@@ -298,7 +298,7 @@ ${result.risques_identifies?.length ? `<div class="section-title">Risques identi
                 <div style={{ fontFamily: "monospace", fontSize: 11, color: "#94a3b8", marginBottom: 6 }}>{result.due_id}</div>
                 <h3 style={{ fontSize: 22, fontWeight: 800, color: "#0f172a", letterSpacing: "-0.5px", marginBottom: 4 }}>Due Diligence — {result.company_name}</h3>
                 {result.founder_name && <p style={{ fontSize: 13, color: "#64748b", marginBottom: 16 }}>Fondateur : {result.founder_name}</p>}
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginTop: 16 }}>
+                <div className="grid grid-cols-1 sm:grid-cols-2" style={{ gap: 12, marginTop: 16 }}>
                   <div style={{ padding: "14px 16px", borderRadius: 12, background: rc.bg, border: `1px solid ${rc.border}` }}>
                     <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: rc.color, marginBottom: 6 }}>Recommandation</div>
                     <div style={{ fontSize: 16, fontWeight: 800, color: rc.color }}>{rc.icon} {result.recommandation_finale}</div>
@@ -346,7 +346,7 @@ ${result.risques_identifies?.length ? `<div class="section-title">Risques identi
                       </div>
                     )}
                     {(result.profil_fondateur.signaux_positifs?.length > 0 || result.profil_fondateur.signaux_negatifs?.length > 0) && (
-                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginTop: 12 }}>
+                      <div className="grid grid-cols-1 sm:grid-cols-2" style={{ gap: 12, marginTop: 12 }}>
                         {result.profil_fondateur.signaux_positifs?.length > 0 && (
                           <div style={{ padding: "12px 14px", borderRadius: 10, background: "#f0fdf4", border: "1px solid #86efac" }}>
                             <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8 }}>

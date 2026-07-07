@@ -340,7 +340,7 @@ h1{font-size:26px;font-weight:800;color:#1a1a2e;letter-spacing:-0.5px;margin-bot
                     </div>
                     <span style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", color: COLOR }}>Scores par critère</span>
                   </div>
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+                  <div className="grid grid-cols-1 sm:grid-cols-2" style={{ gap: 16 }}>
                     {result.scores.map((s) => {
                       const col = scoreColor(s.score);
                       return (
@@ -365,7 +365,7 @@ h1{font-size:26px;font-weight:800;color:#1a1a2e;letter-spacing:-0.5px;margin-bot
 
               {/* Forces & Alertes */}
               {(result.points_forts?.length > 0 || result.points_alerte?.length > 0) && (
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 0, borderBottom: "1px solid #f1f5f9", animation: "fadeInSection 0.4s ease both", animationDelay: "160ms" }}>
+                <div className="grid grid-cols-1 sm:grid-cols-2" style={{ gap: 0, borderBottom: "1px solid #f1f5f9", animation: "fadeInSection 0.4s ease both", animationDelay: "160ms" }}>
                   {result.points_forts?.length > 0 && (
                     <div style={{ padding: "24px 32px", borderRight: "1px solid #f1f5f9" }}>
                       <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14 }}>

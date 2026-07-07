@@ -284,7 +284,7 @@ export default function SettingsPage() {
             <Card>
               <SectionTitle>Informations du compte</SectionTitle>
               <SectionSub>Vue d&apos;ensemble de votre compte VYXEN</SectionSub>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+              <div className="grid grid-cols-1 sm:grid-cols-2" style={{ gap: 12 }}>
                 <div style={{ background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 12, padding: "18px 20px" }}>
                   <div style={{ fontSize: 11, fontWeight: 600, color: "#94a3b8", letterSpacing: "0.07em", textTransform: "uppercase", marginBottom: 8 }}>ID utilisateur</div>
                   <div style={{ display: "flex", alignItems: "center", gap: 8 }}>

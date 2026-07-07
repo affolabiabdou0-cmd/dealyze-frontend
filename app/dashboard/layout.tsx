@@ -221,7 +221,7 @@ function NotifPanel({ user, onClose }: { user: User | null; onClose: () => void 
     <div className="fixed inset-0 z-50" onClick={onClose}>
       <div className="absolute right-0 top-0 h-full flex flex-col"
         style={{
-          width: 360,
+          width: "min(360px, 100vw)",
           background: "#fff",
           borderRadius: "20px 0 0 20px",
           boxShadow: "-20px 0 80px rgba(91,31,200,0.28), -4px 0 20px rgba(91,31,200,0.14), -1px 0 4px rgba(0,0,0,0.08)",
@@ -378,7 +378,7 @@ function AgentPicker({ onClose }: { onClose: () => void }) {
               <X size={14} style={{ color: "#64748b" }} />
             </button>
           </div>
-          <div style={{ padding: "20px 24px 8px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+          <div className="grid grid-cols-1 sm:grid-cols-2" style={{ padding: "20px 24px 8px", gap: 14 }}>
             {AGENT_PICKS.map(({ href, icon: Icon, color, bg, border, name, desc }) => (
               <button key={href} onClick={() => { router.push(href); onClose(); }}
                 style={{ display: "flex", alignItems: "flex-start", gap: 14, padding: "18px", borderRadius: 14, border: `1.5px solid ${border}`, background: bg, cursor: "pointer", textAlign: "left", transition: "all 0.15s" }}

@@ -178,11 +178,11 @@ ${result.next_action_date ? `<div class="next-box"><span style="font-size:18px">
           <div style={{ ...CARD, padding: 24 }}>
             <h3 style={{ fontSize: 13, fontWeight: 600, color: "#64748b", marginBottom: 20 }}>Détails de la facture</h3>
             <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+              <div className="grid grid-cols-1 sm:grid-cols-2" style={{ gap: 12 }}>
                 <div><Label>Votre entreprise *</Label><input type="text" required value={form.company_name} onChange={(e) => set("company_name", e.target.value)} placeholder="Mon Agence SAS" style={inputStyle} onFocus={onFocus} onBlur={onBlur} /></div>
                 <div><Label>Nom du client *</Label><input type="text" required value={form.client_name} onChange={(e) => set("client_name", e.target.value)} placeholder="Acme Corp" style={inputStyle} onFocus={onFocus} onBlur={onBlur} /></div>
               </div>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+              <div className="grid grid-cols-1 sm:grid-cols-2" style={{ gap: 12 }}>
                 <div><Label>Montant *</Label><input type="number" required value={form.amount} onChange={(e) => set("amount", e.target.value)} placeholder="3 500" style={inputStyle} onFocus={onFocus} onBlur={onBlur} /></div>
                 <div><Label>Devise</Label>
                   <select value={form.currency} onChange={(e) => set("currency", e.target.value)} style={{ ...inputStyle, cursor: "pointer" }} onFocus={onFocus} onBlur={onBlur}>
@@ -190,12 +190,12 @@ ${result.next_action_date ? `<div class="next-box"><span style="font-size:18px">
                   </select>
                 </div>
               </div>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+              <div className="grid grid-cols-1 sm:grid-cols-2" style={{ gap: 12 }}>
                 <div><Label>Date d&apos;émission *</Label><input type="date" required value={form.issue_date} onChange={(e) => set("issue_date", e.target.value)} style={inputStyle} onFocus={onFocus} onBlur={onBlur} /></div>
                 <div><Label>Date d&apos;échéance *</Label><input type="date" required value={form.due_date} onChange={(e) => set("due_date", e.target.value)} style={inputStyle} onFocus={onFocus} onBlur={onBlur} /></div>
               </div>
               <div><Label>Description de la prestation</Label><input type="text" value={form.description} onChange={(e) => set("description", e.target.value)} placeholder="Développement site e-commerce Phase 1" style={inputStyle} onFocus={onFocus} onBlur={onBlur} /></div>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+              <div className="grid grid-cols-1 sm:grid-cols-2" style={{ gap: 12 }}>
                 <div><Label>Relances précédentes</Label>
                   <select value={form.previous_reminders} onChange={(e) => set("previous_reminders", e.target.value)} style={{ ...inputStyle, cursor: "pointer" }} onFocus={onFocus} onBlur={onBlur}>
                     <option value="0">Aucune (1ère relance)</option><option value="1">1 relance</option><option value="2">2 relances</option><option value="3">3 ou plus</option>
@@ -207,7 +207,7 @@ ${result.next_action_date ? `<div class="next-box"><span style="font-size:18px">
                   </select>
                 </div>
               </div>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+              <div className="grid grid-cols-1 sm:grid-cols-2" style={{ gap: 12 }}>
                 <div><Label>Style de relance</Label>
                   <select value={form.chase_style} onChange={(e) => set("chase_style", e.target.value)} style={{ ...inputStyle, cursor: "pointer" }} onFocus={onFocus} onBlur={onBlur}>
                     {["professionnel","bienveillant","ferme"].map((s) => <option key={s}>{s}</option>)}
