@@ -102,24 +102,24 @@ function Sidebar({ user, onClose }: { user: User | null; onClose?: () => void })
 
       {/* Logo */}
       <div className="flex items-center justify-between px-5 py-7">
-        <Link href="/dashboard" style={{ textDecoration: "none", display: "block" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 7 }}>
-            <img src="/logo-vyxen.png" alt="" style={{ height: 46, width: "auto", display: "block", flexShrink: 0 }} />
+        <Link href="/dashboard" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: 14 }}>
+          <img src="/logo-vyxen.png" alt="" style={{ height: 56, width: "auto", display: "block", flexShrink: 0 }} />
+          <div>
             <span translate="no" className="notranslate" style={{
               background: "linear-gradient(135deg, #8b5cf6, #22d3ee)",
               WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
-              fontSize: 22, fontWeight: 800, letterSpacing: "5px",
+              fontSize: 26, fontWeight: 800, letterSpacing: "5px",
               display: "inline-flex", alignItems: "center", lineHeight: 1,
             }}>
               VY<span style={{
-                fontSize: "1.65em", fontWeight: 900, lineHeight: 0.85,
+                fontSize: "1.6em", fontWeight: 900, lineHeight: 0.85,
                 background: "linear-gradient(180deg, #c4b5fd 0%, #8b5cf6 55%, #7c3aed 100%)",
                 WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
                 letterSpacing: 0,
               }}>X</span>EN
             </span>
+            <div style={{ fontSize: 8.5, color: "rgba(255,255,255,0.22)", letterSpacing: "0.22em", fontWeight: 700, textTransform: "uppercase", marginTop: 6 }}>AI PLATFORM</div>
           </div>
-          <div style={{ fontSize: 8.5, color: "rgba(255,255,255,0.18)", letterSpacing: "0.22em", fontWeight: 700, textTransform: "uppercase", paddingLeft: 58 }}>AI PLATFORM</div>
         </Link>
         {onClose && (
           <button onClick={onClose} style={{ color: "rgba(255,255,255,0.35)", background: "none", border: "none", cursor: "pointer", padding: 4 }}>
@@ -485,8 +485,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     <div className="min-h-screen flex" style={{ background: "#f1f5f9" }}>
 
       {/* Desktop sidebar */}
-      <div className="hidden lg:block w-64 flex-shrink-0">
-        <div className="fixed left-0 top-0 w-64 h-screen">
+      <div className="hidden lg:block w-72 flex-shrink-0">
+        <div className="fixed left-0 top-0 w-72 h-screen">
           <Sidebar user={user} />
         </div>
       </div>
@@ -495,7 +495,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       {sidebarOpen && (
         <div className="fixed inset-0 z-50 lg:hidden">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setSidebarOpen(false)} />
-          <div className="absolute left-0 top-0 w-64 h-full shadow-2xl">
+          <div className="absolute left-0 top-0 w-72 h-full shadow-2xl">
             <Sidebar user={user} onClose={() => setSidebarOpen(false)} />
           </div>
         </div>
