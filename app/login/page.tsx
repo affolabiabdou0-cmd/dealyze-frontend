@@ -112,19 +112,13 @@ export default function LoginPage() {
           <div style={{ position:"absolute", inset:0, backgroundImage:"radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px)", backgroundSize:"32px 32px", animation:"gridPulse 6s ease-in-out infinite" }} />
         </div>
 
-        <Link href="/" className="relative z-10" style={{ textDecoration: "none", display: "block" }}>
-          <span style={{
+        <Link href="/" className="relative z-10" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: 14 }}>
+          <img src="/logo-vyxen.png" alt="VYXEN" style={{ height: 52, width: "auto", display: "block" }} />
+          <span translate="no" className="notranslate" style={{
             background: "linear-gradient(135deg, #8b5cf6, #22d3ee)",
             WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
-            fontSize: 54, fontWeight: 800, letterSpacing: "8px", display: "inline-flex", alignItems: "center",
-          }}>
-            VY<span style={{
-              fontSize: "1.75em", fontWeight: 900, display: "inline-block", lineHeight: 0.85,
-              background: "linear-gradient(180deg, #7ffeff 0%, #22d3ee 55%, #0ea5e9 100%)",
-              WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
-              letterSpacing: 0,
-            }}>X</span>EN
-          </span>
+            fontSize: 40, fontWeight: 800, letterSpacing: "8px",
+          }}>VYXEN</span>
         </Link>
 
         <div className="relative z-10">
@@ -163,19 +157,13 @@ export default function LoginPage() {
         style={{ background:"#fff", padding:"48px 28px", minHeight:"100vh" }}>
         <div style={{ width:"100%", maxWidth:380 }}>
 
-          <Link href="/" className="lg:hidden" style={{ textDecoration:"none", display:"block", marginBottom:28 }}>
-            <span style={{
+          <Link href="/" className="lg:hidden" style={{ textDecoration:"none", display:"flex", alignItems:"center", gap:8, marginBottom:28 }}>
+            <img src="/logo-vyxen.png" alt="VYXEN" style={{ height: 30, width:"auto", display:"block" }} />
+            <span translate="no" className="notranslate" style={{
               background: "linear-gradient(135deg, #8b5cf6, #22d3ee)",
               WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
-              fontSize: 28, fontWeight: 800, letterSpacing: "5px", display: "inline-flex", alignItems: "center",
-            }}>
-              VY<span style={{
-                fontSize: "1.5em", fontWeight: 900, display: "inline-block", lineHeight: 0.85,
-                background: "linear-gradient(180deg, #7ffeff 0%, #22d3ee 55%, #0ea5e9 100%)",
-                WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
-                letterSpacing: 0,
-              }}>X</span>EN
-            </span>
+              fontSize: 22, fontWeight: 800, letterSpacing: "5px",
+            }}>VYXEN</span>
           </Link>
 
           <h2 style={{ fontSize:30, fontWeight:700, color:"#0A1628", letterSpacing:"-0.75px", marginBottom:6 }}>Bon retour</h2>

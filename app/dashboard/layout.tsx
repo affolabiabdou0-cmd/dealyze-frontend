@@ -104,14 +104,12 @@ function Sidebar({ user, onClose }: { user: User | null; onClose?: () => void })
       <div className="flex items-center justify-between px-5 py-6">
         <Link href="/dashboard" style={{ textDecoration: "none", display: "block" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 5 }}>
-            <Zap size={18} style={{ color: "#8b5cf6", flexShrink: 0 }} strokeWidth={2.5} />
+            <img src="/logo-vyxen.png" alt="VYXEN" style={{ height: 34, width: "auto", display: "block", flexShrink: 0 }} />
             <span translate="no" className="notranslate" style={{
               background: "linear-gradient(135deg, #8b5cf6, #22d3ee)",
               WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
-              fontSize: 30, fontWeight: 800, letterSpacing: "5px", display: "inline-block", lineHeight: 1,
-            }}>
-              VY<span style={{ fontSize: "1.12em", fontWeight: 900 }}>X</span>EN
-            </span>
+              fontSize: 24, fontWeight: 800, letterSpacing: "5px", display: "inline-block", lineHeight: 1,
+            }}>VYXEN</span>
           </div>
           <div style={{ fontSize: 8.5, color: "rgba(255,255,255,0.18)", letterSpacing: "0.22em", fontWeight: 700, textTransform: "uppercase", paddingLeft: 28 }}>AI PLATFORM</div>
         </Link>
