@@ -13,6 +13,9 @@ function getFirebaseApp(): FirebaseApp {
   });
 }
 
+// Pre-init Firebase on module load — avoids cold SDK start on first click
+if (typeof window !== "undefined") getFirebaseApp();
+
 export async function signInWithGoogle(): Promise<string> {
   const app      = getFirebaseApp();
   const auth     = getAuth(app);

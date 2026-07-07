@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff, ArrowRight, AlertCircle, Building2, TrendingUp, FileText, Mail, BarChart3, Shield } from "lucide-react";
@@ -42,6 +42,12 @@ export default function RegisterPage() {
   const [loading,  setLoading]  = useState(false);
   const [gLoading, setGLoading] = useState(false);
   const [error,    setError]    = useState("");
+
+  // Wake up Render backend on mount to reduce cold-start latency
+  useEffect(() => {
+    const base = (process.env.NEXT_PUBLIC_API_URL ?? "https://dealyze-api.onrender.com").replace(/\/$/, "");
+    fetch(`${base}/health`).catch(() => {});
+  }, []);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -196,7 +202,7 @@ export default function RegisterPage() {
             onMouseLeave={(e) => { e.currentTarget.style.background="#fff"; e.currentTarget.style.boxShadow="0 1px 3px rgba(0,0,0,0.06)"; }}
           >
             {gLoading ? <span className="w-[18px] h-[18px] rounded-full border-2 border-gray-200 border-t-gray-500 animate-spin" /> : <GIcon />}
-            Continuer avec Google
+            {gLoading ? "Connexion en cours…" : "Continuer avec Google"}
           </button>
 
           <div className="flex items-center gap-4" style={{ marginBottom:20 }}>
