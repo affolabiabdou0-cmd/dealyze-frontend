@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff, ArrowRight, AlertCircle, FileText, Mail, BarChart3, Shield } from "lucide-react";
 import { login, saveAuth } from "../lib/auth";
-import VyxenMark from "../components/VyxenMark";
 import { signInWithGoogle } from "../lib/firebase";
 import { api, type TokenResponse } from "../lib/api";
 
@@ -120,11 +119,11 @@ export default function LoginPage() {
         </div>
 
         <Link href="/" className="relative z-10" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: 16 }}>
-          <VyxenMark size={58} glow />
+          <img src="/logo-vyxen.png" alt="VYXEN" style={{ height: 64, width: "auto", display: "block" }} />
           <span translate="no" className="notranslate" style={{
             background: "linear-gradient(135deg, #8b5cf6, #22d3ee)",
             WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
-            fontSize: 28, fontWeight: 800, letterSpacing: "7px",
+            fontSize: 32, fontWeight: 800, letterSpacing: "7px",
             display: "inline-flex", alignItems: "center",
           }}>
             VY<span style={{
@@ -172,16 +171,16 @@ export default function LoginPage() {
         style={{ background:"#fff", padding:"48px 28px", minHeight:"100vh" }}>
         <div style={{ width:"100%", maxWidth:380 }}>
 
-          <Link href="/" className="lg:hidden" style={{ textDecoration:"none", display:"flex", alignItems:"center", gap:9, marginBottom:28 }}>
-            <VyxenMark size={32} />
+          <Link href="/" className="lg:hidden" style={{ textDecoration:"none", display:"flex", alignItems:"center", gap:10, marginBottom:28 }}>
+            <img src="/logo-vyxen.png" alt="VYXEN" style={{ height: 36, width:"auto", display:"block" }} />
             <span translate="no" className="notranslate" style={{
               background: "linear-gradient(135deg, #7c3aed, #22d3ee)",
               WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
-              fontSize: 17, fontWeight: 800, letterSpacing: "5px",
+              fontSize: 20, fontWeight: 800, letterSpacing: "5px",
               display: "inline-flex", alignItems: "center",
             }}>
               VY<span style={{
-                fontSize: "1.6em", fontWeight: 900, lineHeight: 0.85,
+                fontSize: "1.7em", fontWeight: 900, lineHeight: 0.85,
                 background: "linear-gradient(180deg, #c4b5fd 0%, #8b5cf6 55%, #7c3aed 100%)",
                 WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
                 letterSpacing: 0,

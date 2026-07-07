@@ -7,7 +7,6 @@ import {
   Check, ArrowRight, Menu, X as CloseIcon, ChevronDown,
   Zap, Clock, Users, Play,
 } from "lucide-react";
-import VyxenMark from "./components/VyxenMark";
 
 // ─── NAVBAR ───────────────────────────────────────────────────────────────────
 function Navbar() {
@@ -32,15 +31,15 @@ function Navbar() {
 
         {/* ── GAUCHE : Logo ── */}
         <a href="#" style={{ textDecoration: "none", flexShrink: 0, display: "flex", alignItems: "center", gap: 10 }}>
-          <VyxenMark size={36} />
+          <img src="/logo-vyxen.png" alt="" style={{ height: 38, width: "auto", display: "block" }} />
           <span translate="no" className="notranslate" style={{
             background: "linear-gradient(135deg, #c4b5fd, #67e8f9)",
             WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
-            fontSize: 16, fontWeight: 800, letterSpacing: "5px",
+            fontSize: 18, fontWeight: 800, letterSpacing: "5px",
             display: "inline-flex", alignItems: "center",
           }}>
             VY<span style={{
-              fontSize: "1.6em", fontWeight: 900, lineHeight: 0.85,
+              fontSize: "1.7em", fontWeight: 900, lineHeight: 0.85,
               background: "linear-gradient(180deg, #e0f2fe 0%, #67e8f9 50%, #22d3ee 100%)",
               WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
               letterSpacing: 0,
@@ -708,15 +707,15 @@ function Footer() {
           {/* Logo + about */}
           <div>
             <span translate="no" className="notranslate" style={{ display: "inline-flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
-              <VyxenMark size={28} />
+              <img src="/logo-vyxen.png" alt="" style={{ height: 28, width: "auto", display: "block" }} />
               <span style={{
                 background: "linear-gradient(135deg, #c4b5fd, #67e8f9)",
                 WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
-                fontSize: 14, fontWeight: 800, letterSpacing: "4px",
+                fontSize: 16, fontWeight: 800, letterSpacing: "4px",
                 display: "inline-flex", alignItems: "center",
               }}>
                 VY<span style={{
-                  fontSize: "1.55em", fontWeight: 900, lineHeight: 0.85,
+                  fontSize: "1.65em", fontWeight: 900, lineHeight: 0.85,
                   background: "linear-gradient(180deg, #e0f2fe 0%, #67e8f9 50%, #22d3ee 100%)",
                   WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
                   letterSpacing: 0,

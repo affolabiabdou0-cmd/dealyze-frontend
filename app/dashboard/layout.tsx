@@ -9,7 +9,6 @@ import {
   ChevronRight, Clock, AlertTriangle,
 } from "lucide-react";
 import { getUser, clearAuth } from "../lib/auth";
-import VyxenMark from "../components/VyxenMark";
 import type { User } from "../lib/auth";
 import { getActivity, markNotifSeen, countUnread, relativeTime, ACTIVITY_META } from "../lib/activity";
 import type { ActivityItem } from "../lib/activity";
@@ -105,15 +104,15 @@ function Sidebar({ user, onClose }: { user: User | null; onClose?: () => void })
       <div className="flex items-center justify-between px-5 py-6">
         <Link href="/dashboard" style={{ textDecoration: "none", display: "block" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 5 }}>
-            <VyxenMark size={34} glow />
+            <img src="/logo-vyxen.png" alt="" style={{ height: 36, width: "auto", display: "block", flexShrink: 0 }} />
             <span translate="no" className="notranslate" style={{
               background: "linear-gradient(135deg, #8b5cf6, #22d3ee)",
               WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
-              fontSize: 18, fontWeight: 800, letterSpacing: "5px",
+              fontSize: 20, fontWeight: 800, letterSpacing: "5px",
               display: "inline-flex", alignItems: "center", lineHeight: 1,
             }}>
               VY<span style={{
-                fontSize: "1.5em", fontWeight: 900, lineHeight: 0.85,
+                fontSize: "1.6em", fontWeight: 900, lineHeight: 0.85,
                 background: "linear-gradient(180deg, #c4b5fd 0%, #8b5cf6 55%, #7c3aed 100%)",
                 WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
                 letterSpacing: 0,
