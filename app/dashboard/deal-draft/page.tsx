@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { FileText, Copy, Check, AlertCircle, Sparkles, Download, Building2, Clock, Wallet, Globe, Tag, Lightbulb, Package, Calendar, CreditCard, Zap, CheckCircle2 } from "lucide-react";
+import { FileText, Copy, Check, AlertCircle, Sparkles, Download, Building2, Clock, Wallet, Globe, Tag, Lightbulb, Package, Calendar, CreditCard, Zap, CheckCircle2, type LucideIcon } from "lucide-react";
 import { api } from "../../lib/api";
 import { addActivity } from "../../lib/activity";
 import PageHeader from "../../components/PageHeader";
@@ -48,7 +48,7 @@ const CARD: React.CSSProperties = {
   borderRadius: 16, boxShadow: "0 1px 4px rgba(0,0,0,0.06)",
 };
 
-const CONTENT_SECTIONS: { key: keyof DealDraftContent; label: string; Icon: React.ElementType }[] = [
+const CONTENT_SECTIONS: { key: keyof DealDraftContent; label: string; Icon: LucideIcon }[] = [
   { key: "introduction",         label: "Introduction",              Icon: Zap          },
   { key: "comprehension_besoin", label: "Compréhension du besoin",   Icon: Lightbulb    },
   { key: "solution_proposee",    label: "Solution proposée",         Icon: CheckCircle2 },
@@ -341,7 +341,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;c
                     { Icon: Wallet,    label: form.budget },
                     { Icon: Clock,     label: form.timeline },
                     { Icon: Globe,     label: result.language === "fr" ? "Français" : "English" },
-                  ] as { Icon: React.ElementType; label: string }[]).filter((p) => p.label).map(({ Icon, label }, i) => (
+                  ] as { Icon: LucideIcon; label: string }[]).filter((p) => p.label).map(({ Icon, label }, i) => (
                     <div key={i} style={{ display: "flex", alignItems: "center", gap: 6, padding: "5px 12px", borderRadius: 20, background: "#fff", border: "1px solid #e2e8f0", fontSize: 12, color: "#64748b" }}>
                       <Icon size={11} style={{ color: COLOR }} /> {label}
                     </div>

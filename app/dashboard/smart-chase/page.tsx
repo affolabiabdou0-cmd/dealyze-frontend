@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Mail, Copy, Check, AlertCircle, Sparkles, Calendar, Download, Building2, Wallet, Clock, AlertTriangle, TrendingUp, User } from "lucide-react";
+import { Mail, Copy, Check, AlertCircle, Sparkles, Calendar, Download, Building2, Wallet, Clock, AlertTriangle, TrendingUp, User, type LucideIcon } from "lucide-react";
 import { api } from "../../lib/api";
 import { addActivity } from "../../lib/activity";
 import PageHeader from "../../components/PageHeader";
@@ -348,7 +348,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;c
                     { Icon: Clock,      label: `${result.days_overdue}j de retard` },
                     { Icon: User,       label: result.client_profile?.replace("_", " ") },
                     { Icon: TrendingUp, label: result.tone },
-                  ] as { Icon: React.ElementType; label: string }[]).filter((p) => p.label).map(({ Icon, label }, i) => (
+                  ] as { Icon: LucideIcon; label: string }[]).filter((p) => p.label).map(({ Icon, label }, i) => (
                     <div key={i} style={{ display: "flex", alignItems: "center", gap: 6, padding: "4px 10px", borderRadius: 20, background: "#fff", border: "1px solid #e2e8f0", fontSize: 11, color: "#64748b" }}>
                       <Icon size={10} style={{ color: COLOR }} /> {label}
                     </div>

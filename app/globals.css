@@ -1,14 +1,65 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
 @import "tailwindcss";
 
+/*
+ * VYXEN Design System — tokens
+ * Source of truth for the "premium AI workforce" identity: dark, glass,
+ * precise. No hardcoded colors in components — reference these tokens.
+ */
 @theme {
-  --color-navy:   #0F2552;
-  --color-accent: #2563EB;
-  --color-surface: #F4F6F9;
-  --color-ink:    #1A1A2E;
-  --color-muted:  #64748B;
-  --color-border: #E2E8F0;
-  --color-success:#16A34A;
+  /* Surfaces */
+  --color-void:      #050507; /* noir profond */
+  --color-panel:      #0b0b13; /* anthracite */
+  --color-elevated:   #12121e; /* graphite */
+  --color-hairline:   rgba(255,255,255,0.07);
+
+  /* Text */
+  --color-text-1: #f8fafc;
+  --color-text-2: rgba(248,250,252,0.56);
+  --color-text-3: rgba(248,250,252,0.32);
+
+  /* Brand core */
+  --color-violet:  #7c3aed;
+  --color-violet-2:#a78bfa;
+  --color-blue-ai: #2563eb;
+  --color-cyan:    #22d3ee;
+
+  /* Semantic */
+  --color-success:  #10b981;
+  --color-warning:  #f59e0b;
+  --color-critical: #ef4444;
+
+  /* Agents — Part 7 identity */
+  --color-agent-smart-chase:        #10b981;
+  --color-agent-smart-chase-accent: #22d3ee;
+  --color-agent-deal-draft:         #7c3aed;
+  --color-agent-deal-draft-accent:  #3b82f6;
+  --color-agent-pitch-radar:        #f97316;
+  --color-agent-pitch-radar-accent: #fbbf24;
+  --color-agent-deep-due:           #2563eb;
+  --color-agent-deep-due-accent:    #e0f2fe;
+}
+
+:root {
+  /* Spacing scale (4 → 128) */
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px;
+  --space-5: 24px; --space-6: 32px; --space-7: 48px; --space-8: 64px;
+  --space-9: 96px; --space-10: 128px;
+
+  /* Radius */
+  --radius-soft: 8px; --radius-medium: 12px; --radius-large: 20px;
+  --radius-glass: 16px; --radius-floating: 28px;
+
+  /* Shadows */
+  --shadow-soft:     0 2px 12px rgba(0,0,0,0.25);
+  --shadow-floating: 0 12px 40px rgba(0,0,0,0.4);
+  --shadow-glass:    0 8px 32px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.05);
+  --shadow-depth:    0 24px 80px rgba(0,0,0,0.5);
+
+  /* Glass materials */
+  --glass-1-bg: rgba(255,255,255,0.035); --glass-1-border: rgba(255,255,255,0.08);
+  --glass-2-bg: rgba(255,255,255,0.06);  --glass-2-border: rgba(255,255,255,0.12);
+  --glass-frost-bg: rgba(12,12,20,0.7);  --glass-frost-blur: 20px;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -17,14 +68,33 @@ html { scroll-behavior: smooth; }
 
 body {
   font-family: 'Inter', system-ui, sans-serif;
-  color: #1A1A2E;
-  background: #ffffff;
+  color: var(--color-text-1);
+  background: var(--color-void);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 .font-display { font-family: 'Playfair Display', Georgia, serif; }
 .font-mono    { font-family: 'JetBrains Mono', monospace; }
+
+.glass-1 { background: var(--glass-1-bg); border: 1px solid var(--glass-1-border); backdrop-filter: blur(16px); }
+.glass-2 { background: var(--glass-2-bg); border: 1px solid var(--glass-2-border); backdrop-filter: blur(20px); }
+.glass-frost { background: var(--glass-frost-bg); backdrop-filter: blur(var(--glass-frost-blur)); }
+
+@keyframes vx-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.55; } }
+@keyframes vx-float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+@keyframes vx-orbit { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes vx-fade-up { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes vx-shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
 
 /* Scrollbar */
 ::-webkit-scrollbar { width: 6px; }

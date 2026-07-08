@@ -3,10 +3,15 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import {
-  FileText, Mail, BarChart3, Shield,
-  Check, ArrowRight, Menu, X as CloseIcon, ChevronDown,
-  Zap, Clock, Users, Play,
+  FileText, Mail, BarChart3,
+  Check, ArrowRight, Menu, X as CloseIcon,
+  Zap, Users, type LucideIcon,
 } from "lucide-react";
+import { AgentSelectionProvider } from "./components/vyxen/AgentSelectionContext";
+import Hero from "./components/vyxen/Hero";
+import AgentsLab from "./components/vyxen/AgentsLab";
+import WorldSection from "./components/vyxen/WorldSection";
+import MissionCenter from "./components/vyxen/MissionCenter";
 
 // ─── NAVBAR ───────────────────────────────────────────────────────────────────
 function Navbar() {
@@ -49,7 +54,7 @@ function Navbar() {
 
         {/* ── CENTRE : Liens ── */}
         <div className="hidden md:flex items-center gap-10">
-          {[["Agents", "#agents"], ["Tarifs", "#tarifs"], ["À propos", "#apropos"]].map(([label, href]) => (
+          {[["Agents", "#agents-lab"], ["Tarifs", "#tarifs"], ["À propos", "#apropos"]].map(([label, href]) => (
             <a key={label} href={href}
               style={{ fontSize: 13.5, color: "rgba(255,255,255,0.48)", textDecoration: "none", fontWeight: 500, transition: "color 0.15s" }}
               onMouseEnter={(e) => { e.currentTarget.style.color = "rgba(255,255,255,0.9)"; }}
@@ -90,7 +95,7 @@ function Navbar() {
       {/* ── Menu mobile ── */}
       {open && (
         <div style={{ background: "#08080f", borderTop: "0.5px solid rgba(255,255,255,0.07)", padding: "20px 28px", display: "flex", flexDirection: "column", gap: 18 }}>
-          {[["Agents", "#agents"], ["Tarifs", "#tarifs"], ["À propos", "#apropos"]].map(([label, href]) => (
+          {[["Agents", "#agents-lab"], ["Tarifs", "#tarifs"], ["À propos", "#apropos"]].map(([label, href]) => (
             <a key={label} href={href} onClick={() => setOpen(false)}
               style={{ fontSize: 14.5, color: "rgba(255,255,255,0.6)", textDecoration: "none", fontWeight: 500 }}>{label}</a>
           ))}
@@ -109,7 +114,7 @@ function Navbar() {
 // ─── DEMO MODAL ──────────────────────────────────────────────────────────────
 type DemoTab = "deal_draft" | "smart_chase" | "pitch_radar";
 
-const DEMO_TABS: { id: DemoTab; label: string; icon: React.ElementType }[] = [
+const DEMO_TABS: { id: DemoTab; label: string; icon: LucideIcon }[] = [
   { id: "deal_draft",  label: "Deal Draft",  icon: FileText  },
   { id: "smart_chase", label: "Smart Chase", icon: Mail      },
   { id: "pitch_radar", label: "Pitch Radar", icon: BarChart3 },
@@ -297,188 +302,6 @@ function DemoModal({ onClose }: { onClose: () => void }) {
   );
 }
 
-// ─── HERO ─────────────────────────────────────────────────────────────────────
-const STATS = [
-  { n: "2 min",  l: "Devis généré",   icon: Zap   },
-  { n: "30 sec", l: "Pitch scoré",    icon: BarChart3 },
-  { n: "10 min", l: "Due diligence",  icon: Shield  },
-  { n: "0 €",    l: "Impayé manqué",  icon: Clock  },
-];
-
-function Hero() {
-  const [demoOpen, setDemoOpen] = useState(false);
-  return (
-    <section style={{
-      minHeight: "100vh", display: "flex", flexDirection: "column",
-      background: "#06060f", position: "relative", overflow: "hidden",
-    }}>
-      {demoOpen && <DemoModal onClose={() => setDemoOpen(false)} />}
-
-      {/* Glows décoratifs */}
-      <div style={{ position: "absolute", top: "15%", left: "50%", transform: "translateX(-50%)", width: 900, height: 700, borderRadius: "50%", background: "radial-gradient(ellipse, rgba(124,58,237,0.11) 0%, transparent 65%)", pointerEvents: "none" }} />
-      <div style={{ position: "absolute", bottom: 0, right: "8%", width: 600, height: 500, borderRadius: "50%", background: "radial-gradient(ellipse, rgba(34,211,238,0.06) 0%, transparent 68%)", pointerEvents: "none" }} />
-      <div style={{ position: "absolute", top: "35%", left: "3%", width: 400, height: 400, borderRadius: "50%", background: "radial-gradient(ellipse, rgba(91,33,182,0.05) 0%, transparent 70%)", pointerEvents: "none" }} />
-      {/* Dot grid */}
-      <div style={{ position: "absolute", inset: 0, backgroundImage: "radial-gradient(rgba(255,255,255,0.028) 1px, transparent 1px)", backgroundSize: "32px 32px", pointerEvents: "none" }} />
-
-      {/* Contenu centré */}
-      <div className="px-4 md:px-8" style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", textAlign: "center", paddingTop: 100, paddingBottom: 48, position: "relative", zIndex: 1 }}>
-
-        {/* Badge */}
-        <div style={{ display: "inline-flex", alignItems: "center", gap: 8, border: "0.5px solid rgba(139,92,246,0.35)", borderRadius: 20, padding: "5px 16px", marginBottom: 38, background: "rgba(139,92,246,0.07)" }}>
-          <span style={{ width: 5, height: 5, borderRadius: "50%", background: "#8b5cf6", display: "inline-block", flexShrink: 0 }} />
-          <span style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", letterSpacing: "1.1px", fontWeight: 500, textTransform: "uppercase" }}>XPRIZE AI Hackathon 2026 · Gemini 2.5 Flash</span>
-        </div>
-
-        {/* Titre principal */}
-        <h1 style={{ fontSize: "clamp(34px, 5.8vw, 64px)", fontWeight: 600, lineHeight: 1.08, letterSpacing: "-1.8px", color: "#f8fafc", marginBottom: 18, maxWidth: 800 }}>
-          Automatisez chaque deal.<br />
-          <span style={{
-            background: "linear-gradient(135deg, #a78bfa 0%, #38bdf8 100%)",
-            WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
-          }}>
-            Concentrez-vous sur gagner.
-          </span>
-        </h1>
-
-        {/* Sous-titre */}
-        <p style={{ fontSize: 16, color: "rgba(255,255,255,0.34)", maxWidth: 520, margin: "0 auto 38px", lineHeight: 1.9, fontWeight: 400 }}>
-          4 agents IA spécialisés — devis, relances, pitch decks, due diligence.<br />En quelques secondes.
-        </p>
-
-        {/* Boutons CTA */}
-        <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap", marginBottom: 16 }}>
-          <Link href="/register" style={{
-            display: "inline-flex", alignItems: "center", gap: 8,
-            background: "linear-gradient(135deg, #5b21b6, #6d28d9)",
-            color: "#ede9fe", padding: "13px 30px", borderRadius: 12,
-            fontSize: 14.5, fontWeight: 600, textDecoration: "none",
-            boxShadow: "0 4px 32px rgba(91,33,182,0.48)",
-          }}>
-            Essai gratuit 14 jours <ArrowRight size={16} />
-          </Link>
-          <button onClick={() => setDemoOpen(true)} style={{
-            display: "inline-flex", alignItems: "center", gap: 8,
-            background: "rgba(255,255,255,0.04)", color: "rgba(255,255,255,0.6)", padding: "13px 30px", borderRadius: 12,
-            fontSize: 14.5, fontWeight: 500, border: "0.5px solid rgba(255,255,255,0.14)",
-            cursor: "pointer", transition: "all 0.15s",
-          }}
-            onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.08)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.25)"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(255,255,255,0.04)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.14)"; }}
-          >
-            <Play size={15} strokeWidth={2} />
-            Voir une démo
-          </button>
-        </div>
-
-        {/* Note */}
-        <p style={{ fontSize: 11.5, color: "rgba(255,255,255,0.18)", letterSpacing: "0.4px" }}>
-          Sans carte bancaire · Résultats en moins de 10 secondes
-        </p>
-      </div>
-
-      {/* Stats row — plancher du hero */}
-      <div style={{ position: "relative", zIndex: 1, borderTop: "0.5px solid rgba(255,255,255,0.06)", background: "rgba(255,255,255,0.025)" }}>
-        <div className="grid grid-cols-2 md:grid-cols-4" style={{ maxWidth: 900, margin: "0 auto" }}>
-          {STATS.map(({ n, l, icon: Icon }, i) => (
-            <div key={l} className="stat-item" style={{
-              padding: "24px 16px", textAlign: "center",
-            }}>
-              <Icon size={13} style={{ color: "#5b21b6", marginBottom: 6, display: "block", margin: "0 auto 8px" }} strokeWidth={1.75} />
-              <div style={{ fontSize: 22, fontWeight: 600, color: "#a78bfa", letterSpacing: "-0.5px" }}>{n}</div>
-              <div style={{ fontSize: 10, color: "#475569", marginTop: 5, letterSpacing: "0.9px", textTransform: "uppercase", fontWeight: 500 }}>{l}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-// ─── LES 4 AGENTS ─────────────────────────────────────────────────────────────
-const AGENTS_DATA = [
-  {
-    icon: FileText, name: "Deal Draft", color: "#7c3aed", iconBg: "rgba(124,58,237,0.15)",
-    tag: "PME · 2 min · FR & EN",
-    headline: "Vos devis en 2 minutes, pas en 2 heures.",
-    desc: "Propositions commerciales structurées, clauses adaptées au secteur, montants calculés — bilingues, professionnelles, prêtes à envoyer. Idéal pour les commerciaux et consultants B2B.",
-    for: "PME de services",
-  },
-  {
-    icon: Mail, name: "Smart Chase", color: "#ec4899", iconBg: "rgba(236,72,153,0.14)",
-    tag: "PME · 4 niveaux d'escalade",
-    headline: "Zéro impayé laissé sans suite.",
-    desc: "Relances automatisées avec escalade progressive. Ton adapté — courtois, ferme, juridique. Sans jamais froisser la relation client. Récupérez ce qui vous est dû.",
-    for: "Dirigeants & Finance",
-  },
-  {
-    icon: BarChart3, name: "Pitch Radar", color: "#06b6d4", iconBg: "rgba(6,182,212,0.14)",
-    tag: "Investisseurs · Score /10",
-    headline: "Analysez 10× plus de pitchs, sans perdre en qualité.",
-    desc: "Score multicritère VC, forces et alertes, recommandation investissement. Accélérez votre sourcing et prenez des décisions mieux informées — en 30 secondes par pitch.",
-    for: "Fonds & Business Angels",
-  },
-  {
-    icon: Shield, name: "Deep Due", color: "#84cc16", iconBg: "rgba(132,204,22,0.14)",
-    tag: "Investisseurs · 10 min",
-    headline: "3 jours de due diligence en 10 minutes.",
-    desc: "Profil fondateur, analyse concurrentielle, cartographie des risques et recommandation finale. Ce que votre analyste fait en 3 jours — structuré, exhaustif, exportable.",
-    for: "VC & Investisseurs",
-  },
-];
-
-function AgentsSection() {
-  return (
-    <section id="agents" className="px-4 md:px-8" style={{ background: "#06060f", paddingTop: 90, paddingBottom: 90, borderTop: "0.5px solid rgba(255,255,255,0.04)" }}>
-      <div style={{ maxWidth: 1040, margin: "0 auto" }}>
-
-        {/* Header */}
-        <div style={{ textAlign: "center", marginBottom: 52 }}>
-          <div style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 10, letterSpacing: "2.5px", color: "#7c3aed", textTransform: "uppercase", fontWeight: 700, marginBottom: 14, background: "rgba(124,58,237,0.1)", padding: "4px 12px", borderRadius: 6 }}>
-            Vos 4 agents IA
-          </div>
-          <h2 style={{ fontSize: "clamp(24px, 3.5vw, 38px)", fontWeight: 600, color: "#f1f5f9", marginBottom: 12, letterSpacing: "-0.8px" }}>Chaque deal a son expert.</h2>
-          <p style={{ fontSize: 15, color: "#475569", maxWidth: 480, margin: "0 auto", lineHeight: 1.75 }}>
-            Pour les PME qui veulent conclure plus vite. Pour les investisseurs qui analysent plus — et mieux.
-          </p>
-        </div>
-
-        {/* Grid 2×2 */}
-        <div className="grid grid-cols-1 md:grid-cols-2" style={{ gap: 14 }}>
-          {AGENTS_DATA.map(({ icon: Icon, name, color, iconBg, tag, headline, desc, for: target }) => (
-            <div key={name} style={{
-              background: "#0c0c1a", border: "0.5px solid rgba(255,255,255,0.07)",
-              borderRadius: 16, padding: "24px 26px", position: "relative", overflow: "hidden",
-              transition: "border-color 0.2s",
-            }}
-              onMouseEnter={(e) => { e.currentTarget.style.borderColor = `${color}40`; }}
-              onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.07)"; }}>
-
-              {/* Barre colorée haut */}
-              <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 2, background: color }} />
-
-              {/* Cible + icône */}
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
-                <div style={{ width: 42, height: 42, borderRadius: 11, background: iconBg, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <Icon size={20} style={{ color }} strokeWidth={1.75} />
-                </div>
-                <span style={{ fontSize: 10, color: "#334155", background: "rgba(255,255,255,0.04)", border: "0.5px solid rgba(255,255,255,0.08)", padding: "3px 9px", borderRadius: 5, letterSpacing: "0.3px", fontWeight: 500 }}>
-                  <Users size={9} style={{ display: "inline", verticalAlign: "middle", marginRight: 4 }} />{target}
-                </span>
-              </div>
-
-              <div style={{ fontSize: 13, fontWeight: 700, color: color, marginBottom: 6, letterSpacing: "0.02em" }}>{name}</div>
-              <div style={{ fontSize: 15, fontWeight: 600, color: "#e2e8f0", marginBottom: 10, lineHeight: 1.35, letterSpacing: "-0.3px" }}>{headline}</div>
-              <div style={{ fontSize: 13, color: "#4b5563", lineHeight: 1.75, marginBottom: 16 }}>{desc}</div>
-              <span style={{ fontSize: 10, padding: "4px 11px", borderRadius: 6, background: iconBg, color, fontWeight: 600, letterSpacing: "0.3px" }}>{tag}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
 // ─── COMMENT ÇA MARCHE ────────────────────────────────────────────────────────
 const STEPS = [
   {
@@ -497,28 +320,28 @@ const STEPS = [
 
 function HowItWorks() {
   return (
-    <section className="px-4 md:px-8" style={{ background: "#08080f", paddingTop: 90, paddingBottom: 90, borderTop: "0.5px solid rgba(255,255,255,0.04)" }}>
+    <section className="px-4 md:px-8" style={{ background: "var(--color-void)", paddingTop: 90, paddingBottom: 90, borderTop: "0.5px solid var(--color-hairline)" }}>
       <div style={{ maxWidth: 1040, margin: "0 auto" }}>
 
         <div style={{ textAlign: "center", marginBottom: 52 }}>
-          <div style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 10, letterSpacing: "2.5px", color: "#7c3aed", textTransform: "uppercase", fontWeight: 700, marginBottom: 14, background: "rgba(124,58,237,0.1)", padding: "4px 12px", borderRadius: 6 }}>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 10, letterSpacing: "2.5px", color: "var(--color-violet)", textTransform: "uppercase", fontWeight: 700, marginBottom: 14, background: "rgba(124,58,237,0.1)", padding: "4px 12px", borderRadius: 6 }}>
             Comment ça marche
           </div>
-          <h2 style={{ fontSize: "clamp(24px, 3.5vw, 38px)", fontWeight: 600, color: "#f1f5f9", marginBottom: 12, letterSpacing: "-0.8px" }}>Opérationnel en 3 étapes.</h2>
-          <p style={{ fontSize: 15, color: "#475569", maxWidth: 400, margin: "0 auto", lineHeight: 1.75 }}>Pas de configuration complexe. <span translate="no" className="notranslate">VYXEN</span> est prêt en quelques minutes.</p>
+          <h2 style={{ fontSize: "clamp(24px, 3.5vw, 38px)", fontWeight: 600, color: "var(--color-text-1)", marginBottom: 12, letterSpacing: "-0.8px" }}>Opérationnel en 3 étapes.</h2>
+          <p style={{ fontSize: 15, color: "var(--color-text-2)", maxWidth: 400, margin: "0 auto", lineHeight: 1.75 }}>Pas de configuration complexe. <span translate="no" className="notranslate">VYXEN</span> est prêt en quelques minutes.</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3" style={{ gap: 14 }}>
           {STEPS.map(({ n, title, desc, icon: Icon }) => (
-            <div key={n} style={{ background: "#0c0c1a", border: "0.5px solid rgba(255,255,255,0.07)", borderRadius: 16, padding: "28px 24px" }}>
+            <div key={n} style={{ background: "var(--color-panel)", border: "0.5px solid var(--color-hairline)", borderRadius: 16, padding: "28px 24px" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 18 }}>
-                <span style={{ fontSize: 11, fontWeight: 700, color: "#5b21b6", background: "rgba(91,33,182,0.14)", padding: "3px 9px", borderRadius: 6, letterSpacing: "0.5px" }}>{n}</span>
-                <div style={{ width: 32, height: 32, borderRadius: 8, background: "rgba(91,33,182,0.12)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <Icon size={16} style={{ color: "#7c3aed" }} strokeWidth={1.75} />
+                <span style={{ fontSize: 11, fontWeight: 700, color: "var(--color-violet-2)", background: "rgba(124,58,237,0.14)", padding: "3px 9px", borderRadius: 6, letterSpacing: "0.5px" }}>{n}</span>
+                <div style={{ width: 32, height: 32, borderRadius: 8, background: "rgba(124,58,237,0.12)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <Icon size={16} style={{ color: "var(--color-violet)" }} strokeWidth={1.75} />
                 </div>
               </div>
-              <div style={{ fontSize: 16, fontWeight: 600, color: "#e2e8f0", marginBottom: 10, letterSpacing: "-0.3px" }}>{title}</div>
-              <div style={{ fontSize: 13, color: "#4b5563", lineHeight: 1.75 }}>{desc}</div>
+              <div style={{ fontSize: 16, fontWeight: 600, color: "var(--color-text-1)", marginBottom: 10, letterSpacing: "-0.3px" }}>{title}</div>
+              <div style={{ fontSize: 13, color: "var(--color-text-2)", lineHeight: 1.75 }}>{desc}</div>
             </div>
           ))}
         </div>
@@ -575,15 +398,15 @@ const PLANS = [
 
 function Pricing() {
   return (
-    <section id="tarifs" className="px-4 md:px-8" style={{ background: "#06060f", paddingTop: 90, paddingBottom: 90, borderTop: "0.5px solid rgba(255,255,255,0.04)" }}>
+    <section id="tarifs" className="px-4 md:px-8" style={{ background: "var(--color-void)", paddingTop: 90, paddingBottom: 90, borderTop: "0.5px solid var(--color-hairline)" }}>
       <div style={{ maxWidth: 1040, margin: "0 auto" }}>
 
         <div style={{ textAlign: "center", marginBottom: 52 }}>
-          <div style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 10, letterSpacing: "2.5px", color: "#7c3aed", textTransform: "uppercase", fontWeight: 700, marginBottom: 14, background: "rgba(124,58,237,0.1)", padding: "4px 12px", borderRadius: 6 }}>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 10, letterSpacing: "2.5px", color: "var(--color-violet)", textTransform: "uppercase", fontWeight: 700, marginBottom: 14, background: "rgba(124,58,237,0.1)", padding: "4px 12px", borderRadius: 6 }}>
             Tarification
           </div>
-          <h2 style={{ fontSize: "clamp(24px, 3.5vw, 38px)", fontWeight: 600, color: "#f1f5f9", marginBottom: 12, letterSpacing: "-0.8px" }}>Simple. Transparent. Sans surprise.</h2>
-          <p style={{ fontSize: 15, color: "#475569" }}>Essai gratuit inclus — sans carte bancaire. Annulez à tout moment.</p>
+          <h2 style={{ fontSize: "clamp(24px, 3.5vw, 38px)", fontWeight: 600, color: "var(--color-text-1)", marginBottom: 12, letterSpacing: "-0.8px" }}>Simple. Transparent. Sans surprise.</h2>
+          <p style={{ fontSize: 15, color: "var(--color-text-2)" }}>Essai gratuit inclus — sans carte bancaire. Annulez à tout moment.</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3" style={{ gap: 14, alignItems: "start" }}>
@@ -607,21 +430,21 @@ function Pricing() {
                 )}
 
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 5 }}>
-                  <div style={{ fontSize: 16, fontWeight: 700, color: "#e2e8f0" }}>{plan.name}</div>
+                  <div style={{ fontSize: 16, fontWeight: 700, color: "var(--color-text-1)" }}>{plan.name}</div>
                   <div style={{ fontSize: 10, color: plan.accent, background: `${plan.accent}14`, border: `0.5px solid ${plan.accent}30`, padding: "2px 8px", borderRadius: 4, fontWeight: 600 }}>{plan.target}</div>
                 </div>
                 <div style={{ fontSize: 12, color: plan.descColor, marginBottom: 16, lineHeight: 1.5 }}>{plan.desc}</div>
 
                 <div style={{ marginBottom: 4 }}>
                   <span style={{ fontSize: 36, fontWeight: 700, color: plan.accentLight, letterSpacing: "-1px" }}>${plan.price}</span>
-                  <span style={{ fontSize: 12, color: "#475569", fontWeight: 400 }}> /mois</span>
+                  <span style={{ fontSize: 12, color: "var(--color-text-2)", fontWeight: 400 }}> /mois</span>
                 </div>
 
                 <div style={{ height: "0.5px", background: `${plan.accent}22`, margin: "14px 0" }} />
 
                 <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 2 }}>
                   {plan.features.map((f) => (
-                    <div key={f} style={{ display: "flex", alignItems: "center", gap: 9, fontSize: 12.5, color: "#94a3b8", padding: "4px 0" }}>
+                    <div key={f} style={{ display: "flex", alignItems: "center", gap: 9, fontSize: 12.5, color: "var(--color-text-2)", padding: "4px 0" }}>
                       <Check size={12} style={{ color: plan.accent, flexShrink: 0 }} />
                       {f}
                     </div>
@@ -643,9 +466,9 @@ function Pricing() {
           ))}
         </div>
 
-        <div style={{ marginTop: 22, paddingTop: 18, borderTop: "0.5px solid rgba(255,255,255,0.05)", display: "flex", flexWrap: "wrap", gap: 20, justifyContent: "center" }}>
+        <div style={{ marginTop: 22, paddingTop: 18, borderTop: "0.5px solid var(--color-hairline)", display: "flex", flexWrap: "wrap", gap: 20, justifyContent: "center" }}>
           {["Paiement SSL sécurisé", "Via Paddle", "Annulation à tout moment", "VISA · Mastercard · Mobile Money"].map((t) => (
-            <span key={t} style={{ fontSize: 11.5, color: "#334155" }}>· {t}</span>
+            <span key={t} style={{ fontSize: 11.5, color: "var(--color-text-3)" }}>· {t}</span>
           ))}
         </div>
 
@@ -657,16 +480,16 @@ function Pricing() {
 // ─── CTA FINAL ────────────────────────────────────────────────────────────────
 function CTAFinal() {
   return (
-    <section className="px-4 md:px-8" style={{ background: "#08080f", paddingTop: 100, paddingBottom: 100, borderTop: "0.5px solid rgba(255,255,255,0.04)", position: "relative", overflow: "hidden" }}>
-      <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: 700, height: 400, borderRadius: "50%", background: "radial-gradient(ellipse, rgba(91,33,182,0.09) 0%, transparent 70%)", pointerEvents: "none" }} />
+    <section className="px-4 md:px-8" style={{ background: "var(--color-void)", paddingTop: 100, paddingBottom: 100, borderTop: "0.5px solid var(--color-hairline)", position: "relative", overflow: "hidden" }}>
+      <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: 700, height: 400, borderRadius: "50%", background: "radial-gradient(ellipse, rgba(124,58,237,0.09) 0%, transparent 70%)", pointerEvents: "none" }} />
       <div style={{ maxWidth: 640, margin: "0 auto", textAlign: "center", position: "relative", zIndex: 1 }}>
-        <h2 style={{ fontSize: "clamp(28px, 4vw, 48px)", fontWeight: 600, color: "#f1f5f9", letterSpacing: "-1px", marginBottom: 16, lineHeight: 1.12 }}>
+        <h2 style={{ fontSize: "clamp(28px, 4vw, 48px)", fontWeight: 600, color: "var(--color-text-1)", letterSpacing: "-1px", marginBottom: 16, lineHeight: 1.12 }}>
           Votre prochain deal<br />
-          <span style={{ background: "linear-gradient(135deg, #a78bfa, #22d3ee)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
+          <span style={{ background: "linear-gradient(135deg, var(--color-violet-2), var(--color-cyan))", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
             commence maintenant.
           </span>
         </h2>
-        <p style={{ fontSize: 15, color: "rgba(255,255,255,0.32)", marginBottom: 36, lineHeight: 1.85, maxWidth: 520, margin: "0 auto 36px" }}>
+        <p style={{ fontSize: 15, color: "var(--color-text-2)", marginBottom: 36, lineHeight: 1.85, maxWidth: 520, margin: "0 auto 36px" }}>
           PME : concluez vos deals 10× plus vite. Investisseurs : analysez chaque opportunité sans perdre en rigueur.
           <br /><span translate="no" className="notranslate">VYXEN</span>{" "}s&apos;adapte à votre profil.
         </p>
@@ -682,9 +505,9 @@ function CTAFinal() {
           </Link>
           <Link href="/login" style={{
             display: "inline-flex", alignItems: "center", gap: 8,
-            background: "rgba(255,255,255,0.04)", color: "rgba(255,255,255,0.5)", padding: "13px 30px", borderRadius: 12,
+            background: "var(--glass-1-bg)", color: "var(--color-text-2)", padding: "13px 30px", borderRadius: 12,
             fontSize: 14.5, fontWeight: 500, textDecoration: "none",
-            border: "0.5px solid rgba(255,255,255,0.12)",
+            border: "0.5px solid var(--glass-1-border)",
           }}>
             Se connecter
           </Link>
@@ -698,7 +521,7 @@ function CTAFinal() {
 function Footer() {
   return (
     <footer id="apropos" className="px-4 md:px-8" style={{
-      background: "#06060f", borderTop: "0.5px solid rgba(255,255,255,0.06)",
+      background: "var(--color-void)", borderTop: "0.5px solid var(--color-hairline)",
       paddingTop: 32, paddingBottom: 24,
     }}>
       <div style={{ maxWidth: 1040, margin: "0 auto" }}>
@@ -722,7 +545,7 @@ function Footer() {
                 }}>X</span>EN
               </span>
             </span>
-            <p style={{ fontSize: 12, color: "#475569", maxWidth: 260, lineHeight: 1.7, marginTop: 8 }}>
+            <p style={{ fontSize: 12, color: "var(--color-text-2)", maxWidth: 260, lineHeight: 1.7, marginTop: 8 }}>
               Plateforme IA pour PME et investisseurs. 4 agents spécialisés pour automatiser chaque étape de vos deals. Projet XPRIZE AI Hackathon 2026.
             </p>
           </div>
@@ -730,38 +553,38 @@ function Footer() {
           {/* Links */}
           <div style={{ display: "flex", gap: 48, flexWrap: "wrap" }}>
             <div>
-              <div style={{ fontSize: 10, color: "#475569", letterSpacing: "1.5px", textTransform: "uppercase", fontWeight: 600, marginBottom: 12 }}>Produit</div>
-              {[["Agents IA", "#agents"], ["Tarifs", "#tarifs"], ["Se connecter", "/login"], ["Essai gratuit", "/register"]].map(([l, href]) => (
+              <div style={{ fontSize: 10, color: "var(--color-text-2)", letterSpacing: "1.5px", textTransform: "uppercase", fontWeight: 600, marginBottom: 12 }}>Produit</div>
+              {[["Agents IA", "#agents-lab"], ["Tarifs", "#tarifs"], ["Se connecter", "/login"], ["Essai gratuit", "/register"]].map(([l, href]) => (
                 <div key={l} style={{ marginBottom: 8 }}>
-                  <Link href={href} style={{ fontSize: 13, color: "#64748b", textDecoration: "none" }}>{l}</Link>
+                  <Link href={href} style={{ fontSize: 13, color: "var(--color-text-2)", textDecoration: "none" }}>{l}</Link>
                 </div>
               ))}
             </div>
             <div>
-              <div style={{ fontSize: 10, color: "#475569", letterSpacing: "1.5px", textTransform: "uppercase", fontWeight: 600, marginBottom: 12 }}>Légal</div>
+              <div style={{ fontSize: 10, color: "var(--color-text-2)", letterSpacing: "1.5px", textTransform: "uppercase", fontWeight: 600, marginBottom: 12 }}>Légal</div>
               {[["Conditions d'utilisation", "/terms"], ["Politique de confidentialité", "/privacy"], ["Politique de remboursement", "/refund"]].map(([l, href]) => (
                 <div key={l} style={{ marginBottom: 8 }}>
-                  <Link href={href} style={{ fontSize: 13, color: "#64748b", textDecoration: "none" }}>{l}</Link>
+                  <Link href={href} style={{ fontSize: 13, color: "var(--color-text-2)", textDecoration: "none" }}>{l}</Link>
                 </div>
               ))}
             </div>
           </div>
         </div>
 
-        <div style={{ height: "0.5px", background: "rgba(255,255,255,0.06)", margin: "0 0 16px" }} />
+        <div style={{ height: "0.5px", background: "var(--color-hairline)", margin: "0 0 16px" }} />
         <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 8, alignItems: "center" }}>
           <span style={{ display: "inline-flex", alignItems: "baseline", gap: 6 }}>
             <span translate="no" className="notranslate" style={{ position: "relative", display: "inline-block" }}>
-              <span style={{ fontSize: 11, fontWeight: 500, color: "#c8c8d0" }}>f4ntom_kox</span>
-              <span style={{ position: "absolute", bottom: -1, left: 0, right: 0, height: 1, background: "linear-gradient(90deg, #7c3aed, transparent)", display: "block" }} />
+              <span style={{ fontSize: 11, fontWeight: 500, color: "var(--color-text-1)" }}>f4ntom_kox</span>
+              <span style={{ position: "absolute", bottom: -1, left: 0, right: 0, height: 1, background: "linear-gradient(90deg, var(--color-violet), transparent)", display: "block" }} />
             </span>
-            <span style={{ fontSize: 11, color: "#475569" }}>· Tous droits réservés.</span>
+            <span style={{ fontSize: 11, color: "var(--color-text-2)" }}>· Tous droits réservés.</span>
           </span>
           <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
-            <span style={{ fontSize: 11, color: "#475569" }}>© 2026 <span translate="no" className="notranslate">VYXEN</span> · Turn every deal into done.</span>
-            <Link href="/terms"   style={{ fontSize: 11, color: "#475569", textDecoration: "none" }}>CGU</Link>
-            <Link href="/privacy" style={{ fontSize: 11, color: "#475569", textDecoration: "none" }}>Confidentialité</Link>
-            <Link href="/refund"  style={{ fontSize: 11, color: "#475569", textDecoration: "none" }}>Remboursement</Link>
+            <span style={{ fontSize: 11, color: "var(--color-text-2)" }}>© 2026 <span translate="no" className="notranslate">VYXEN</span> · Turn every deal into done.</span>
+            <Link href="/terms"   style={{ fontSize: 11, color: "var(--color-text-2)", textDecoration: "none" }}>CGU</Link>
+            <Link href="/privacy" style={{ fontSize: 11, color: "var(--color-text-2)", textDecoration: "none" }}>Confidentialité</Link>
+            <Link href="/refund"  style={{ fontSize: 11, color: "var(--color-text-2)", textDecoration: "none" }}>Remboursement</Link>
           </div>
         </div>
       </div>
@@ -771,20 +594,24 @@ function Footer() {
 
 // ─── PAGE ────────────────────────────────────────────────────────────────────
 export default function HomePage() {
+  const [demoOpen, setDemoOpen] = useState(false);
   return (
-    <>
+    <AgentSelectionProvider>
       <style>{`
         .stat-item { border-right: 0.5px solid rgba(255,255,255,0.05); }
         .stat-item:last-child { border-right: none; }
         @media (max-width: 640px) { .stat-item:nth-child(even) { border-right: none; } }
       `}</style>
+      {demoOpen && <DemoModal onClose={() => setDemoOpen(false)} />}
       <Navbar />
-      <Hero />
-      <AgentsSection />
+      <Hero onOpenDemo={() => setDemoOpen(true)} />
+      <AgentsLab />
+      <WorldSection />
+      <MissionCenter onOpenDemo={() => setDemoOpen(true)} />
       <HowItWorks />
       <Pricing />
       <CTAFinal />
       <Footer />
-    </>
+    </AgentSelectionProvider>
   );
 }

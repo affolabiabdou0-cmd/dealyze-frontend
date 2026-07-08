@@ -6,7 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard, FileText, Mail, BarChart3, Shield,
   Settings, CreditCard, LogOut, Menu, X, Bell, Plus, Zap,
-  ChevronRight, Clock, AlertTriangle,
+  ChevronRight, Clock, AlertTriangle, type LucideIcon,
 } from "lucide-react";
 import { getUser, clearAuth } from "../lib/auth";
 import type { User } from "../lib/auth";
@@ -52,7 +52,7 @@ function SectionLabel({ children, first }: { children: React.ReactNode; first?: 
   );
 }
 
-type NavEntry = { href: string; label: string; icon: React.ElementType; color?: string; iconBg?: string; onClose?: () => void };
+type NavEntry = { href: string; label: string; icon: LucideIcon; color?: string; iconBg?: string; onClose?: () => void };
 
 function NavItem({ href, label, icon: Icon, color, iconBg, onClose }: NavEntry) {
   const pathname = usePathname();
@@ -207,7 +207,7 @@ function Sidebar({ user, onClose }: { user: User | null; onClose?: () => void })
 }
 
 /* ── Notification panel ── */
-const NOTIF_ICONS: Record<string, React.ElementType> = {
+const NOTIF_ICONS: Record<string, LucideIcon> = {
   deal_draft: FileText, smart_chase: Mail, pitch_radar: BarChart3, deep_due: Shield,
 };
 
