@@ -70,7 +70,7 @@ export default function DeepDuePage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault(); setError(""); setLoading(true); setResult(null);
     try {
-      const res = await api.post<DeepDueResult>("/agents/deep-due", form);
+      const res = await api.post<DeepDueResult>("/agents/deep-due/analyze", form);
       setResult(res.data);
       addActivity({
         type: "deep_due",

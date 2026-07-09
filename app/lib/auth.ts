@@ -42,6 +42,16 @@ export function isAuthenticated(): boolean {
   return !!getToken();
 }
 
+const TRIAL_DURATION_DAYS = 14;
+
+/** Jours restants sur l'essai gratuit de 14 jours (0 si expiré). */
+export function trialDaysRemaining(user: User | null): number {
+  if (!user?.created_at) return TRIAL_DURATION_DAYS;
+  const elapsedMs = Date.now() - new Date(user.created_at).getTime();
+  const elapsedDays = Math.floor(elapsedMs / (24 * 60 * 60 * 1000));
+  return Math.max(0, TRIAL_DURATION_DAYS - elapsedDays);
+}
+
 export async function login(email: string, password: string): Promise<TokenResponse> {
   const form = new URLSearchParams();
   form.append("username", email);
@@ -64,4 +74,32 @@ export async function register(
   });
   saveAuth(res.data);
   return res.data;
+}
+
+interface MeResponse {
+  user_id: string;
+  email: string;
+  full_name: string;
+  profile: string;
+  plan: string;
+  created_at: string;
+}
+
+/** Re-fetches the authoritative user profile (plan included) and refreshes the local cache. */
+export async function refreshUser(): Promise<User | null> {
+  try {
+    const res = await api.get<MeResponse>("/auth/me");
+    const updated: User = {
+      id: res.data.user_id,
+      email: res.data.email,
+      full_name: res.data.full_name,
+      profile: res.data.profile,
+      plan: res.data.plan,
+      created_at: res.data.created_at,
+    };
+    localStorage.setItem("dealyze_user", JSON.stringify(updated));
+    return updated;
+  } catch {
+    return null;
+  }
 }

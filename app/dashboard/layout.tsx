@@ -8,7 +8,7 @@ import {
   Settings, CreditCard, LogOut, Menu, X, Bell, Plus, Zap,
   ChevronRight, Clock, AlertTriangle, type LucideIcon,
 } from "lucide-react";
-import { getUser, clearAuth } from "../lib/auth";
+import { getUser, clearAuth, trialDaysRemaining } from "../lib/auth";
 import type { User } from "../lib/auth";
 import { getActivity, markNotifSeen, countUnread, relativeTime, ACTIVITY_META } from "../lib/activity";
 import type { ActivityItem } from "../lib/activity";
@@ -90,7 +90,9 @@ function NavItem({ href, label, icon: Icon, color, iconBg, onClose }: NavEntry) 
 function Sidebar({ user, onClose }: { user: User | null; onClose?: () => void }) {
   const router    = useRouter();
   const planKey   = user?.plan ?? "free_trial";
-  const planInfo  = PLAN_INFO[planKey] ?? PLAN_INFO.free_trial;
+  const planInfo  = planKey === "free_trial"
+    ? { daysRemaining: trialDaysRemaining(user), daysTotal: 14 }
+    : (PLAN_INFO[planKey] ?? PLAN_INFO.free_trial);
   const pct       = Math.round((planInfo.daysRemaining / planInfo.daysTotal) * 100);
   const planLabel = PLAN_LABELS[planKey] ?? "Free Trial";
   const price     = PLAN_PRICES[planKey] ?? "";
@@ -166,12 +168,14 @@ function Sidebar({ user, onClose }: { user: User | null; onClose?: () => void })
             <span style={{ fontSize: 13, fontWeight: 700, color: "#f1f5f9" }}>Plan {planLabel}</span>
             <span style={{ fontSize: 11, color: "rgba(255,255,255,0.3)", background: "rgba(255,255,255,0.06)", padding: "2px 8px", borderRadius: 6 }}>{price}</span>
           </div>
-          <div style={{ fontSize: 11.5, color: "rgba(255,255,255,0.35)", marginBottom: 10 }}>
-            {planInfo.daysRemaining} jours restants · {pct}% actif
+          <div style={{ fontSize: 11.5, color: "rgba(255,255,255,0.35)", marginBottom: planKey === "free_trial" ? 10 : 14 }}>
+            {planKey === "free_trial" ? `${planInfo.daysRemaining} jours restants · ${pct}% actif` : "Abonnement actif · renouvellement mensuel"}
           </div>
-          <div style={{ height: 5, borderRadius: 5, background: "rgba(255,255,255,0.08)", overflow: "hidden", marginBottom: 14 }}>
-            <div style={{ height: "100%", width: `${pct}%`, background: "linear-gradient(90deg, #7c3aed, #a855f7)", borderRadius: 5 }} />
-          </div>
+          {planKey === "free_trial" && (
+            <div style={{ height: 5, borderRadius: 5, background: "rgba(255,255,255,0.08)", overflow: "hidden", marginBottom: 14 }}>
+              <div style={{ height: "100%", width: `${pct}%`, background: "linear-gradient(90deg, #7c3aed, #a855f7)", borderRadius: 5 }} />
+            </div>
+          )}
           <Link href="/dashboard/billing" style={{
             display: "block", textAlign: "center", padding: "9px 0",
             background: "linear-gradient(135deg, #7c3aed, #a855f7)",
@@ -214,7 +218,9 @@ const NOTIF_ICONS: Record<string, LucideIcon> = {
 function NotifPanel({ user, onClose }: { user: User | null; onClose: () => void }) {
   const activities = getActivity().slice(0, 8);
   const planKey    = user?.plan ?? "free_trial";
-  const planInfo   = PLAN_INFO[planKey] ?? PLAN_INFO.free_trial;
+  const planInfo   = planKey === "free_trial"
+    ? { daysRemaining: trialDaysRemaining(user), daysTotal: 14 }
+    : (PLAN_INFO[planKey] ?? PLAN_INFO.free_trial);
   useEffect(() => { markNotifSeen(); }, []);
 
   return (

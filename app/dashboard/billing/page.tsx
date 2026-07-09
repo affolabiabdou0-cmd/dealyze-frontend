@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { CreditCard, Check, ArrowRight, Zap, Star, FileText, Mail, BarChart3, Shield, Clock, Receipt, CheckCircle, XCircle } from "lucide-react";
-import { getUser } from "../../lib/auth";
+import { getUser, trialDaysRemaining, refreshUser } from "../../lib/auth";
 import { api } from "../../lib/api";
 import PageHeader from "../../components/PageHeader";
 
@@ -41,17 +41,30 @@ const AGENT_META = [
   { key: "deep_due",    label: "Deep Due",    icon: Shield,    color: "#10b981" },
 ] as const;
 
-const PLAN_DAYS: Record<string, { remaining: number; total: number }> = {
-  free_trial: { remaining: 11, total: 14 },
-  starter:    { remaining: 22, total: 30 },
-  growth:     { remaining: 18, total: 30 },
-  enterprise: { remaining: 30, total: 30 },
-};
+interface SubscriptionResponse {
+  plan: string;
+  subscription_status: string;
+  current_period_end: string | null;
+}
+
+interface Invoice {
+  id: string;
+  date: string;
+  montant: number | null;
+  devise: string | null;
+  statut: string;
+  invoice_id: string | null;
+}
 
 function dayBarColor(pct: number) {
   if (pct > 50) return "#10b981";
   if (pct > 25) return "#f59e0b";
   return "#ef4444";
+}
+
+function daysUntil(iso: string): number {
+  const ms = new Date(iso).getTime() - Date.now();
+  return Math.max(0, Math.ceil(ms / (24 * 60 * 60 * 1000)));
 }
 
 const CARD: React.CSSProperties = {
@@ -73,6 +86,8 @@ export default function BillingPage() {
   const router      = useRouter();
   const currentPlan = user?.plan ?? "free_trial";
   const [quota, setQuota]             = useState<QuotaResponse | null>(null);
+  const [subscription, setSubscription] = useState<SubscriptionResponse | null>(null);
+  const [invoices, setInvoices]       = useState<Invoice[]>([]);
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
   const [toast, setToast]             = useState<{ type: "success" | "error"; msg: string } | null>(null);
 
@@ -105,17 +120,45 @@ export default function BillingPage() {
     document.head.appendChild(script);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  useEffect(() => {
+  function loadAccountState() {
     api.get<QuotaResponse>("/auth/quota").then((r) => setQuota(r.data)).catch(() => null);
-    const params = new URLSearchParams(window.location.search);
-    if (params.get("payment") === "simulated" || params.get("payment") === "success") {
-      showToast("success", `Plan ${params.get("plan") ?? ""} activé avec succès !`);
-      router.replace("/dashboard/billing");
-    }
-  }, [router]);
+    api.get<SubscriptionResponse>("/billing/subscription").then((r) => setSubscription(r.data)).catch(() => null);
+    api.get<Invoice[]>("/billing/invoices").then((r) => setInvoices(r.data)).catch(() => null);
+  }
 
-  const planDays = PLAN_DAYS[currentPlan] ?? PLAN_DAYS.free_trial;
-  const dayPct   = Math.round((planDays.remaining / planDays.total) * 100);
+  // Après un paiement, on confirme que le backend a bien activé le plan (webhook Paddle)
+  // avant d'afficher un succès — pas de confirmation optimiste non vérifiée.
+  async function confirmUpgrade(expectedPlan: string | null) {
+    showToast("success", "Paiement reçu — activation de votre plan en cours…");
+    for (let attempt = 0; attempt < 8; attempt++) {
+      await new Promise((r) => setTimeout(r, 1500));
+      const updated = await refreshUser();
+      if (updated && (!expectedPlan || updated.plan === expectedPlan)) {
+        loadAccountState();
+        showToast("success", `Plan ${expectedPlan ?? updated.plan} activé avec succès !`);
+        return;
+      }
+    }
+    showToast("error", "Paiement reçu, mais l'activation prend plus de temps que prévu. Rechargez la page dans un instant.");
+  }
+
+  useEffect(() => {
+    loadAccountState();
+    const params = new URLSearchParams(window.location.search);
+    const paymentState = params.get("payment");
+    if (paymentState === "simulated" || paymentState === "success") {
+      const expectedPlan = params.get("plan");
+      router.replace("/dashboard/billing");
+      confirmUpgrade(expectedPlan);
+    }
+  }, [router]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const planDays = currentPlan === "free_trial"
+    ? { remaining: trialDaysRemaining(user), total: 14 }
+    : subscription?.current_period_end
+      ? { remaining: daysUntil(subscription.current_period_end), total: 30 }
+      : null;
+  const dayPct   = planDays ? Math.round((planDays.remaining / planDays.total) * 100) : 0;
   const dayColor = dayBarColor(dayPct);
 
   const PLAN_LABEL: Record<string, string> = {
@@ -146,7 +189,7 @@ export default function BillingPage() {
           customer: { email: res.data.user_email ?? user?.email ?? "" },
           customData: { user_id: res.data.user_id ?? user?.id ?? "" },
           settings: {
-            successUrl: `${window.location.origin}/dashboard?payment=success&plan=${planId}`,
+            successUrl: `${window.location.origin}/dashboard/billing?payment=success&plan=${planId}`,
             displayMode: "overlay",
             locale: "fr",
           },
@@ -215,13 +258,15 @@ export default function BillingPage() {
                 )}
               </div>
               <div style={{ fontSize: 12, color: "#94a3b8" }}>
-                {currentPlan === "free_trial" ? "5 utilisations gratuites par agent incluses" : "Abonnement mensuel actif"}
+                {currentPlan === "free_trial" ? "Quota gratuit limité par agent — détail ci-dessous" : "Abonnement mensuel actif"}
               </div>
             </div>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 6, background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 9, padding: "6px 12px" }}>
-            <Clock size={12} style={{ color: dayColor }} strokeWidth={1.5} />
-            <span style={{ fontSize: 12, fontWeight: 600, color: dayColor }}>{planDays.remaining} jours restants</span>
+            <Clock size={12} style={{ color: planDays ? dayColor : "#94a3b8" }} strokeWidth={1.5} />
+            <span style={{ fontSize: 12, fontWeight: 600, color: planDays ? dayColor : "#94a3b8" }}>
+              {planDays ? `${planDays.remaining} jours restants` : "Cycle en cours"}
+            </span>
           </div>
         </div>
 
@@ -229,7 +274,7 @@ export default function BillingPage() {
         <div style={{ marginBottom: 12 }}>
           <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 5 }}>
             <span style={{ fontSize: 10.5, color: "#94a3b8" }}>Durée de la période</span>
-            <span style={{ fontSize: 10.5, fontFamily: "monospace", color: "#64748b" }}>{planDays.remaining}/{planDays.total} j</span>
+            <span style={{ fontSize: 10.5, fontFamily: "monospace", color: "#64748b" }}>{planDays ? `${planDays.remaining}/${planDays.total} j` : "—"}</span>
           </div>
           <div style={{ height: 5, borderRadius: 4, background: "#f1f5f9", overflow: "hidden" }}>
             <div style={{ height: "100%", width: `${dayPct}%`, borderRadius: 4, background: `linear-gradient(90deg, ${dayColor}, ${dayColor}99)`, transition: "width 1s" }} />
@@ -354,24 +399,42 @@ export default function BillingPage() {
             <span key={h} style={{ fontSize: 9.5, fontWeight: 700, letterSpacing: "0.07em", color: "#94a3b8", textTransform: "uppercase" }}>{h}</span>
           ))}
         </div></div>
-        <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "14px 12px" }}>
-          <div style={{ width: 34, height: 34, borderRadius: 9, background: "#f8fafc", border: "1px solid #e2e8f0", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-            <Receipt size={15} style={{ color: "#cbd5e1" }} strokeWidth={1.5} />
+        {invoices.length === 0 ? (
+          <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "14px 12px" }}>
+            <div style={{ width: 34, height: 34, borderRadius: 9, background: "#f8fafc", border: "1px solid #e2e8f0", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+              <Receipt size={15} style={{ color: "#cbd5e1" }} strokeWidth={1.5} />
+            </div>
+            <div>
+              <p style={{ fontSize: 12.5, color: "#64748b", fontWeight: 500 }}>Aucun paiement pour le moment</p>
+              <p style={{ fontSize: 11, color: "#94a3b8", marginTop: 2 }}>Vos factures apparaîtront ici après votre premier paiement</p>
+            </div>
           </div>
-          <div>
-            <p style={{ fontSize: 12.5, color: "#64748b", fontWeight: 500 }}>Aucun paiement pour le moment</p>
-            <p style={{ fontSize: 11, color: "#94a3b8", marginTop: 2 }}>Vos factures apparaîtront ici après votre premier paiement</p>
+        ) : (
+          <div style={{ overflowX: "auto" }}>
+            <div style={{ minWidth: 460 }}>
+              {invoices.map((inv) => (
+                <div key={inv.id} style={{ display: "grid", gridTemplateColumns: "1.2fr 2fr 1fr 1fr 0.8fr", gap: 10, alignItems: "center", padding: "10px 12px", borderBottom: "1px solid #f8fafc" }}>
+                  <span style={{ fontSize: 12, color: "#334155" }}>{new Date(inv.date).toLocaleDateString("fr-FR")}</span>
+                  <span style={{ fontSize: 12, color: "#64748b" }}>Abonnement VYXEN</span>
+                  <span style={{ fontSize: 12, fontFamily: "monospace", color: "#0f172a" }}>
+                    {inv.montant != null ? `${(inv.montant / 100).toFixed(2)} ${inv.devise ?? ""}` : "—"}
+                  </span>
+                  <span style={{ fontSize: 11, fontWeight: 600, color: inv.statut === "completed" ? "#16a34a" : "#f59e0b" }}>{inv.statut}</span>
+                  <span style={{ fontSize: 11, color: "#94a3b8" }}>{inv.invoice_id ? "PDF" : "—"}</span>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       {/* ── Sécurité paiement ── */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "center", flexWrap: "wrap", gap: 16, padding: "10px 20px", borderRadius: 11, background: "#fff", border: "1px solid #e2e8f0" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-          <div style={{ width: 20, height: 20, borderRadius: 5, background: "#f97316", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <span style={{ fontSize: 8, fontWeight: 900, color: "#fff" }}>LS</span>
+          <div style={{ width: 20, height: 20, borderRadius: 5, background: "#1a1a2e", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <span style={{ fontSize: 8, fontWeight: 900, color: "#fff" }}>P</span>
           </div>
-          <span style={{ fontSize: 11.5, color: "#64748b", fontWeight: 600 }}>Lemon Squeezy</span>
+          <span style={{ fontSize: 11.5, color: "#64748b", fontWeight: 600 }}>Paddle</span>
         </div>
         <div style={{ width: 1, height: 14, background: "#e2e8f0" }} />
         <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
