@@ -54,11 +54,15 @@ function pwStrength(pw: string): { score: number; label: string; color: string }
 }
 
 export default function SettingsPage() {
-  const user   = getUser();
+  // Loaded post-mount, not read directly from localStorage during render — this page is
+  // statically exported, so rendering user-derived text synchronously here would make the
+  // server-rendered HTML (no user) mismatch the client's first paint (real user), triggering
+  // a React hydration error.
+  const [user, setUser] = useState<ReturnType<typeof getUser>>(null);
   const router = useRouter();
   const [active, setActive] = useState<Section>("profil");
 
-  const [fullName, setFullName] = useState(user?.full_name ?? "");
+  const [fullName, setFullName] = useState("");
   const [saving,   setSaving]   = useState(false);
   const [saved,    setSaved]    = useState(false);
   const [saveErr,  setSaveErr]  = useState("");
@@ -79,6 +83,9 @@ export default function SettingsPage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
+    const u = getUser();
+    setUser(u);
+    setFullName(u?.full_name ?? "");
     const saved = localStorage.getItem("vyxen_avatar");
     if (saved) setAvatarUrl(saved);
   }, []);

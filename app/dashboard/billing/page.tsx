@@ -82,8 +82,12 @@ declare global {
 }
 
 export default function BillingPage() {
-  const user        = getUser();
   const router      = useRouter();
+  // user is loaded post-mount (not read directly from localStorage during render) so the
+  // static export's server-rendered HTML always matches the client's first paint — reading
+  // it synchronously here caused a React hydration mismatch (#418) once the trial countdown
+  // became a real, time-dependent value instead of a static lookup.
+  const [user, setUser]               = useState<ReturnType<typeof getUser>>(null);
   const currentPlan = user?.plan ?? "free_trial";
   const [quota, setQuota]             = useState<QuotaResponse | null>(null);
   const [subscription, setSubscription] = useState<SubscriptionResponse | null>(null);
@@ -134,6 +138,7 @@ export default function BillingPage() {
       await new Promise((r) => setTimeout(r, 1500));
       const updated = await refreshUser();
       if (updated && (!expectedPlan || updated.plan === expectedPlan)) {
+        setUser(updated);
         loadAccountState();
         showToast("success", `Plan ${expectedPlan ?? updated.plan} activé avec succès !`);
         return;
@@ -143,6 +148,7 @@ export default function BillingPage() {
   }
 
   useEffect(() => {
+    setUser(getUser());
     loadAccountState();
     const params = new URLSearchParams(window.location.search);
     const paymentState = params.get("payment");

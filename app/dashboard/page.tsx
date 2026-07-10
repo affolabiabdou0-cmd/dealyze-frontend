@@ -104,7 +104,10 @@ function ActivityDrawer({ item, onClose }: { item: ActivityItem; onClose: () => 
 
 /* ── Page ── */
 export default function DashboardPage() {
-  const user = getUser();
+  // Loaded post-mount rather than read directly from localStorage during render, so the
+  // statically-exported HTML (no user yet) matches the client's first paint and React
+  // doesn't throw a hydration mismatch once the real name/plan appear.
+  const [user, setUser]              = useState<ReturnType<typeof getUser>>(null);
   const [quota,       setQuota]      = useState<QuotaResponse | null>(null);
   const [loading,     setLoading]    = useState(true);
   const [activities,  setActivities] = useState<ActivityItem[]>([]);
@@ -113,6 +116,7 @@ export default function DashboardPage() {
   const loadAct = useCallback(() => { setActivities(getActivity()); }, []);
 
   useEffect(() => {
+    setUser(getUser());
     api.get<QuotaResponse>("/auth/quota").then((r) => setQuota(r.data)).catch(() => null).finally(() => setLoading(false));
     loadAct();
     window.addEventListener("focus", loadAct);
