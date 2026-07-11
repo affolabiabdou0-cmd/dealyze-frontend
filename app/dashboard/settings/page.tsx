@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { User, Lock, Info, AlertTriangle, Check, AlertCircle, Copy, CheckCircle, Eye, EyeOff, Settings, Camera } from "lucide-react";
-import { getUser, clearAuth } from "../../lib/auth";
+import { getUser, clearAuth, refreshUser } from "../../lib/auth";
 import { api } from "../../lib/api";
 import { useRouter } from "next/navigation";
 import PageHeader from "../../components/PageHeader";
@@ -89,6 +89,7 @@ export default function SettingsPage() {
     setFullName(u?.full_name ?? "");
     const saved = localStorage.getItem("vyxen_avatar");
     if (saved) setAvatarUrl(saved);
+    refreshUser().then((updated) => { if (updated) setUser(updated); });
   }, []);
 
   function handleAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -135,6 +136,20 @@ export default function SettingsPage() {
   function copyId() {
     if (!user?.id) return;
     navigator.clipboard.writeText(user.id).then(() => { setIdCopied(true); setTimeout(() => setIdCopied(false), 2000); });
+  }
+
+  const [resending, setResending] = useState(false);
+  const [resent, setResent] = useState(false);
+
+  async function handleResendVerification() {
+    setResending(true);
+    try {
+      await api.post("/auth/resend-verification");
+      setResent(true);
+      setTimeout(() => setResent(false), 4000);
+    } finally {
+      setResending(false);
+    }
   }
 
   async function handleDelete() {
@@ -359,6 +374,22 @@ export default function SettingsPage() {
                   <span style={{ fontSize: 13, color: "#334155" }}>
                     {user?.profile === "pme" ? "PME / Commercial" : "Investisseur / VC"}
                   </span>
+                </div>
+                <div style={{ background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 12, padding: "18px 20px" }}>
+                  <div style={{ fontSize: 11, fontWeight: 600, color: "#94a3b8", letterSpacing: "0.07em", textTransform: "uppercase", marginBottom: 8 }}>Email</div>
+                  {user?.email_verified ? (
+                    <span style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 12.5, fontWeight: 600, color: "#10b981" }}>
+                      <Check size={13} /> Vérifié
+                    </span>
+                  ) : (
+                    <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+                      <span style={{ fontSize: 12.5, fontWeight: 600, color: "#f59e0b" }}>Non vérifié</span>
+                      <button onClick={handleResendVerification} disabled={resending}
+                        style={{ fontSize: 12, color: "#7c3aed", background: "none", border: "none", cursor: resending ? "default" : "pointer", padding: 0, textDecoration: "underline", opacity: resending ? 0.5 : 1 }}>
+                        {resent ? "Email renvoyé ✓" : resending ? "Envoi…" : "Renvoyer l'email"}
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             </Card>

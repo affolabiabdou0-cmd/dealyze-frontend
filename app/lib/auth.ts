@@ -7,6 +7,7 @@ export interface User {
   profile: string;
   plan: string;
   created_at?: string;
+  email_verified?: boolean;
 }
 
 export function getToken(): string | null {
@@ -83,6 +84,7 @@ interface MeResponse {
   profile: string;
   plan: string;
   created_at: string;
+  email_verified?: boolean;
 }
 
 /** Re-fetches the authoritative user profile (plan included) and refreshes the local cache. */
@@ -96,6 +98,7 @@ export async function refreshUser(): Promise<User | null> {
       profile: res.data.profile,
       plan: res.data.plan,
       created_at: res.data.created_at,
+      email_verified: res.data.email_verified,
     };
     localStorage.setItem("dealyze_user", JSON.stringify(updated));
     return updated;
