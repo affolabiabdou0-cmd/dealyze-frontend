@@ -93,11 +93,24 @@ export default function BillingPage() {
   const [subscription, setSubscription] = useState<SubscriptionResponse | null>(null);
   const [invoices, setInvoices]       = useState<Invoice[]>([]);
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
+  const [downloadingInvoice, setDownloadingInvoice] = useState<string | null>(null);
   const [toast, setToast]             = useState<{ type: "success" | "error"; msg: string } | null>(null);
 
   function showToast(type: "success" | "error", msg: string) {
     setToast({ type, msg });
     setTimeout(() => setToast(null), 4500);
+  }
+
+  async function handleDownloadInvoice(transactionId: string) {
+    setDownloadingInvoice(transactionId);
+    try {
+      const res = await api.get<{ url: string }>(`/billing/invoices/${transactionId}/pdf`);
+      window.open(res.data.url, "_blank", "noopener,noreferrer");
+    } catch {
+      showToast("error", "Facture indisponible pour le moment.");
+    } finally {
+      setDownloadingInvoice(null);
+    }
   }
 
   // Charge Paddle.js une seule fois
@@ -366,6 +379,17 @@ export default function BillingPage() {
                     <div style={{ padding: "10px", borderRadius: 9, textAlign: "center", fontSize: 12, fontWeight: 600, color: "#94a3b8", background: "#f8fafc", border: "1px solid #e2e8f0" }}>
                       Plan actuel
                     </div>
+                  ) : plan.id === "enterprise" ? (
+                    <a href={`mailto:affolabiabdou0@gmail.com?subject=${encodeURIComponent("Plan Enterprise VYXEN")}&body=${encodeURIComponent(`Bonjour,\n\nJe suis intéressé·e par le plan Enterprise VYXEN pour mon compte (${user?.email ?? ""}).\n\nMerci de me recontacter pour en discuter.`)}`}
+                      style={{
+                        width: "100%", padding: "11px", borderRadius: 9,
+                        border: "1px solid #e2e8f0", background: "#f8fafc", color: "#0f172a",
+                        fontSize: 13, fontWeight: 600, textDecoration: "none",
+                        display: "flex", alignItems: "center", justifyContent: "center", gap: 7,
+                      }}
+                    >
+                      Nous contacter <ArrowRight size={13} strokeWidth={1.5} />
+                    </a>
                   ) : (
                     <button onClick={() => handleUpgrade(plan.id)} disabled={loadingPlan === plan.id}
                       style={{
@@ -426,7 +450,14 @@ export default function BillingPage() {
                     {inv.montant != null ? `${(inv.montant / 100).toFixed(2)} ${inv.devise ?? ""}` : "—"}
                   </span>
                   <span style={{ fontSize: 11, fontWeight: 600, color: inv.statut === "completed" ? "#16a34a" : "#f59e0b" }}>{inv.statut}</span>
-                  <span style={{ fontSize: 11, color: "#94a3b8" }}>{inv.invoice_id ? "PDF" : "—"}</span>
+                  {inv.invoice_id ? (
+                    <button onClick={() => handleDownloadInvoice(inv.id)} disabled={downloadingInvoice === inv.id}
+                      style={{ fontSize: 11, fontWeight: 600, color: "#7c3aed", background: "none", border: "none", cursor: downloadingInvoice === inv.id ? "default" : "pointer", padding: 0, textAlign: "left", textDecoration: "underline", opacity: downloadingInvoice === inv.id ? 0.5 : 1 }}>
+                      {downloadingInvoice === inv.id ? "…" : "Télécharger"}
+                    </button>
+                  ) : (
+                    <span style={{ fontSize: 11, color: "#94a3b8" }}>—</span>
+                  )}
                 </div>
               ))}
             </div>

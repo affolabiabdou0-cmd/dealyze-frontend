@@ -228,7 +228,10 @@ export default function LoginPage() {
                 placeholder="vous@example.com" style={inputBase} onFocus={onFocus} onBlur={onBlur} />
             </div>
             <div>
-              <label style={{ display:"block", fontSize:13, fontWeight:600, color:"#374151", marginBottom:6 }}>Mot de passe</label>
+              <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:6 }}>
+                <label style={{ fontSize:13, fontWeight:600, color:"#374151" }}>Mot de passe</label>
+                <Link href="/forgot-password" style={{ fontSize:12.5, color:"#2563EB", fontWeight:600, textDecoration:"none" }}>Mot de passe oublié ?</Link>
+              </div>
               <div style={{ position:"relative" }}>
                 <input type={showPw?"text":"password"} required value={password}
                   onChange={(e) => setPassword(e.target.value)} placeholder="••••••••"

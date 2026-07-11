@@ -79,6 +79,7 @@ export default function SettingsPage() {
   const [idCopied,       setIdCopied]       = useState(false);
   const [deleteConfirm,  setDeleteConfirm]  = useState("");
   const [deleting,       setDeleting]       = useState(false);
+  const [deleteErr,      setDeleteErr]      = useState("");
   const [avatarUrl,      setAvatarUrl]      = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -136,10 +137,21 @@ export default function SettingsPage() {
     navigator.clipboard.writeText(user.id).then(() => { setIdCopied(true); setTimeout(() => setIdCopied(false), 2000); });
   }
 
-  function handleDelete() {
+  async function handleDelete() {
     if (deleteConfirm !== "supprimer") return;
     setDeleting(true);
-    setTimeout(() => { clearAuth(); router.push("/login"); }, 1000);
+    setDeleteErr("");
+    try {
+      await api.delete("/auth/me");
+      clearAuth();
+      router.push("/login");
+    } catch (err: unknown) {
+      setDeleteErr(
+        (err as { response?: { data?: { detail?: string } } })?.response?.data?.detail
+          || "Suppression impossible pour le moment. Réessayez."
+      );
+      setDeleting(false);
+    }
   }
 
   const planColors: Record<string, string> = {
@@ -381,6 +393,9 @@ export default function SettingsPage() {
                 >
                   {deleting ? <span className="w-4 h-4 border-2 border-red-300 border-t-red-500 rounded-full animate-spin" /> : "Supprimer définitivement mon compte"}
                 </button>
+                {deleteErr && (
+                  <p style={{ fontSize: 12.5, color: "#ef4444", marginTop: 10 }}>{deleteErr}</p>
+                )}
               </div>
             </div>
           )}
