@@ -140,13 +140,21 @@ export default function SettingsPage() {
 
   const [resending, setResending] = useState(false);
   const [resent, setResent] = useState(false);
+  const [resendErr, setResendErr] = useState("");
 
   async function handleResendVerification() {
     setResending(true);
+    setResendErr("");
     try {
-      await api.post("/auth/resend-verification");
-      setResent(true);
-      setTimeout(() => setResent(false), 4000);
+      const res = await api.post<{ message: string; sent: boolean }>("/auth/resend-verification");
+      if (res.data.sent) {
+        setResent(true);
+        setTimeout(() => setResent(false), 4000);
+      } else {
+        setResendErr(res.data.message);
+      }
+    } catch {
+      setResendErr("Échec de l'envoi. Réessayez plus tard.");
     } finally {
       setResending(false);
     }
@@ -382,12 +390,15 @@ export default function SettingsPage() {
                       <Check size={13} /> Vérifié
                     </span>
                   ) : (
-                    <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
-                      <span style={{ fontSize: 12.5, fontWeight: 600, color: "#f59e0b" }}>Non vérifié</span>
-                      <button onClick={handleResendVerification} disabled={resending}
-                        style={{ fontSize: 12, color: "#7c3aed", background: "none", border: "none", cursor: resending ? "default" : "pointer", padding: 0, textDecoration: "underline", opacity: resending ? 0.5 : 1 }}>
-                        {resent ? "Email renvoyé ✓" : resending ? "Envoi…" : "Renvoyer l'email"}
-                      </button>
+                    <div>
+                      <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+                        <span style={{ fontSize: 12.5, fontWeight: 600, color: "#f59e0b" }}>Non vérifié</span>
+                        <button onClick={handleResendVerification} disabled={resending}
+                          style={{ fontSize: 12, color: "#7c3aed", background: "none", border: "none", cursor: resending ? "default" : "pointer", padding: 0, textDecoration: "underline", opacity: resending ? 0.5 : 1 }}>
+                          {resent ? "Email renvoyé ✓" : resending ? "Envoi…" : "Renvoyer l'email"}
+                        </button>
+                      </div>
+                      {resendErr && <p style={{ fontSize: 11.5, color: "#ef4444", marginTop: 6 }}>{resendErr}</p>}
                     </div>
                   )}
                 </div>

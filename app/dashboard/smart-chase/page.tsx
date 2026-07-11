@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Mail, Copy, Check, AlertCircle, Sparkles, Calendar, Download, Building2, Wallet, Clock, AlertTriangle, TrendingUp, User, type LucideIcon } from "lucide-react";
 import { api } from "../../lib/api";
 import { addActivity } from "../../lib/activity";
+import { getUser } from "../../lib/auth";
 import PageHeader from "../../components/PageHeader";
 
 interface SmartChaseResult {
@@ -47,6 +48,8 @@ const CARD: React.CSSProperties = {
 };
 
 export default function SmartChasePage() {
+  const [user, setUser] = useState<ReturnType<typeof getUser>>(null);
+  useEffect(() => { setUser(getUser()); }, []);
   const [form, setForm] = useState({
     invoice_id: "", client_name: "", amount: "", currency: "EUR",
     due_date: "", issue_date: "", description: "",
@@ -204,6 +207,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;c
         subtitle="Transformez vos impayés en paiements avec des relances IA calibrées au profil de chaque client"
         accentColor={COLOR}
         icon={<Mail size={22} style={{ color: COLOR }} strokeWidth={1.75} />}
+        plan={user?.plan}
       />
 
       <div className={result ? "block" : "grid lg:grid-cols-2 gap-6"}>

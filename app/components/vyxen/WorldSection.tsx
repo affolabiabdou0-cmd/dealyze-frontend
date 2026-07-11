@@ -3,7 +3,20 @@
 import dynamic from "next/dynamic";
 import { useReducedMotion } from "./useReducedMotion";
 
-const GlobeScene = dynamic(() => import("./GlobeScene"), { ssr: false, loading: () => null });
+function StaticGlobeGlow() {
+  return (
+    <div style={{
+      width: "100%", height: "100%", borderRadius: "50%", margin: "40px auto",
+      background: "radial-gradient(circle at 35% 30%, rgba(124,58,237,0.25), transparent 70%)",
+      border: "1px solid rgba(167,139,250,0.25)", maxWidth: 300, maxHeight: 300,
+    }} />
+  );
+}
+
+// Same reasoning as AICore: a blank loading state reads as "the world section never
+// loaded" on any real connection. Show the static glow immediately, swap to the live
+// globe once the WebGL chunk is ready.
+const GlobeScene = dynamic(() => import("./GlobeScene"), { ssr: false, loading: () => <StaticGlobeGlow /> });
 
 const INDUSTRIES = [
   "Cabinets d'avocats", "Comptabilité", "Immobilier", "Restaurants", "Santé",
@@ -32,15 +45,7 @@ export default function WorldSection() {
         </div>
 
         <div style={{ width: "100%", maxWidth: 460, height: 380, margin: "0 auto" }}>
-          {reducedMotion ? (
-            <div style={{
-              width: "100%", height: "100%", borderRadius: "50%", margin: "40px auto",
-              background: "radial-gradient(circle at 35% 30%, rgba(124,58,237,0.25), transparent 70%)",
-              border: "1px solid rgba(167,139,250,0.25)", maxWidth: 300, maxHeight: 300,
-            }} />
-          ) : (
-            <GlobeScene />
-          )}
+          {reducedMotion ? <StaticGlobeGlow /> : <GlobeScene />}
         </div>
 
         <div style={{ display: "flex", gap: 18, flexWrap: "wrap", justifyContent: "center", marginTop: -10, marginBottom: 40 }}>

@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FileText, Copy, Check, AlertCircle, Sparkles, Download, Building2, Clock, Wallet, Globe, Tag, Lightbulb, Package, Calendar, CreditCard, Zap, CheckCircle2, type LucideIcon } from "lucide-react";
 import { api } from "../../lib/api";
 import { addActivity } from "../../lib/activity";
+import { getUser } from "../../lib/auth";
 import PageHeader from "../../components/PageHeader";
 
 interface DealDraftContent {
@@ -63,6 +64,8 @@ const TONE_LABELS: Record<string, string> = {
 };
 
 export default function DealDraftPage() {
+  const [user, setUser] = useState<ReturnType<typeof getUser>>(null);
+  useEffect(() => { setUser(getUser()); }, []);
   const [form, setForm] = useState({ client_name: "", sector: "", need: "", budget: "", timeline: "", language: "fr" });
   const [loading, setLoading] = useState(false);
   const [error, setError]     = useState("");
@@ -212,6 +215,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;c
         subtitle="Générez une proposition commerciale professionnelle sur-mesure en moins de 30 secondes"
         accentColor={COLOR}
         icon={<FileText size={22} style={{ color: COLOR }} strokeWidth={1.75} />}
+        plan={user?.plan}
       />
 
       <div className={result ? "block" : "grid lg:grid-cols-2 gap-6"}>

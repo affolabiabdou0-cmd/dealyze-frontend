@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Shield, Copy, Check, AlertCircle, Sparkles, Download, User, Building2, AlertTriangle, CheckCircle2, XCircle, FileSearch } from "lucide-react";
 import { api } from "../../lib/api";
 import { addActivity } from "../../lib/activity";
+import { getUser } from "../../lib/auth";
 import PageHeader from "../../components/PageHeader";
 
 interface RiskItem { level: string; description: string; }
@@ -59,6 +60,8 @@ const CARD: React.CSSProperties = {
 };
 
 export default function DeepDuePage() {
+  const [user, setUser] = useState<ReturnType<typeof getUser>>(null);
+  useEffect(() => { setUser(getUser()); }, []);
   const [form, setForm]       = useState({ company_name: "", founder_name: "", context: "", language: "fr" });
   const [loading, setLoading] = useState(false);
   const [error, setError]     = useState("");
@@ -240,6 +243,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;c
         subtitle="Due diligence IA complète — profil fondateur, analyse concurrentielle et cartographie des risques"
         accentColor={COLOR}
         icon={<Shield size={22} style={{ color: COLOR }} strokeWidth={1.75} />}
+        plan={user?.plan}
       />
 
       <div className={result ? "block" : "grid lg:grid-cols-2 gap-6"}>

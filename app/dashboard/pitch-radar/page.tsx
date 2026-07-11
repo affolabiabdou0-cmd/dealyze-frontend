@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BarChart3, Copy, Check, AlertCircle, Sparkles, Upload, Download, TrendingUp, AlertTriangle, HelpCircle, Star } from "lucide-react";
 import { api } from "../../lib/api";
 import { addActivity } from "../../lib/activity";
+import { getUser } from "../../lib/auth";
 import PageHeader from "../../components/PageHeader";
 
 interface CriterionScore { key: string; label: string; score: number; weight: number; note: string; }
@@ -70,6 +71,8 @@ function recoConfig(r: string) {
 }
 
 export default function PitchRadarPage() {
+  const [user, setUser] = useState<ReturnType<typeof getUser>>(null);
+  useEffect(() => { setUser(getUser()); }, []);
   const [startupName, setStartupName] = useState("");
   const [deckText, setDeckText]       = useState("");
   const [file, setFile]               = useState<File | null>(null);
@@ -253,6 +256,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;c
         subtitle="Notation IA multicritère d'un pitch deck · Score VC · Forces & alertes · Recommandation investisseur"
         accentColor={COLOR}
         icon={<BarChart3 size={22} style={{ color: COLOR }} strokeWidth={1.75} />}
+        plan={user?.plan}
       />
 
       <div className={result ? "block" : "grid lg:grid-cols-2 gap-6"}>

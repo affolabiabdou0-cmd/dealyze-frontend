@@ -3,9 +3,13 @@
 import dynamic from "next/dynamic";
 import { useReducedMotion, usePerfTier } from "./useReducedMotion";
 
+// loading: () => null left the hero completely blank while the WebGL chunk downloaded —
+// on any real-world connection that reads as "nothing shows up when you land on the page".
+// Show the same static glow used for reduced-motion so there's always something on screen
+// immediately, then it's replaced by the live scene once the chunk is ready.
 const AICoreScene = dynamic(() => import("./AICoreScene"), {
   ssr: false,
-  loading: () => null,
+  loading: () => <StaticCoreGlow />,
 });
 
 /** Static CSS fallback for reduced-motion users — same silhouette, no WebGL. */
