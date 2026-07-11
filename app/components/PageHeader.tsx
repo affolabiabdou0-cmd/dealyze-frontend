@@ -43,15 +43,20 @@ export default function PageHeader({
   showNewAction = false,
 }: PageHeaderProps) {
   const [unread, setUnread] = useState(0);
+  // Computed post-mount, not during render: this page is statically exported, so "now" at
+  // build time almost never matches "now" in the visitor's browser — rendering the date
+  // synchronously here is what caused a hydration mismatch (React error #418) on every
+  // dashboard page, since PageHeader is shared by all of them.
+  const [todayCapital, setTodayCapital] = useState("");
 
   useEffect(() => {
     setUnread(countUnread());
+    const today = new Date().toLocaleDateString("fr-FR", {
+      weekday: "long", day: "numeric", month: "long", year: "numeric",
+    });
+    setTodayCapital(today.charAt(0).toUpperCase() + today.slice(1));
   }, []);
 
-  const today = new Date().toLocaleDateString("fr-FR", {
-    weekday: "long", day: "numeric", month: "long", year: "numeric",
-  });
-  const todayCapital = today.charAt(0).toUpperCase() + today.slice(1);
   const planLabel = PLAN_LABELS[plan] ?? plan;
 
   function handleBell() {
