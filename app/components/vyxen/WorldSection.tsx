@@ -3,6 +3,12 @@
 import dynamic from "next/dynamic";
 import { useReducedMotion, useWebGLSupported } from "./useReducedMotion";
 
+const GLOBE_SPARKS = [
+  { radius: 62, size: 4,   duration: 16, delay: -3,  reverse: false, color: "#67e8f9" },
+  { radius: 62, size: 3,   duration: 16, delay: -10, reverse: false, color: "#a78bfa" },
+  { radius: 84, size: 3,   duration: 26, delay: -14, reverse: true,  color: "#c4b5fd" },
+];
+
 // Animation is neutralized automatically for prefers-reduced-motion by the global
 // override in globals.css, so this serves both the reduced-motion and WebGL-unavailable
 // fallback cases without needing two variants.
@@ -11,18 +17,53 @@ function StaticGlobeGlow() {
     <div style={{ position: "relative", width: "100%", height: "100%", maxWidth: 300, maxHeight: 300, margin: "40px auto" }}>
       <style>{`
         @keyframes vx-globe-breathe { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.04); opacity: 0.8; } }
+        @keyframes vx-globe-spin    { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
       `}</style>
+
       <div style={{
         position: "absolute", inset: 0, borderRadius: "50%",
         background: "radial-gradient(circle at 35% 30%, rgba(124,58,237,0.25), transparent 70%)",
         border: "1px solid rgba(167,139,250,0.25)",
         animation: "vx-globe-breathe 5s ease-in-out infinite",
       }} />
+
+      {/* Rotating aurora sweep, same treatment as the hero core, sized down */}
+      <div style={{
+        position: "absolute", inset: "18%", borderRadius: "50%",
+        background: "conic-gradient(from 0deg, transparent 0%, rgba(34,211,238,0.4) 20%, transparent 36%, rgba(167,139,250,0.35) 60%, transparent 78%)",
+        maskImage: "radial-gradient(circle, transparent 66%, black 68%, black 82%, transparent 84%)",
+        WebkitMaskImage: "radial-gradient(circle, transparent 66%, black 68%, black 82%, transparent 84%)",
+        mixBlendMode: "screen",
+        animation: "vx-globe-spin 20s linear infinite",
+      }} />
+
       <div style={{
         position: "absolute", inset: "12%", borderRadius: "50%",
         border: "1px solid rgba(34,211,238,0.18)",
-        animation: "vx-orbit 28s linear infinite",
+        animation: "vx-globe-spin 28s linear infinite reverse",
       }} />
+
+      {GLOBE_SPARKS.map((s, i) => (
+        <div key={i} style={{
+          position: "absolute", top: "50%", left: "50%",
+          width: `${s.radius}%`, height: `${s.radius}%`,
+          transform: "translate(-50%,-50%)",
+        }}>
+          <div style={{
+            position: "absolute", inset: 0,
+            animation: `vx-globe-spin ${s.duration}s linear infinite${s.reverse ? " reverse" : ""}`,
+            animationDelay: `${s.delay}s`,
+          }}>
+            <div style={{
+              position: "absolute", top: 0, left: "50%",
+              width: s.size, height: s.size, borderRadius: "50%",
+              transform: "translate(-50%,-50%)",
+              background: s.color, opacity: 0.75,
+              boxShadow: `0 0 ${s.size * 2.5}px ${s.color}`,
+            }} />
+          </div>
+        </div>
+      ))}
     </div>
   );
 }
