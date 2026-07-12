@@ -321,7 +321,7 @@ const STEPS = [
 
 function HowItWorks() {
   return (
-    <section className="px-4 md:px-8" style={{ background: "rgba(5,5,7,0.82)", paddingTop: 90, paddingBottom: 90, borderTop: "0.5px solid var(--color-hairline)" }}>
+    <section className="px-4 md:px-8" style={{ background: "rgba(5,5,7,0.72)", paddingTop: 90, paddingBottom: 90, borderTop: "0.5px solid var(--color-hairline)" }}>
       <div style={{ maxWidth: 1040, margin: "0 auto" }}>
 
         <div style={{ textAlign: "center", marginBottom: 52 }}>
@@ -399,7 +399,7 @@ const PLANS = [
 
 function Pricing() {
   return (
-    <section id="tarifs" className="px-4 md:px-8" style={{ background: "rgba(5,5,7,0.82)", paddingTop: 90, paddingBottom: 90, borderTop: "0.5px solid var(--color-hairline)" }}>
+    <section id="tarifs" className="px-4 md:px-8" style={{ background: "rgba(5,5,7,0.72)", paddingTop: 90, paddingBottom: 90, borderTop: "0.5px solid var(--color-hairline)" }}>
       <div style={{ maxWidth: 1040, margin: "0 auto" }}>
 
         <div style={{ textAlign: "center", marginBottom: 52 }}>
@@ -481,7 +481,7 @@ function Pricing() {
 // ─── CTA FINAL ────────────────────────────────────────────────────────────────
 function CTAFinal() {
   return (
-    <section className="px-4 md:px-8" style={{ background: "rgba(5,5,7,0.82)", paddingTop: 100, paddingBottom: 100, borderTop: "0.5px solid var(--color-hairline)", position: "relative", overflow: "hidden" }}>
+    <section className="px-4 md:px-8" style={{ background: "rgba(5,5,7,0.72)", paddingTop: 100, paddingBottom: 100, borderTop: "0.5px solid var(--color-hairline)", position: "relative", overflow: "hidden" }}>
       <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: 700, height: 400, borderRadius: "50%", background: "radial-gradient(ellipse, rgba(124,58,237,0.09) 0%, transparent 70%)", pointerEvents: "none" }} />
       <div style={{ maxWidth: 640, margin: "0 auto", textAlign: "center", position: "relative", zIndex: 1 }}>
         <h2 style={{ fontSize: "clamp(28px, 4vw, 48px)", fontWeight: 600, color: "var(--color-text-1)", letterSpacing: "-1px", marginBottom: 16, lineHeight: 1.12 }}>
@@ -522,7 +522,7 @@ function CTAFinal() {
 function Footer() {
   return (
     <footer id="apropos" className="px-4 md:px-8" style={{
-      background: "rgba(5,5,7,0.82)", borderTop: "0.5px solid var(--color-hairline)",
+      background: "rgba(5,5,7,0.72)", borderTop: "0.5px solid var(--color-hairline)",
       paddingTop: 32, paddingBottom: 24,
     }}>
       <div style={{ maxWidth: 1040, margin: "0 auto" }}>

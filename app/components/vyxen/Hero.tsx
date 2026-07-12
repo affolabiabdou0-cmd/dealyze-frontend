@@ -35,7 +35,7 @@ export default function Hero({ onOpenDemo }: { onOpenDemo: () => void }) {
   return (
     <section style={{
       minHeight: "100vh", display: "flex", flexDirection: "column",
-      background: "rgba(5,5,7,0.82)", position: "relative", overflow: "hidden",
+      background: "rgba(5,5,7,0.72)", position: "relative", overflow: "hidden",
     }}>
       {/* AI Core — centered background layer */}
       <div style={{

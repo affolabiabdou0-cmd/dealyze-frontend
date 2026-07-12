@@ -73,7 +73,7 @@ export default function MissionCenter({ onOpenDemo }: { onOpenDemo: () => void }
   useEffect(() => clearAll, []);
 
   return (
-    <section className="px-4 md:px-8" style={{ background: "rgba(11,11,19,0.82)", paddingTop: 90, paddingBottom: 100, borderTop: "0.5px solid var(--color-hairline)", position: "relative", overflow: "hidden" }}>
+    <section className="px-4 md:px-8" style={{ background: "rgba(11,11,19,0.72)", paddingTop: 90, paddingBottom: 100, borderTop: "0.5px solid var(--color-hairline)", position: "relative", overflow: "hidden" }}>
       <div style={{ position: "absolute", top: "10%", left: "50%", transform: "translateX(-50%)", width: 500, height: 500, pointerEvents: "none", opacity: phase === "idle" ? 0.35 : 0.6, transition: "opacity 0.6s" }}>
         <AICore interactive={phase !== "idle"} />
       </div>
