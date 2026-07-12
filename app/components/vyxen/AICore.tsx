@@ -12,22 +12,34 @@ const AICoreScene = dynamic(() => import("./AICoreScene"), {
   loading: () => <StaticCoreGlow />,
 });
 
-/** Static CSS fallback for reduced-motion users — same silhouette, no WebGL. */
+/**
+ * CSS-only fallback — used both for prefers-reduced-motion (must stay static) and for
+ * WebGL-unavailable (should still feel alive). The animations below are automatically
+ * neutralized by the global `prefers-reduced-motion: reduce` override in globals.css
+ * (animation-duration: 0.001ms !important), so this one component correctly serves both
+ * cases without forking into two variants.
+ */
 function StaticCoreGlow() {
   return (
     <div style={{ position: "relative", width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <style>{`
+        @keyframes vx-core-breathe { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.06); opacity: 0.85; } }
+      `}</style>
       <div style={{
         width: "42%", aspectRatio: "1", borderRadius: "50%",
         background: "radial-gradient(circle at 35% 30%, #a78bfa, #5b21b6 55%, #1e0547 100%)",
         boxShadow: "0 0 120px rgba(124,58,237,0.45)",
+        animation: "vx-core-breathe 4.5s ease-in-out infinite",
       }} />
       <div style={{
         position: "absolute", width: "62%", aspectRatio: "1", borderRadius: "50%",
         border: "1px solid rgba(167,139,250,0.35)",
+        animation: "vx-orbit 24s linear infinite",
       }} />
       <div style={{
         position: "absolute", width: "78%", aspectRatio: "1", borderRadius: "50%",
         border: "1px solid rgba(34,211,238,0.2)",
+        animation: "vx-orbit 36s linear infinite reverse",
       }} />
     </div>
   );

@@ -3,13 +3,27 @@
 import dynamic from "next/dynamic";
 import { useReducedMotion, useWebGLSupported } from "./useReducedMotion";
 
+// Animation is neutralized automatically for prefers-reduced-motion by the global
+// override in globals.css, so this serves both the reduced-motion and WebGL-unavailable
+// fallback cases without needing two variants.
 function StaticGlobeGlow() {
   return (
-    <div style={{
-      width: "100%", height: "100%", borderRadius: "50%", margin: "40px auto",
-      background: "radial-gradient(circle at 35% 30%, rgba(124,58,237,0.25), transparent 70%)",
-      border: "1px solid rgba(167,139,250,0.25)", maxWidth: 300, maxHeight: 300,
-    }} />
+    <div style={{ position: "relative", width: "100%", height: "100%", maxWidth: 300, maxHeight: 300, margin: "40px auto" }}>
+      <style>{`
+        @keyframes vx-globe-breathe { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.04); opacity: 0.8; } }
+      `}</style>
+      <div style={{
+        position: "absolute", inset: 0, borderRadius: "50%",
+        background: "radial-gradient(circle at 35% 30%, rgba(124,58,237,0.25), transparent 70%)",
+        border: "1px solid rgba(167,139,250,0.25)",
+        animation: "vx-globe-breathe 5s ease-in-out infinite",
+      }} />
+      <div style={{
+        position: "absolute", inset: "12%", borderRadius: "50%",
+        border: "1px solid rgba(34,211,238,0.18)",
+        animation: "vx-orbit 28s linear infinite",
+      }} />
+    </div>
   );
 }
 
