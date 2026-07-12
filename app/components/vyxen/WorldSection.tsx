@@ -86,7 +86,7 @@ export default function WorldSection() {
   const webglSupported = useWebGLSupported();
 
   return (
-    <section className="px-4 md:px-8" style={{ background: "var(--color-void)", paddingTop: 90, paddingBottom: 60, borderTop: "0.5px solid var(--color-hairline)", overflow: "hidden" }}>
+    <section className="px-4 md:px-8" style={{ background: "rgba(5,5,7,0.82)", paddingTop: 90, paddingBottom: 60, borderTop: "0.5px solid var(--color-hairline)", overflow: "hidden" }}>
       <div style={{ maxWidth: 1040, margin: "0 auto" }}>
         <div style={{ textAlign: "center", marginBottom: 20 }}>
           <div style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 10, letterSpacing: "2.5px", color: "var(--color-cyan)", textTransform: "uppercase", fontWeight: 700, marginBottom: 14, background: "rgba(34,211,238,0.1)", padding: "4px 12px", borderRadius: 6 }}>

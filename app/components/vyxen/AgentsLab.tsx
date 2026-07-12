@@ -71,7 +71,7 @@ export default function AgentsLab() {
   }, [selected]);
 
   return (
-    <section id="agents-lab" className="px-4 md:px-8" style={{ background: "var(--color-panel)", paddingTop: 90, paddingBottom: 90, borderTop: "0.5px solid var(--color-hairline)" }}>
+    <section id="agents-lab" className="px-4 md:px-8" style={{ background: "rgba(11,11,19,0.82)", paddingTop: 90, paddingBottom: 90, borderTop: "0.5px solid var(--color-hairline)" }}>
       <div style={{ maxWidth: 1040, margin: "0 auto" }}>
         <div style={{ textAlign: "center", marginBottom: 44 }}>
           <div style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 10, letterSpacing: "2.5px", color: "var(--color-violet)", textTransform: "uppercase", fontWeight: 700, marginBottom: 14, background: "rgba(124,58,237,0.1)", padding: "4px 12px", borderRadius: 6 }}>
