@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useReducedMotion } from "./useReducedMotion";
+import { useReducedMotion, useWebGLSupported } from "./useReducedMotion";
 
 function StaticGlobeGlow() {
   return (
@@ -28,6 +28,7 @@ const HUBS_LABELS = ["Paris", "Londres", "New York", "Tokyo", "Dubai", "Singapou
 
 export default function WorldSection() {
   const reducedMotion = useReducedMotion();
+  const webglSupported = useWebGLSupported();
 
   return (
     <section className="px-4 md:px-8" style={{ background: "var(--color-void)", paddingTop: 90, paddingBottom: 60, borderTop: "0.5px solid var(--color-hairline)", overflow: "hidden" }}>
@@ -45,7 +46,7 @@ export default function WorldSection() {
         </div>
 
         <div style={{ width: "100%", maxWidth: 460, height: 380, margin: "0 auto" }}>
-          {reducedMotion ? <StaticGlobeGlow /> : <GlobeScene />}
+          {reducedMotion || webglSupported !== true ? <StaticGlobeGlow /> : <GlobeScene />}
         </div>
 
         <div style={{ display: "flex", gap: 18, flexWrap: "wrap", justifyContent: "center", marginTop: -10, marginBottom: 40 }}>

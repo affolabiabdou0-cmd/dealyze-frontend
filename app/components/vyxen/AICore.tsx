@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useReducedMotion, usePerfTier } from "./useReducedMotion";
+import { useReducedMotion, usePerfTier, useWebGLSupported } from "./useReducedMotion";
 
 // loading: () => null left the hero completely blank while the WebGL chunk downloaded —
 // on any real-world connection that reads as "nothing shows up when you land on the page".
@@ -44,10 +44,11 @@ export default function AICore({
 }) {
   const reducedMotion = useReducedMotion();
   const tier = usePerfTier();
+  const webglSupported = useWebGLSupported();
 
   return (
     <div className={className} style={{ width: "100%", height: "100%", ...style }}>
-      {reducedMotion ? (
+      {reducedMotion || webglSupported !== true ? (
         <StaticCoreGlow />
       ) : (
         <AICoreScene quality={tier} interactive={interactive} />

@@ -32,3 +32,28 @@ export function usePerfTier(): "low" | "mid" | "high" {
 
   return tier;
 }
+
+/**
+ * Feature-detects WebGL before attempting to mount a Three.js scene. Needed because
+ * WebGLRenderer throws (as an unhandled promise rejection, not a normal render error) when
+ * a context can't be created — hardware acceleration disabled, sandboxed/locked-down
+ * browser, old GPU drivers. React error boundaries don't catch that kind of async throw, so
+ * the only reliable fix is never attempting to create the context in the first place.
+ * Returns null while the check is pending (first client render) to avoid a hydration
+ * mismatch, then true/false once known.
+ */
+export function useWebGLSupported(): boolean | null {
+  const [supported, setSupported] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    try {
+      const canvas = document.createElement("canvas");
+      const gl = canvas.getContext("webgl2") || canvas.getContext("webgl");
+      setSupported(!!gl);
+    } catch {
+      setSupported(false);
+    }
+  }, []);
+
+  return supported;
+}
