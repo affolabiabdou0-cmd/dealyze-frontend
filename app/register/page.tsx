@@ -42,11 +42,14 @@ export default function RegisterPage() {
   const [loading,  setLoading]  = useState(false);
   const [gLoading, setGLoading] = useState(false);
   const [error,    setError]    = useState("");
+  const [serverWarm, setServerWarm] = useState<"pending"|"ready">("pending");
 
   // Wake up Render backend on mount to reduce cold-start latency
   useEffect(() => {
     const base = (process.env.NEXT_PUBLIC_API_URL ?? "https://dealyze-api.onrender.com").replace(/\/$/, "");
-    fetch(`${base}/health`).catch(() => {});
+    fetch(`${base}/health`)
+      .then(() => setServerWarm("ready"))
+      .catch(() => setServerWarm("ready"));
   }, []);
 
   async function handleSubmit(e: React.FormEvent) {
@@ -210,16 +213,25 @@ export default function RegisterPage() {
             </div>
           </div>
 
-          {/* Google */}
-          <button type="button" onClick={handleGoogle} disabled={gLoading || loading}
+          {/* Google — disabled until the backend is confirmed awake, same reasoning as
+              the login page: finishing the Google popup only to then hit a cold Render
+              instance on the final step reads as broken, not as "server starting up". */}
+          <button type="button" onClick={handleGoogle} disabled={gLoading || loading || serverWarm === "pending"}
             className="w-full flex items-center justify-center gap-3"
-            style={{ padding:"15px 20px", borderRadius:12, border:"1.5px solid #E2E8F0", background:"#fff", fontSize:14, fontWeight:600, color:"#111827", cursor:(gLoading||loading)?"default":"pointer", marginBottom:20, opacity:(gLoading||loading)?0.6:1, boxShadow:"0 1px 3px rgba(0,0,0,0.06)", transition:"background 0.12s, box-shadow 0.12s" }}
-            onMouseEnter={(e) => { if (!gLoading && !loading) { e.currentTarget.style.background="#F9FAFB"; e.currentTarget.style.boxShadow="0 2px 8px rgba(0,0,0,0.08)"; } }}
+            style={{ padding:"15px 20px", borderRadius:12, border:"1.5px solid #E2E8F0", background:"#fff", fontSize:14, fontWeight:600, color:"#111827", cursor:(gLoading||loading||serverWarm==="pending")?"default":"pointer", marginBottom:20, opacity:(gLoading||loading||serverWarm==="pending")?0.6:1, boxShadow:"0 1px 3px rgba(0,0,0,0.06)", transition:"background 0.12s, box-shadow 0.12s" }}
+            onMouseEnter={(e) => { if (!gLoading && !loading && serverWarm === "ready") { e.currentTarget.style.background="#F9FAFB"; e.currentTarget.style.boxShadow="0 2px 8px rgba(0,0,0,0.08)"; } }}
             onMouseLeave={(e) => { e.currentTarget.style.background="#fff"; e.currentTarget.style.boxShadow="0 1px 3px rgba(0,0,0,0.06)"; }}
           >
-            {gLoading ? <span className="w-[18px] h-[18px] rounded-full border-2 border-gray-200 border-t-gray-500 animate-spin" /> : <GIcon />}
-            {gLoading ? "Connexion en cours…" : "Continuer avec Google"}
+            {gLoading || serverWarm === "pending" ? <span className="w-[18px] h-[18px] rounded-full border-2 border-gray-200 border-t-gray-500 animate-spin" /> : <GIcon />}
+            {gLoading ? "Connexion en cours…" : serverWarm === "pending" ? "Préparation…" : "Continuer avec Google"}
           </button>
+
+          {serverWarm === "pending" && !gLoading && (
+            <div style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:6, marginTop:-10, marginBottom:16, fontSize:11, color:"#94a3b8" }}>
+              <span style={{ width:6, height:6, borderRadius:"50%", background:"#f59e0b", display:"inline-block" }} />
+              Initialisation du serveur IA… (quelques secondes)
+            </div>
+          )}
 
           <div className="flex items-center gap-4" style={{ marginBottom:20 }}>
             <div className="flex-1" style={{ height:1, background:"#F1F5F9" }} />

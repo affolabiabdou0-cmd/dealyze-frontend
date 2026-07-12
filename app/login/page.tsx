@@ -194,24 +194,28 @@ export default function LoginPage() {
           <h2 style={{ fontSize:30, fontWeight:700, color:"#0A1628", letterSpacing:"-0.75px", marginBottom:6 }}>Bon retour</h2>
           <p style={{ fontSize:14, color:"#94A3B8", marginBottom:36 }}>Connectez-vous à votre espace VYXEN</p>
 
-          {/* Google */}
-          <button type="button" onClick={handleGoogle} disabled={gLoading || loading}
+          {/* Google — disabled until the backend is confirmed awake. Without this, a user
+              could finish the (fast) Google popup only to then hit a cold Render instance
+              on the final step, which read as "Google sign-in is stuck/broken" rather than
+              "the server is starting up". Gating it here moves that same wait to before
+              they've committed to picking an account, which reads as normal loading. */}
+          <button type="button" onClick={handleGoogle} disabled={gLoading || loading || serverWarm === "pending"}
             className="w-full flex items-center justify-center gap-3"
-            style={{ padding:"15px 20px", borderRadius:12, border:"1.5px solid #E2E8F0", background:"#fff", fontSize:14, fontWeight:600, color:"#111827", cursor:(gLoading || loading)?"default":"pointer", marginBottom:22, opacity:(gLoading || loading)?0.6:1, boxShadow:"0 1px 3px rgba(0,0,0,0.06)", transition:"background 0.12s, box-shadow 0.12s" }}
-            onMouseEnter={(e) => { if (!gLoading && !loading) { e.currentTarget.style.background="#F9FAFB"; e.currentTarget.style.boxShadow="0 2px 8px rgba(0,0,0,0.08)"; } }}
+            style={{ padding:"15px 20px", borderRadius:12, border:"1.5px solid #E2E8F0", background:"#fff", fontSize:14, fontWeight:600, color:"#111827", cursor:(gLoading || loading || serverWarm === "pending")?"default":"pointer", marginBottom:22, opacity:(gLoading || loading || serverWarm === "pending")?0.6:1, boxShadow:"0 1px 3px rgba(0,0,0,0.06)", transition:"background 0.12s, box-shadow 0.12s" }}
+            onMouseEnter={(e) => { if (!gLoading && !loading && serverWarm === "ready") { e.currentTarget.style.background="#F9FAFB"; e.currentTarget.style.boxShadow="0 2px 8px rgba(0,0,0,0.08)"; } }}
             onMouseLeave={(e) => { e.currentTarget.style.background="#fff"; e.currentTarget.style.boxShadow="0 1px 3px rgba(0,0,0,0.06)"; }}
           >
-            {gLoading
+            {gLoading || serverWarm === "pending"
               ? <span className="w-[18px] h-[18px] rounded-full border-2 border-gray-200 border-t-gray-500 animate-spin" />
               : <GIcon />}
-            {gLoading ? "Connexion en cours…" : "Continuer avec Google"}
+            {gLoading ? "Connexion en cours…" : serverWarm === "pending" ? "Préparation…" : "Continuer avec Google"}
           </button>
 
           {/* Server warm-up indicator */}
           {serverWarm === "pending" && !gLoading && (
             <div style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:6, marginTop:-14, marginBottom:14, fontSize:11, color:"#94a3b8" }}>
               <span style={{ width:6, height:6, borderRadius:"50%", background:"#f59e0b", display:"inline-block", animation:"pulse 1.5s ease-in-out infinite" }} />
-              Initialisation du serveur IA…
+              Initialisation du serveur IA… (quelques secondes)
             </div>
           )}
 
