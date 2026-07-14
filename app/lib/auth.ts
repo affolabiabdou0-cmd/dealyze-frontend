@@ -54,12 +54,11 @@ export function trialDaysRemaining(user: User | null): number {
 }
 
 export async function login(email: string, password: string): Promise<TokenResponse> {
-  const form = new URLSearchParams();
-  form.append("username", email);
-  form.append("password", password);
-  const res = await api.post<TokenResponse>("/auth/login", form.toString(), {
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-  });
+  // POST /auth/login expects a JSON body ({email, password}) — this used to send
+  // form-urlencoded {username, password} instead, so FastAPI couldn't parse the request
+  // body at all and every single email/password login attempt failed with a 422,
+  // regardless of whether the credentials were correct. Verified against production.
+  const res = await api.post<TokenResponse>("/auth/login", { email, password });
   saveAuth(res.data);
   return res.data;
 }
