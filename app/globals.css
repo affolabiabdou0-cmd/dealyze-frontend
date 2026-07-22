@@ -62,8 +62,6 @@
   --glass-frost-bg: rgba(12,12,20,0.7);  --glass-frost-blur: 20px;
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
-
 html { scroll-behavior: smooth; }
 
 body {
