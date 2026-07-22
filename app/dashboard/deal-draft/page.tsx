@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { FileText, Copy, Check, AlertCircle, Sparkles, Download, Building2, Clock, Wallet, Globe, Tag, Lightbulb, Package, Calendar, CreditCard, Zap, CheckCircle2, type LucideIcon } from "lucide-react";
-import { api } from "../../lib/api";
+import { api, getErrorMessage } from "../../lib/api";
 import { addActivity } from "../../lib/activity";
 import { getUser } from "../../lib/auth";
 import PageHeader from "../../components/PageHeader";
@@ -95,7 +95,7 @@ export default function DealDraftPage() {
         ],
       });
     } catch (err: unknown) {
-      setError((err as { response?: { data?: { detail?: string } } })?.response?.data?.detail || "Erreur lors de la génération. Réessayez.");
+      setError(getErrorMessage(err, "Erreur lors de la génération. Réessayez."));
     } finally { setLoading(false); }
   }
 

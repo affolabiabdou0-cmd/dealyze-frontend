@@ -29,6 +29,20 @@ api.interceptors.response.use(
   }
 );
 
+// FastAPI returns `detail` as a plain string for HTTPException, but as an array of
+// {type, loc, msg, input, ctx} objects for Pydantic request-validation failures (422).
+// Rendering that array directly as JSX crashes the page (React error #31: "objects are
+// not valid as a React child") — this normalizes either shape into a displayable string.
+export function getErrorMessage(err: unknown, fallback: string): string {
+  const detail = (err as { response?: { data?: { detail?: unknown } } })?.response?.data?.detail;
+  if (typeof detail === "string" && detail.trim()) return detail;
+  if (Array.isArray(detail) && detail.length > 0) {
+    const msgs = detail.map((d) => (d && typeof d === "object" && "msg" in d ? String((d as { msg: unknown }).msg) : String(d)));
+    return msgs.join(" ");
+  }
+  return fallback;
+}
+
 export interface TokenResponse {
   access_token: string;
   user_id: string;

@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { Eye, EyeOff, ArrowRight, AlertCircle, FileText, Mail, BarChart3, Shield } from "lucide-react";
 import { login, saveAuth } from "../lib/auth";
 import { signInWithGoogle } from "../lib/firebase";
-import { api, type TokenResponse } from "../lib/api";
+import { api, getErrorMessage, type TokenResponse } from "../lib/api";
 
 const AGENTS = [
   { icon: FileText, name: "Deal Draft",  desc: "Propositions commerciales en 10s", color: "#a78bfa", bg: "rgba(167,139,250,0.18)" },
@@ -34,14 +34,11 @@ export default function LoginPage() {
   const [loading,    setLoading]    = useState(false);
   const [gLoading,   setGLoading]   = useState(false);
   const [error,      setError]      = useState("");
-  const [serverWarm, setServerWarm] = useState<"pending"|"ready">("pending");
 
-  // Wake up Render backend on mount to reduce cold-start latency
+  // Wake up Render backend on mount to reduce cold-start latency on the first real request
   useEffect(() => {
     const base = (process.env.NEXT_PUBLIC_API_URL ?? "https://dealyze-api.onrender.com").replace(/\/$/, "");
-    fetch(`${base}/health`)
-      .then(() => setServerWarm("ready"))
-      .catch(() => setServerWarm("ready")); // allow login even if health check fails
+    fetch(`${base}/health`).catch(() => {});
   }, []);
 
   async function handleSubmit(e: React.FormEvent) {
@@ -51,10 +48,7 @@ export default function LoginPage() {
       await login(email, password);
       router.push("/dashboard");
     } catch (err: unknown) {
-      setError(
-        (err as { response?: { data?: { detail?: string } } })?.response?.data?.detail
-          || "Email ou mot de passe incorrect."
-      );
+      setError(getErrorMessage(err, "Email ou mot de passe incorrect."));
     } finally { setLoading(false); }
   }
 
@@ -77,10 +71,7 @@ export default function LoginPage() {
       } else if (code === "auth/cancelled-popup-request") {
         setError(""); // user opened multiple popups, ignore
       } else {
-        setError(
-          (err as { response?: { data?: { detail?: string } } })?.response?.data?.detail
-            || "Connexion Google échouée. Réessayez."
-        );
+        setError(getErrorMessage(err, "Connexion Google échouée. Réessayez."));
       }
       setGLoading(false);
     }
@@ -194,30 +185,22 @@ export default function LoginPage() {
           <h2 style={{ fontSize:30, fontWeight:700, color:"#0A1628", letterSpacing:"-0.75px", marginBottom:6 }}>Bon retour</h2>
           <p style={{ fontSize:14, color:"#94A3B8", marginBottom:36 }}>Connectez-vous à votre espace VYXEN</p>
 
-          {/* Google — disabled until the backend is confirmed awake. Without this, a user
-              could finish the (fast) Google popup only to then hit a cold Render instance
-              on the final step, which read as "Google sign-in is stuck/broken" rather than
-              "the server is starting up". Gating it here moves that same wait to before
-              they've committed to picking an account, which reads as normal loading. */}
-          <button type="button" onClick={handleGoogle} disabled={gLoading || loading || serverWarm === "pending"}
+          {/* Google — used to also wait for the backend warm-up ping before enabling this
+              button. That gate added the full Render cold-start delay (15-50s+) in front
+              of the button before the user could click at all, which read as "broken",
+              not as loading — exactly the complaint this was meant to avoid, just moved
+              earlier. The Google popup itself takes the user real time to pick an account,
+              which is plenty of time for the warm-up ping (still fired on mount) to land
+              before the POST /auth/google call needs the backend. */}
+          <button type="button" onClick={handleGoogle} disabled={gLoading || loading}
             className="w-full flex items-center justify-center gap-3"
-            style={{ padding:"15px 20px", borderRadius:12, border:"1.5px solid #E2E8F0", background:"#fff", fontSize:14, fontWeight:600, color:"#111827", cursor:(gLoading || loading || serverWarm === "pending")?"default":"pointer", marginBottom:22, opacity:(gLoading || loading || serverWarm === "pending")?0.6:1, boxShadow:"0 1px 3px rgba(0,0,0,0.06)", transition:"background 0.12s, box-shadow 0.12s" }}
-            onMouseEnter={(e) => { if (!gLoading && !loading && serverWarm === "ready") { e.currentTarget.style.background="#F9FAFB"; e.currentTarget.style.boxShadow="0 2px 8px rgba(0,0,0,0.08)"; } }}
+            style={{ padding:"15px 20px", borderRadius:12, border:"1.5px solid #E2E8F0", background:"#fff", fontSize:14, fontWeight:600, color:"#111827", cursor:(gLoading || loading)?"default":"pointer", marginBottom:22, opacity:(gLoading || loading)?0.6:1, boxShadow:"0 1px 3px rgba(0,0,0,0.06)", transition:"background 0.12s, box-shadow 0.12s" }}
+            onMouseEnter={(e) => { if (!gLoading && !loading) { e.currentTarget.style.background="#F9FAFB"; e.currentTarget.style.boxShadow="0 2px 8px rgba(0,0,0,0.08)"; } }}
             onMouseLeave={(e) => { e.currentTarget.style.background="#fff"; e.currentTarget.style.boxShadow="0 1px 3px rgba(0,0,0,0.06)"; }}
           >
-            {gLoading || serverWarm === "pending"
-              ? <span className="w-[18px] h-[18px] rounded-full border-2 border-gray-200 border-t-gray-500 animate-spin" />
-              : <GIcon />}
-            {gLoading ? "Connexion en cours…" : serverWarm === "pending" ? "Préparation…" : "Continuer avec Google"}
+            {gLoading ? <span className="w-[18px] h-[18px] rounded-full border-2 border-gray-200 border-t-gray-500 animate-spin" /> : <GIcon />}
+            {gLoading ? "Connexion en cours…" : "Continuer avec Google"}
           </button>
-
-          {/* Server warm-up indicator */}
-          {serverWarm === "pending" && !gLoading && (
-            <div style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:6, marginTop:-14, marginBottom:14, fontSize:11, color:"#94a3b8" }}>
-              <span style={{ width:6, height:6, borderRadius:"50%", background:"#f59e0b", display:"inline-block", animation:"pulse 1.5s ease-in-out infinite" }} />
-              Initialisation du serveur IA… (quelques secondes)
-            </div>
-          )}
 
           <div className="flex items-center gap-4" style={{ marginBottom:22 }}>
             <div className="flex-1" style={{ height:1, background:"#F1F5F9" }} />

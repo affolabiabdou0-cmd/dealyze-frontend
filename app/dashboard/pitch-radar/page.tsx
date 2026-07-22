@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { BarChart3, Copy, Check, AlertCircle, Sparkles, Upload, Download, TrendingUp, AlertTriangle, HelpCircle, Star } from "lucide-react";
-import { api } from "../../lib/api";
+import { api, getErrorMessage } from "../../lib/api";
 import { addActivity } from "../../lib/activity";
 import { getUser } from "../../lib/auth";
 import PageHeader from "../../components/PageHeader";
@@ -109,7 +109,7 @@ export default function PitchRadarPage() {
         ],
       });
     } catch (err: unknown) {
-      setError((err as { response?: { data?: { detail?: string } } })?.response?.data?.detail || "Erreur lors de l'analyse. Réessayez.");
+      setError(getErrorMessage(err, "Erreur lors de l'analyse. Réessayez."));
     } finally { setLoading(false); }
   }
 

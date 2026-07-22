@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { CreditCard, Check, ArrowRight, Zap, Star, FileText, Mail, BarChart3, Shield, Clock, Receipt, CheckCircle, XCircle } from "lucide-react";
 import { getUser, trialDaysRemaining, refreshUser } from "../../lib/auth";
-import { api } from "../../lib/api";
+import { api, getErrorMessage } from "../../lib/api";
 import PageHeader from "../../components/PageHeader";
 
 const PLANS = [
@@ -217,8 +217,7 @@ export default function BillingPage() {
         showToast("error", "Paddle non initialisé. Rechargez la page.");
       }
     } catch (err: unknown) {
-      const detail = (err as { response?: { data?: { detail?: string } } })?.response?.data?.detail;
-      showToast("error", detail ?? "Erreur de paiement. Contactez le support.");
+      showToast("error", getErrorMessage(err, "Erreur de paiement. Contactez le support."));
     } finally { setLoadingPlan(null); }
   }
 

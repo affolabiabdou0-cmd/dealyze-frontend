@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { CheckCircle, AlertCircle, Loader2 } from "lucide-react";
-import { api } from "../lib/api";
+import { api, getErrorMessage } from "../lib/api";
 
 export default function VerifyEmailPage() {
   const [state, setState] = useState<"loading" | "success" | "error">("loading");
@@ -23,10 +23,7 @@ export default function VerifyEmailPage() {
       })
       .catch((err: unknown) => {
         setState("error");
-        setMessage(
-          (err as { response?: { data?: { detail?: string } } })?.response?.data?.detail
-            || "Lien invalide ou expiré."
-        );
+        setMessage(getErrorMessage(err, "Lien invalide ou expiré."));
       });
   }, []);
 

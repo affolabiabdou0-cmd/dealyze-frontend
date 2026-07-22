@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Mail, Copy, Check, AlertCircle, Sparkles, Calendar, Download, Building2, Wallet, Clock, AlertTriangle, TrendingUp, User, type LucideIcon } from "lucide-react";
-import { api } from "../../lib/api";
+import { api, getErrorMessage } from "../../lib/api";
 import { addActivity } from "../../lib/activity";
 import { getUser } from "../../lib/auth";
 import PageHeader from "../../components/PageHeader";
@@ -100,7 +100,7 @@ export default function SmartChasePage() {
         ],
       });
     } catch (err: unknown) {
-      setError((err as { response?: { data?: { detail?: string } } })?.response?.data?.detail || "Erreur lors de la génération. Réessayez.");
+      setError(getErrorMessage(err, "Erreur lors de la génération. Réessayez."));
     } finally { setLoading(false); }
   }
 

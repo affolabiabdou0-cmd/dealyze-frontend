@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { User, Lock, Info, AlertTriangle, Check, AlertCircle, Copy, CheckCircle, Eye, EyeOff, Settings, Camera } from "lucide-react";
 import { getUser, clearAuth, refreshUser } from "../../lib/auth";
-import { api } from "../../lib/api";
+import { api, getErrorMessage } from "../../lib/api";
 import { useRouter } from "next/navigation";
 import PageHeader from "../../components/PageHeader";
 
@@ -115,7 +115,7 @@ export default function SettingsPage() {
       if (stored) { const p = JSON.parse(stored); p.full_name = fullName; localStorage.setItem("dealyze_user", JSON.stringify(p)); }
       setSaved(true); setTimeout(() => setSaved(false), 2500);
     } catch (err: unknown) {
-      setSaveErr((err as { response?: { data?: { detail?: string } } })?.response?.data?.detail || "Erreur de sauvegarde.");
+      setSaveErr(getErrorMessage(err, "Erreur de sauvegarde."));
     } finally { setSaving(false); }
   }
 
@@ -129,7 +129,7 @@ export default function SettingsPage() {
       setPwSaved(true); setOldPw(""); setNewPw(""); setConfirmPw("");
       setTimeout(() => setPwSaved(false), 2500);
     } catch (err: unknown) {
-      setPwErr((err as { response?: { data?: { detail?: string } } })?.response?.data?.detail || "Mot de passe actuel incorrect.");
+      setPwErr(getErrorMessage(err, "Mot de passe actuel incorrect."));
     } finally { setPwSaving(false); }
   }
 
@@ -169,10 +169,7 @@ export default function SettingsPage() {
       clearAuth();
       router.push("/login");
     } catch (err: unknown) {
-      setDeleteErr(
-        (err as { response?: { data?: { detail?: string } } })?.response?.data?.detail
-          || "Suppression impossible pour le moment. Réessayez."
-      );
+      setDeleteErr(getErrorMessage(err, "Suppression impossible pour le moment. Réessayez."));
       setDeleting(false);
     }
   }
@@ -261,8 +258,8 @@ export default function SettingsPage() {
                   <Label>Email</Label>
                   <div style={{ position: "relative" }}>
                     <input type="email" value={user?.email ?? ""} disabled style={{ ...inputStyle, opacity: 0.6, cursor: "not-allowed", paddingRight: 90 }} />
-                    <span style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", display: "flex", alignItems: "center", gap: 4, fontSize: 11, fontWeight: 600, color: "#10b981", background: "#f0fdf4", padding: "3px 8px", borderRadius: 6 }}>
-                      <CheckCircle size={11} /> Vérifié
+                    <span style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", display: "flex", alignItems: "center", gap: 4, fontSize: 11, fontWeight: 600, color: user?.email_verified ? "#10b981" : "#f59e0b", background: user?.email_verified ? "#f0fdf4" : "#fffbeb", padding: "3px 8px", borderRadius: 6 }}>
+                      <CheckCircle size={11} /> {user?.email_verified ? "Vérifié" : "Non vérifié"}
                     </span>
                   </div>
                 </div>

@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, ArrowRight, CheckCircle, AlertCircle, Eye, EyeOff } from "lucide-react";
-import { api } from "../lib/api";
+import { api, getErrorMessage } from "../lib/api";
 
 export default function ResetPasswordPage() {
   const router = useRouter();
@@ -40,10 +40,7 @@ export default function ResetPasswordPage() {
       setDone(true);
       setTimeout(() => router.push("/login"), 2500);
     } catch (err: unknown) {
-      setError(
-        (err as { response?: { data?: { detail?: string } } })?.response?.data?.detail
-          || "Lien invalide ou expiré. Refaites une demande."
-      );
+      setError(getErrorMessage(err, "Lien invalide ou expiré. Refaites une demande."));
     } finally {
       setLoading(false);
     }
