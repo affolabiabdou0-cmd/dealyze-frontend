@@ -10,12 +10,12 @@ const cormorant = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
-  title: "VYXEN — Turn every deal into done.",
-  description: "Automatisez vos négociations, relances et due diligences avec 4 agents IA spécialisés — pour PME et investisseurs.",
+  title: "Vyxen — Turn every deal into done.",
+  description: "AI agents that chase unpaid invoices, draft proposals, score pitch decks and run due diligence — while you focus on everything else.",
   keywords: ["deal", "IA", "PME", "investisseur", "négociation", "due diligence", "Gemini"],
   openGraph: {
-    title: "VYXEN — Turn every deal into done.",
-    description: "4 agents IA pour automatiser chaque étape de vos deals.",
+    title: "Vyxen — Turn every deal into done.",
+    description: "AI agents that chase unpaid invoices, draft proposals, score pitch decks and run due diligence.",
     type: "website",
   },
 };
