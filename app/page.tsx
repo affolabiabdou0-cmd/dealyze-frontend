@@ -332,13 +332,36 @@ function FadeIn({ children, delay = 0 }: { children: ReactNode; delay?: number }
 }
 
 // ─── Reusable UI ─────────────────────────────────────────────────────────
-function Logo({ dark = false }: { dark?: boolean }) {
-  const base = dark ? "#FFFFFF" : "#0F2552";
+function Logo() {
   return (
-    <span className="font-display font-bold tracking-[0.04em] select-none leading-none text-[26px] md:text-[30px]">
-      <span style={{ color: base }}>VY</span>
-      <span style={{ color: "#2563EB" }} className="italic">X</span>
-      <span style={{ color: base }}>EN</span>
+    <span className="inline-flex items-center gap-2 select-none">
+      <img src="/logo-vyxen.png" alt="" aria-hidden="true" className="h-7 md:h-8 w-auto shrink-0" />
+      <span
+        translate="no"
+        className="notranslate font-extrabold tracking-[0.02em] leading-none text-[22px] md:text-[26px] inline-flex items-center"
+        style={{
+          background: "linear-gradient(135deg, #7c3aed, #2563eb)",
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+          backgroundClip: "text",
+        }}
+      >
+        VY
+        <span
+          style={{
+            fontSize: "1.5em",
+            fontWeight: 900,
+            lineHeight: 0.78,
+            background: "linear-gradient(180deg, #22d3ee 0%, #0ea5e9 100%)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            backgroundClip: "text",
+          }}
+        >
+          X
+        </span>
+        EN
+      </span>
     </span>
   );
 }
@@ -1339,7 +1362,10 @@ function Footer({ lang }: { lang: Lang }) {
           ))}
         </div>
         <div className="mt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-muted">
-          <div>© 2026 Vyxen · {tr(T.footer.rights, lang)}</div>
+          <div>
+            © 2026 Vyxen · {tr(T.footer.rights, lang)} ·{" "}
+            <span className="font-mono font-semibold" style={{ color: "#7c3aed" }}>f4ntom_kox</span>
+          </div>
           <div className="font-mono">Made with Google Gemini · XPRIZE AI 2026</div>
         </div>
       </div>
@@ -1350,6 +1376,11 @@ function Footer({ lang }: { lang: Lang }) {
 // ─── Page ────────────────────────────────────────────────────────────────
 export default function Landing() {
   const [lang, setLang] = useLang();
+  useEffect(() => {
+    const prev = document.body.style.backgroundColor;
+    document.body.style.backgroundColor = "#ffffff";
+    return () => { document.body.style.backgroundColor = prev; };
+  }, []);
   return (
     <div className="min-h-screen bg-white text-foreground overflow-x-hidden">
       <Nav lang={lang} setLang={setLang} />
